@@ -1,0 +1,66 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="icon_note_pen_space_margin">5dp</dimen>
+
+    <dimen name="default_window_width">40dp</dimen>
+    <dimen name="default_panel_icon_padding">5dp</dimen>
+    <dimen name="item_margin">15dp</dimen>
+
+    <dimen name="item_height">100dp</dimen>
+    <dimen name="panel_vertical_margin">50dp</dimen>
+    <dimen name="panel_horizonal_margin">50dp</dimen>
+
+    <dimen name="activity_margin_max">42dp</dimen>
+    <dimen name="activity_margin_min">6dp</dimen>
+    <dimen name="activity_min_padding">10dp</dimen>
+    <dimen name="activity_margin_20dp">20dp</dimen>
+    <dimen name="activity_margin_30dp">30dp</dimen>
+
+
+    <dimen name="shape_size">60dp</dimen>
+    <dimen name="shape_margin_top">-130dp</dimen>
+    <dimen name="shape_padding_LeftRight">15dp</dimen>
+    <dimen name="shape_padding_TopBottom">8dp</dimen>
+
+    <dimen name="custom_tab_layout_height_reverse">-72dp</dimen>
+
+    <dimen name="button_radius">6dp</dimen>
+    <dimen name="billstatement_icon_radius">12dp</dimen>
+    <dimen name="circle_size">50dp</dimen>
+
+    <dimen name="app_name_margin_top">78dp</dimen>
+    <dimen name="app_icon_size_actionbar">50dp</dimen>
+    <dimen name="icon_size_actionbar">30dp</dimen>
+
+    <dimen name="dialog_padding">25dp</dimen>
+
+    <dimen name="tab_max_width">264dp</dimen>
+    <dimen name="tab_padding_bottom">16dp</dimen>
+    <dimen name="tab_label">9sp</dimen>
+    <dimen name="custom_tab_layout_height">72dp</dimen>
+
+    <dimen name="text_currency">12sp</dimen>
+    <dimen name="date_day">68sp</dimen>
+    <dimen name="day">18sp</dimen>
+
+    <dimen name="shadow_width">2dp</dimen>
+    <dimen name="slidingmenu_offset">100dp</dimen>
+
+    <dimen name="profile_pic_size">60dp</dimen>
+    <dimen name="calender_text_size">18sp</dimen>
+
+    <dimen name="mybills_tab_text_size">9sp</dimen>
+
+    <dimen name="mybill_statement_icon_size">100dp</dimen>
+    <dimen name="mybill_statement_icon_margin_top_dashed">74dp</dimen> <!-- Always -1 on mybill_statement_icon_margin_top -->
+    <dimen name="mybill_statement_icon_margin_top">75dp</dimen>
+
+    <dimen name="view_bills_header_height">180dp</dimen>
+    <dimen name="view_bills_margin_leftright">25dp</dimen>
+
+    <dimen name="min_icon_size">20dp</dimen>
+
+</resources>

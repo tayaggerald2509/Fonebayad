@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="login_opacity">#BF000000</color>
+
+    <color name="dashboard_color">#293135</color>
+    <color name="app_color">#015242</color>
+    <color name="app_subtext_color">#c3c3c3</color>
+
+    <color name="myDrawerBackground">#FFF</color>
+    <color name="myWindowBackground">#FFF</color>
+    <color name="myTextPrimaryColor">#212121</color>
+    <color name="myNavigationColor">#000</color>
+
+    <color name="transparent_background">#8C000000</color>
+
+    <color name="warning_color">#f4511e</color>
+    <color name="hint_color">#42000000</color>
+    <color name="success_color">#009688</color>
+
+    <color name="color_overdue">#af2835</color>
+    <color name="color_week">#d68e1c</color>
+    <color name="color_total">#293135</color>
+
+    <color name="f9f9f9">#f9f9f9</color>
+    <color name="ededed">#ededed</color>
+
+</resources>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_margin_min"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bill_statement_background_icon"
+            android:orientation="horizontal">
+
+            <estansaas.fonebayad.view.AutofitTextView
+                android:id="@+id/txtBillerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Meralco"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/abc_text_size_medium_material"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:padding="@dimen/activity_min_padding"
+                android:layout_weight="1" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/chk_select"
+                android:focusable="false"
+                android:layout_gravity="right"
+                android:focusableInTouchMode="false"
+                android:checked="false"
+                android:clickable="false"
+                android:enabled="true"
+                android:visibility="invisible" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bill_statement_due"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!--estansaas.fonebayad.view_payment_full.MarqueeView
+                android:id="@+id/marqueeView100"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                marquee:autoStart="true"
+                marquee:pause="1000"
+                marquee:speed="5" >
+
+                <TextView
+                    android:id="@+id/txtOverdue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="PHP 2,607.00"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/abc_text_size_medium_material" />
+
+            </estansaas.fonebayad.view_payment_full.MarqueeView -->
+
+            <estansaas.fonebayad.view.AutofitTextView
+                android:id="@+id/txtOverdue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:singleLine="true"
+                android:text="PHP 2,607.00"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/abc_text_size_medium_material"
+                autofit:minTextSize="8sp"
+                android:layout_marginTop="@dimen/activity_margin_min" />
+
+            <estansaas.fonebayad.view.AutofitTextView
+                android:id="@+id/txtNoOfDays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="35 DAYS OVERDUE"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_currency"
+                autofit:minTextSize="8sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

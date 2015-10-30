@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="estansaas.fonebayad">
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="false"
+        android:xlargeScreens="true" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.nfc" />
+
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
+
+
+    <application
+        android:name=".Fonebayad"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:theme="@style/MyMaterialTheme">
+
+        <receiver android:name=".provider.EdgeProvider">
+            <intent-filter>
+                <action android:name="com.samsung.android.cocktail.action.COCKTAIL_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.samsung.android.cocktail.provider"
+                android:resource="@xml/single_cocktail" />
+        </receiver>
+
+        <service
+            android:name=".service.NFCTapPayService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NFC_SERVICE">
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/apduservice" />
+        </service>
+
+        <activity
+            android:name=".activity.ActivitySplash"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="com.samsung.android.cocktail.subwindow.enable"
+                android:value="true" />
+        </activity>
+        <activity
+            android:name=".activity.ActivityLogin"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".activity.ActivityRegister"
+            android:label="@string/app_register"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ActivityRegisterSuccess"
+            android:label="@string/app_register"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ActivityDashboard"
+            android:label="@string/app_dashboard"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityTransactionHistory"
+            android:label="@string/app_transaction_history"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityReloadEWallet"
+            android:label="@string/app_reload_ewallet"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityCalendar"
+            android:label="@string/app_calendar"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityMyBills"
+            android:label="@string/app_calendar"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityAddBill"
+            android:label="@string/app_calendar"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityAddManualBill"
+            android:label="@string/app_bill_info"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityPhoto"
+            android:label="@string/app_photo"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityProblemLogin"
+            android:label="@string/app_problem_login"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityTranspera"
+            android:label="@string/app_transpera"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityPaymentMethod"
+            android:label="@string/app_payment_method"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityViewBills"
+            android:label="@string/app_bill_view"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityPaymentView"
+            android:label="@string/app_payment"
+            android:screenOrientation="portrait" />
+
+        <activity android:name="nl.changer.polypicker.ImagePickerActivity" />
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="fonebayad.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="AA_DB_MODELS"
+            android:value="estansaas.fonebayad.model.ModelBillInformation, estansaas.fonebayad.model.LoginModel, estansaas.fonebayad.model.BillersModel, estansaas.fonebayad.model.BillCategoryModel, estansaas.fonebayad.model.CurrencyModel, estansaas.fonebayad.model.CountryModel" />
+
+        <meta-data
+            android:name="com.samsung.android.cocktail.mode"
+            android:value="edge_extended" />
+    </application>
+
+</manifest>

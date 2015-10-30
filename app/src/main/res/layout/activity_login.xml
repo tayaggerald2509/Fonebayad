@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lblEnterPin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_margin_max"
+            android:text="PLEASE ENTER YOUR PIN"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_medium_material" />
+
+        <LinearLayout
+            android:id="@+id/ll_pin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/pin1"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
+                android:layout_marginLeft="@dimen/activity_margin_min"
+                android:background="@drawable/circle_selector"
+                android:enabled="true" />
+
+            <Button
+                android:id="@+id/pin2"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
+                android:layout_marginLeft="@dimen/activity_margin_min"
+                android:background="@drawable/circle_selector" />
+
+            <Button
+                android:id="@+id/pin3"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
+                android:layout_marginLeft="@dimen/activity_margin_min"
+                android:background="@drawable/circle_selector" />
+
+            <Button
+                android:id="@+id/pin4"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
+                android:layout_marginLeft="@dimen/activity_margin_min"
+                android:background="@drawable/circle_selector" />
+        </LinearLayout>
+
+        <estansaas.fonebayad.view.PinView
+            android:id="@+id/txtPin"
+            style="@style/PasscodeInputIStyle"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:imeOptions="actionDone"
+            android:inputType="number|numberPassword"
+            android:maxLength="4"
+            android:textColor="@android:color/transparent" />
+
+        <TextView
+            android:id="@+id/lblAppName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="false"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/app_name_margin_top"
+            android:text="fonebayad"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/abc_text_size_display_3_material"
+            android:gravity="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin_max"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/lblRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/abc_dialog_list_padding_vertical_material"
+                android:text="REGISTER"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/abc_text_size_menu_material" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/button_selector"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="LOGIN"
+                android:textColor="#005444"
+                android:textSize="@dimen/abc_text_size_menu_material" />
+
+            <TextView
+                android:id="@+id/lblProblem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/abc_control_inset_material"
+                android:layout_marginTop="@dimen/abc_dialog_list_padding_vertical_material"
+                android:text="Problem with login?"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/abc_text_size_small_material" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/app_color"
+            android:gravity="center"
+            android:padding="@dimen/activity_min_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="TAKE A QUICK TOUR"
+                android:id="@+id/txtQuickTour"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

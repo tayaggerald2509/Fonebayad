@@ -1,0 +1,102 @@
+<resources>
+
+    <string name="vertical_text">This is a test panel to display vertical string on the 2nd screen !!!</string>
+    <string name="single_cocktail_name">SingleCocktailExample</string>
+    <string name="description_single">Sample panel for SINGLE cocktail</string>
+
+    <string name="app_name">Fonebayad</string>
+    <string name="app_register">Registration</string>
+    <string name="app_dashboard">Personal Dashboard</string>
+    <string name="app_calendar">My Bills</string>
+    <string name="app_add_bill">Add New Bill</string>
+    <string name="app_bill_info">Bill Information</string>
+    <string name="app_photo">Photo</string>
+    <string name="app_problem_login">Problem with Login</string>
+    <string name="app_transpera">TransPera</string>
+    <string name="app_payment_method">Payment Methods</string>
+    <string name="app_bill_view">Bill View</string>
+    <string name="app_payment">Payment</string>
+    <string name="app_transaction_history">Transaction History</string>
+    <string name="app_reload_ewallet">Reload E-Wallet</string>
+
+    <string name="app_ewallet_header">What can your e-wallet do?</string>
+    <string name="app_ewallet_desc">With e-wallet, you can pay bills and remit money anytime, anywhere. We have a list of banks located in several countries. Just pick one, deposit your desired amount and wait for our confirmation. It\'s simple! Pay your bills and send money to anyone without worrying about extra charges.</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_signing">Signing in</string>
+    <string name="action_wait">Loading Please wait...</string>
+    <string name="action_category">Bill Category</string>
+
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">CANCEL</string>
+
+    <string name="registration_message_head">Congratulations!</string>
+    <string name="registration_message">Thank you for registering, a confirmation e-mail has been sent to your personal email address.</string>
+    <string name="registration_message_subhead">To verify account please click the VERIFY button</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="use_password">Use password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="ok">Ok</string>
+
+    <string name="password">Password</string>
+    <string name="fingerprint_hint">Touch sensor</string>
+    <string name="fingerprint_description">Confirm fingerprint to continue</string>
+    <string name="use_fingerprint_in_future">Use fingerprint in the future</string>
+    <string name="password_description">Enter your store password to continue</string>
+    <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
+    <string name="fingerprint_success">Fingerprint recognized</string>
+    <string name="use_fingerprint_to_authenticate_key">use_fingerprint_to_authenticate_key</string>
+    <string name="new_fingerprint_enrolled_description">A new fingerprint was added to this device, so your password is required.</string>
+
+    <string name="prompt_salutation">Select Salutation</string>
+    <string name="prompt_status">Select Bill Status</string>
+
+    <string name="alpha">" " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.</string>
+    <string name="numeric">0123456789</string>
+    <string name="numeric_amount">0123456789.</string>
+
+    <string-array name="salutation">
+        <item>Mr</item>
+        <item>Ms</item>
+        <item>Mrs</item>
+        <item>Miss</item>
+    </string-array>
+
+    <string-array name="bill_status">
+        <item>Paid</item>
+        <item>Unpaid</item>
+    </string-array>
+
+    <string-array name="nav_drawer_items">
+        <item>Transaction History</item>
+        <item>Rate Matrix</item>
+        <item>Reload E-Wallet</item>
+        <item>Payment Method</item>
+        <item>Foreign Exchange</item>
+        <item>Recycle Bin</item>
+        <item>Account Settings</item>
+        <item>Privacy Policy</item>
+        <item>FAQ</item>
+        <item>Help Desk</item>
+        <item>LOGOUT</item>
+    </string-array>
+
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_assignment_white_48dp</item>
+        <item>@drawable/ic_business_white_48dp</item>
+        <item>@drawable/ic_ic_autorenew_white_48dp</item>
+        <item>@drawable/ic_payment_white_24dp</item>
+        <item>@drawable/ic_trending_up_white_24dp</item>
+        <item>@drawable/ic_delete_white_24dp</item>
+        <item>@drawable/ic_settings_white_24dp</item>
+        <item>@drawable/ic_help_outline_white_24dp</item>
+        <item>@drawable/ic_info_outline_white_24dp</item>
+        <item>@drawable/ic_help_outline_white_24dp</item>
+        <item>@drawable/ic_exit_to_app_white_24dp</item>
+    </array>
+
+    <string name="aiddescription">aiddescription</string>
+    <string name="servicedesc">servicedesc</string>
+
+</resources>

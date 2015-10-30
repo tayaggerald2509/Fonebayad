@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/back"
+                            android:layout_width="@dimen/app_icon_size_actionbar"
+                            android:layout_height="@dimen/app_icon_size_actionbar"
+                            android:src="@drawable/button_navbar_back" />
+
+                        <TextView
+                            android:id="@+id/lblTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/app_transpera"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#ffffff" />
+
+                        <ImageView
+                            android:id="@+id/expanded_menu"
+                            android:layout_width="@dimen/app_icon_size_actionbar"
+                            android:layout_height="@dimen/app_icon_size_actionbar"
+                            android:src="@drawable/ic_social_person_add" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.CoordinatorLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/app_subtext_color" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ScrollView
+                android:id="@+id/scrollView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/activity_vertical_margin"
+                        android:orientation="vertical">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/app_subtext_color">
+
+                            <estansaas.fonebayad.view.FormView
+                                android:id="@+id/txtFname"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                                android:layout_marginTop="@dimen/activity_vertical_margin"
+                                android:background="@drawable/textbox_selector"
+                                android:digits="@string/alpha"
+                                android:ems="10"
+                                android:hint="First Name"
+                                android:inputType="textPersonName"
+                                android:paddingBottom="@dimen/abc_control_padding_material"
+                                android:singleLine="true"
+                                android:textColor="@color/app_color"
+                                android:textColorHint="@color/app_subtext_color" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/app_subtext_color">
+
+                            <estansaas.fonebayad.view.FormView
+                                android:id="@+id/txtLname"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                                android:layout_marginTop="@dimen/activity_vertical_margin"
+                                android:background="@drawable/textbox_selector"
+                                android:digits="@string/alpha"
+                                android:ems="10"
+                                android:hint="Lastname"
+                                android:inputType="textPersonName"
+                                android:paddingBottom="@dimen/abc_control_padding_material"
+                                android:singleLine="true"
+                                android:textColor="@color/app_color"
+                                android:textColorHint="@color/app_subtext_color" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/app_subtext_color">
+
+                            <estansaas.fonebayad.view.FormView
+                                android:id="@+id/txtmobileNo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                                android:layout_marginTop="@dimen/activity_vertical_margin"
+                                android:background="@drawable/textbox_selector"
+                                android:digits="@string/numeric"
+                                android:ems="10"
+                                android:hint="Mobile Number"
+                                android:inputType="number|phone"
+                                android:paddingBottom="@dimen/abc_control_padding_material"
+                                android:singleLine="true"
+                                android:textColor="@color/app_color"
+                                android:textColorHint="@color/app_subtext_color" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/app_subtext_color">
+
+                            <estansaas.fonebayad.view.FormView
+                                android:id="@+id/txtPostalCode"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                                android:layout_marginTop="@dimen/activity_vertical_margin"
+                                android:background="@drawable/textbox_selector"
+                                android:digits="@string/numeric"
+                                android:ems="10"
+                                android:hint="Postal Code"
+                                android:inputType="number"
+                                android:paddingBottom="@dimen/abc_control_padding_material"
+                                android:singleLine="true"
+                                android:textColor="@color/app_color"
+                                android:textColorHint="@color/app_subtext_color" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/app_subtext_color">
+
+                            <estansaas.fonebayad.view.FormView
+                                android:id="@+id/txtBday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                                android:layout_marginTop="@dimen/activity_vertical_margin"
+                                android:background="@drawable/textbox_selector"
+                                android:digits="@string/alpha"
+                                android:ems="10"
+                                android:hint="Date of Birth"
+                                android:inputType="date"
+                                android:paddingBottom="@dimen/abc_control_padding_material"
+                                android:singleLine="true"
+                                android:textColor="@color/app_color"
+                                android:textColorHint="@color/app_subtext_color" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/app_subtext_color">
+
+                            <estansaas.fonebayad.view.FormView
+                                android:id="@+id/txtAmountTransfer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                                android:layout_marginTop="@dimen/activity_vertical_margin"
+                                android:background="@drawable/textbox_selector"
+                                android:digits="@string/numeric_amount"
+                                android:ems="10"
+                                android:hint="Amount to Transfer"
+                                android:inputType="number"
+                                android:paddingBottom="@dimen/abc_control_padding_material"
+                                android:singleLine="true"
+                                android:textColor="@color/app_color"
+                                android:textColorHint="@color/app_subtext_color" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_margin_max"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/ll_forget"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                                android:layout_marginLeft="@dimen/activity_margin_max"
+                                android:layout_marginRight="@dimen/activity_margin_max"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/chk_forget_pin"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="true"
+                                    android:clickable="false" />
+
+                                <TextView
+                                    android:id="@+id/txtTransfer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/activity_margin_min"
+                                    android:gravity="center"
+                                    android:text="Transfer No"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textColor="@color/color_total" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_auth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/activity_margin_max"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/chk_auth"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="false"
+                                    android:clickable="false" />
+
+                                <TextView
+                                    android:id="@+id/txtTransferOnDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/activity_margin_min"
+                                    android:gravity="center"
+                                    android:text="Transfer on Calendar Date"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textColor="@color/color_total" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:layout_marginRight="@dimen/activity_vertical_margin"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/btnProceed"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/activity_margin_max"
+                            android:layout_marginLeft="@dimen/activity_margin_max"
+                            android:layout_marginRight="@dimen/activity_margin_max"
+                            android:layout_marginTop="@dimen/activity_margin_max"
+                            android:background="@drawable/button_selector"
+                            android:text="PROCEED"
+                            android:textColor="@color/app_color"
+                            android:textSize="@dimen/abc_text_size_medium_material" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+
