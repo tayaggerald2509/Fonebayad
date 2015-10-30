@@ -2,17 +2,18 @@ package estansaas.fonebayad.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
-
-import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,6 +22,7 @@ import estansaas.fonebayad.R;
 import estansaas.fonebayad.auth.Responses.Response;
 import estansaas.fonebayad.auth.RestClient;
 import estansaas.fonebayad.model.ModelLogin;
+import estansaas.fonebayad.utils.FilePath;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import retrofit.Call;
@@ -102,7 +104,22 @@ public class ActivityAddBill extends BaseActivity implements MaterialDialog.Sing
         switch (dialogAction) {
             case POSITIVE:
                 if (Network.isConnected(this)) {
-                    uploadFile(materialDialog);
+
+                    new MaterialDialog.Builder(this)
+                            .content(R.string.action_wait)
+                            .contentGravity(GravityEnum.CENTER)
+                            .theme(Theme.DARK)
+                            .widgetColor(Color.WHITE)
+                            .progressIndeterminateStyle(false)
+                            .progress(true, 0)
+                            .cancelable(false)
+                            .showListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialogInterface) {
+                                    uploadFile(dialogInterface);
+                                }
+                            }).show();
+
                 } else {
                     materialDialog.dismiss();
                     Util.ShowNeutralDialog(this, "fonebaayd", "No Internet Connection", "OK", this);
@@ -116,9 +133,7 @@ public class ActivityAddBill extends BaseActivity implements MaterialDialog.Sing
 
     private void uploadFile(final DialogInterface dialogInterface) {
 
-        final File file = new File(imageUri.getPath());
-
-        RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file.getPath());
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), FilePath.getPath(getApplicationContext(), imageUri));
         RequestBody createdBy = RequestBody.create(MediaType.parse("text/plain"), ModelLogin.getUserInfo().getApp_id());
         RequestBody device = RequestBody.create(MediaType.parse("text/plain"), Util.getDeviceType());
         RequestBody device_guid = RequestBody.create(MediaType.parse("text/plain"), Util.getGUID(this));
@@ -133,7 +148,8 @@ public class ActivityAddBill extends BaseActivity implements MaterialDialog.Sing
                 if (response.isSuccess()) {
                     if (response.body().getMessage().toLowerCase().equals("success")) {
                         Intent intent = new Intent(ActivityAddBill.this, ActivityPhoto.class);
-                        intent.putExtra("photo", file.getPath());
+                        intent.putExtra("photo", FilePath.getPath(getApplicationContext(), imageUri));
+                        finish();
                         startActivity(intent);
                     }
                 } else {
