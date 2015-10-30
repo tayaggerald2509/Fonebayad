@@ -420,7 +420,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         txtTotalSelected.setText("PHP " + new DecimalFormat("#,##0.00").format(totalSelected < 0.00 ? (totalSelected * -1) : totalSelected));
     }
 
-
     private void animateToolPay() {
         if (selected > 0) {
             if (ll_tool.getVisibility() == View.INVISIBLE) {
@@ -523,14 +522,15 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     @Override
     public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
 
-        billStatements = estansaas.fonebayad.model.ModelBillInformation.getBillStatementByCategory(mListableItems[i]);
+        Toast.makeText(ActivityMyBills.this, mListableItems[i], Toast.LENGTH_SHORT).show();
+
+        billStatements = ModelBillInformation.getBillStatementByCategory(mListableItems[i]);
+
         txtNoOfBills.setText(String.valueOf(billStatements.size()));
         InitiliazeAdapters();
         iconAdapter.notifyDataSetChanged();
         listAdapter.notifyDataSetChanged();
         ShowMessage();
-
-        Toast.makeText(this, mListableItems[i], Toast.LENGTH_SHORT).show();
     }
 
     @Override

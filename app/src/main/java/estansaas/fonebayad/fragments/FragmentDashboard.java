@@ -56,8 +56,6 @@ import retrofit.Retrofit;
  */
 public class FragmentDashboard extends Fragment {
 
-    private static int FRAGMENT_DIALOG_ID;
-
     @Bind(R.id.coordinatorLayout)
     public CoordinatorLayout coordinatorLayout;
 
@@ -216,9 +214,7 @@ public class FragmentDashboard extends Fragment {
 
     @OnClick(R.id.ll_transpera)
     public void ShowTranspera() {
-
         if (Network.isConnected(getActivity())) {
-
             new MaterialDialog.Builder(getActivity())
                     .content(R.string.action_wait)
                     .contentGravity(GravityEnum.CENTER)
@@ -234,15 +230,12 @@ public class FragmentDashboard extends Fragment {
                         }
                     }).show();
         } else {
-
+            Util.ShowNeutralDialog(getActivity(), "Dashboard", "Please connect to internet!", "OK", dashboardCallback);
         }
-        //Util.startNextActivity(getActivity(), ActivityTranspera.class);
     }
 
     private void AuthPrimaryBankDetails() {
-
         if (Network.isConnected(getActivity())) {
-            FRAGMENT_DIALOG_ID = 201;
             Call<ResponseBankAccount> responseBankAccountCall = RestClient.get().getAllActiveBankAccounts(ModelLogin.getUserInfo().getApp_id());
             responseBankAccountCall.enqueue(new Callback<ResponseBankAccount>() {
                 @Override
@@ -301,9 +294,8 @@ public class FragmentDashboard extends Fragment {
 
     private void SyncDashboardData() {
         if (Network.isConnected(getActivity())) {
-            FRAGMENT_DIALOG_ID = 101;
             new MaterialDialog.Builder(getActivity())
-                    .content(R.string.action_wait)
+                    .content("Fetching user record")
                     .contentGravity(GravityEnum.CENTER)
                     .theme(Theme.DARK)
                     .widgetColor(Color.WHITE)

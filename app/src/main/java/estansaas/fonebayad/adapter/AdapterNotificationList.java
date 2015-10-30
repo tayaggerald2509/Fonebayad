@@ -71,17 +71,22 @@ public class AdapterNotificationList extends BaseAdapter {
             holder.ll_row.setBackgroundColor(Color.WHITE);
         }
 
-        holder.txtBillername.setText(ModelBillers.getBillers(billStatement.getBill_biller()).getBiller_name());
         try {
-            if (new Date().before(Util.convertDate(billStatement.getBill_duedate()))) {
-                holder.txtMsg.setText("Your bill is now overdue.");
-            } else {
+            holder.txtBillername.setText(ModelBillers.getBillers(billStatement.getBill_biller()).getBiller_name());
+            try {
+                if (new Date().before(Util.convertDate(billStatement.getBill_duedate()))) {
+                    holder.txtMsg.setText("Your bill is now overdue.");
+                } else {
                 holder.txtMsg.setText("will due on " + billStatement.getBill_duedate() + ".");
             }
         } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            holder.txtCategory.setText("");
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        holder.txtCategory.setText("");
 
         return convertView;
     }

@@ -84,7 +84,6 @@ public class AdapterIconViewBillStatement extends BaseAdapter {
         holder.paramNoOfDays.setText(billStatement.getNoOfDays());
         holder.paramOverDue.setText("PHP " + new DecimalFormat("#,##0.00").format(Double.valueOf(billStatement.getBalance())));
 
-
         if (estansaas.fonebayad.model.ModelBillInformation.getSelected(billStatement.getBill_Id()) == true) {
             holder.paramSelect.setVisibility(View.VISIBLE);
         } else {

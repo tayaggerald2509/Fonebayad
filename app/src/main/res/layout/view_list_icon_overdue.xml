@@ -14,35 +14,50 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
             android:background="@drawable/bill_statement_background_icon"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <estansaas.fonebayad.view.AutofitTextView
-                android:id="@+id/txtBillerName"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Meralco"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/abc_text_size_medium_material"
-                android:textStyle="bold"
-                android:gravity="center_horizontal"
-                android:padding="@dimen/activity_min_padding"
-                android:layout_weight="1" />
+                android:layout_height="match_parent">
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/chk_select"
-                android:focusable="false"
-                android:layout_gravity="right"
-                android:focusableInTouchMode="false"
-                android:checked="false"
-                android:clickable="false"
-                android:enabled="true"
-                android:visibility="invisible" />
+                <CheckBox
+                    android:id="@+id/chk_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:enabled="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:visibility="invisible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <estansaas.fonebayad.view.AutofitTextView
+                        android:id="@+id/txtBillerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:padding="@dimen/activity_min_padding"
+                        android:singleLine="true"
+                        android:text="a"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/abc_text_size_medium_material"
+                        android:textStyle="bold"
+                        autofit:minTextSize="8sp" />
+                </LinearLayout>
+            </RelativeLayout>
 
 
         </LinearLayout>
@@ -51,8 +66,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bill_statement_overdue"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <!--estansaas.fonebayad.view_payment_full.MarqueeView
                 android:id="@+id/marqueeView100"
@@ -76,15 +91,14 @@
 
             <estansaas.fonebayad.view.AutofitTextView
                 android:id="@+id/txtOverdue"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:singleLine="true"
                 android:text="PHP 2,607.00"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/abc_text_size_medium_material"
                 autofit:minTextSize="8sp"
-                android:layout_marginTop="@dimen/activity_margin_min" />
+                android:gravity="center" />
 
             <estansaas.fonebayad.view.AutofitTextView
                 android:id="@+id/txtNoOfDays"

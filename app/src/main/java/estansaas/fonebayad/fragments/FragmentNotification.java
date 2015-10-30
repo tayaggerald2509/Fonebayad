@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -44,6 +45,16 @@ public class FragmentNotification extends Fragment implements MaterialDialog.Sin
     @Bind(R.id.list_notification)
     public ListView list_notification;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TextView lblTitle = (TextView) getActivity().findViewById(R.id.lblTitle);
+        lblTitle.setText(R.string.app_notification);
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +64,7 @@ public class FragmentNotification extends Fragment implements MaterialDialog.Sin
         ShowAuthDialog();
         return view;
     }
+
 
     private void ShowAuthDialog() {
         billStatements = new ArrayList<ModelBillStatement>();

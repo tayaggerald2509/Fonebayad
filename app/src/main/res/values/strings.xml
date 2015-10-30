@@ -7,6 +7,7 @@
     <string name="app_name">Fonebayad</string>
     <string name="app_register">Registration</string>
     <string name="app_dashboard">Personal Dashboard</string>
+    <string name="app_notification">Personal Dashboard</string>
     <string name="app_calendar">My Bills</string>
     <string name="app_add_bill">Add New Bill</string>
     <string name="app_bill_info">Bill Information</string>

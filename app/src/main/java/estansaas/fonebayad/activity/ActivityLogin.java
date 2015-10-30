@@ -275,7 +275,7 @@ public class ActivityLogin extends AppCompatActivity implements MaterialDialog.S
                     } else if (loginResponse.getStatus().contains(Constants.STATUS_NOTACCEPTABLE)) {
                         Util.ShowNeutralDialog(ActivityLogin.this, "fonebayad", "Entered PIN is not yet valid." + '\n' + "You need to verify your email first.", "OK", ActivityLogin.this);
                     } else if (loginResponse.getStatus().contains(Constants.STATUS_NODEVICE)) {
-                        Util.ShowDialog(ActivityLogin.this, "fonebayad", "No Device Found", "REGISTER", "CANCEL", new MaterialDialog.SingleButtonCallback() {
+                        Util.ShowDialog(ActivityLogin.this, "Register", "Entered PIN doesn't have and account. Would you like to: ", "REGISTER", "CANCEL", new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                                 switch (dialogAction) {

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/ll_row"
-        android:background="@color/app_color">
+        android:paddingBottom="@dimen/activity_min_padding">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -38,19 +38,19 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="PLDT"
                     android:id="@+id/txtBillerName"
-                    android:textSize="@dimen/abc_text_size_button_material"
+                    android:textSize="@dimen/abc_text_size_menu_material"
                     android:gravity="center" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingBottom="@dimen/activity_min_padding"
-            android:paddingTop="@dimen/activity_min_padding">
+            android:paddingTop="@dimen/activity_margin_20dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,7 +60,8 @@
                 android:id="@+id/txtCategory"
                 android:layout_gravity="right"
                 android:layout_margin="@dimen/activity_margin_min"
-                android:textSize="@dimen/text_currency" />
+                android:textSize="@dimen/text_currency"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -73,11 +74,11 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="will due on 30-Oct-2015"
                     android:id="@+id/txtMsg"
-                    android:layout_marginLeft="@dimen/activity_margin_min"
+                    android:layout_marginLeft="@dimen/activity_vertical_margin"
                     android:layout_marginTop="@dimen/activity_margin_min"
                     android:layout_marginBottom="@dimen/activity_margin_min"
                     android:textColor="@color/color_total"
-                    android:textSize="@dimen/abc_text_size_caption_material" />
+                    android:textSize="@dimen/abc_text_size_small_material" />
 
                 <TextView
                     android:layout_width="wrap_content"

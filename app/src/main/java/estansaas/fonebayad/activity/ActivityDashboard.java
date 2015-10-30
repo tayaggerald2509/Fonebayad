@@ -29,6 +29,9 @@ import estansaas.fonebayad.view.BadgeView;
  */
 public class ActivityDashboard extends BaseActivity {
 
+    @Bind(R.id.lblTitle)
+    public TextView lblTitle;
+
     @Bind(R.id.coordinatorLayout)
     public CoordinatorLayout coordinatorLayout;
 
@@ -64,8 +67,9 @@ public class ActivityDashboard extends BaseActivity {
 
     }
 
-    private void setUpTabs(){
-        for(int i = 0; i<Util.Tabs.length; i++) {
+
+    private void setUpTabs() {
+        for (int i = 0; i < Util.Tabs.length; i++) {
             TextView tabs = (TextView) LayoutInflater.from(this).inflate(R.layout.icon_tab, null);
             tabs.setText(Util.Tabs[i].toUpperCase());
             tabs.setCompoundDrawablesWithIntrinsicBounds(0, Util.Tabs_Icon[i], 0, 0);
@@ -73,8 +77,8 @@ public class ActivityDashboard extends BaseActivity {
         }
     }
 
-    private void setUpBadges(){
-        for(int i = 0; i< Util.Tabs.length; i++){
+    private void setUpBadges() {
+        for (int i = 0; i < Util.Tabs.length; i++) {
             TextView tabs = (TextView) LayoutInflater.from(this).inflate(R.layout.icon_tab, null);
             BadgeView badgeView = new BadgeView(this, tabs);
             badgeView.setText("1");
@@ -94,7 +98,7 @@ public class ActivityDashboard extends BaseActivity {
     }
 
     @OnClick(R.id.expanded_menu)
-    public void toggleMenu(){
+    public void toggleMenu() {
         showMenu();
     }
 

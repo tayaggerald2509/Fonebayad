@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
@@ -92,8 +93,24 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
         prSurfaceHolder.addCallback(this);
         prSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_NORMAL);
 
+        int isVisible = getIntent().getStringExtra("photo") == null ? View.INVISIBLE : View.VISIBLE;
+        int isButtonVisible = getIntent().getStringExtra("photo") == null ? View.VISIBLE : View.INVISIBLE;
 
-        rl_bill_added.setVisibility(getIntent().getStringExtra("photo") == "" ? View.INVISIBLE : View.VISIBLE);
+        rl_bill_added.setVisibility(isVisible);
+        img_captured.setVisibility(isVisible);
+
+        btn_capture.setVisibility(isButtonVisible);
+        surface_camera.setVisibility(isButtonVisible);
+
+        try {
+            ImageLoader imageLoader = ImageLoader.getInstance();
+
+            imageLoader.displayImage("file://" + getIntent().getStringExtra("photo"), img_captured);
+
+            YoYo.with(Techniques.Landing).duration(1200).playOn(findViewById(R.id.img_stamp));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -285,7 +302,7 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
 
     @OnClick(R.id.back)
     public void Back() {
-        finish();
+        GotoDashboard();
     }
 
     @Override
