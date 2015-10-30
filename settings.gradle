@@ -1,0 +1,3 @@
+include ':app', ':oauthio', ':ExpandableListView'
+project(':oauthio').projectDir = new File('libs/oauthio')
+project(':ExpandableListView').projectDir = new File('libs/ExpandableListView')
