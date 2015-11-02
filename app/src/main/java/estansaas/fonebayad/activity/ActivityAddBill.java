@@ -56,11 +56,13 @@ public class ActivityAddBill extends BaseActivity implements MaterialDialog.Sing
 
     @OnClick(R.id.ll_addManually)
     public void ShowAdd() {
+        finish();
         Util.startNextActivity(this, ActivityAddManualBill.class);
     }
 
     @OnClick(R.id.ll_photo)
     public void ShowPhoto() {
+        finish();
         Util.startNextActivity(this, ActivityPhoto.class);
     }
 

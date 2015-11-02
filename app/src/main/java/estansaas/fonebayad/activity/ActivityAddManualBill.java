@@ -376,7 +376,13 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
 
     @OnClick(R.id.back)
     public void Back() {
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
         finish();
+        Util.startNextActivity(this, ActivityAddBill.class);
     }
 
     @Override

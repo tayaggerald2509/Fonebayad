@@ -40,9 +40,9 @@ import estansaas.fonebayad.adapter.AdapterListViewBillStatement;
 import estansaas.fonebayad.auth.Responses.ResponseBillStatement;
 import estansaas.fonebayad.auth.RestClient;
 import estansaas.fonebayad.model.ModelBillCategory;
+import estansaas.fonebayad.model.ModelBillInformation;
 import estansaas.fonebayad.model.ModelBillStatement;
 import estansaas.fonebayad.model.ModelLogin;
-import estansaas.fonebayad.model.ModelBillInformation;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import estansaas.fonebayad.view.AutofitTextView;
@@ -103,6 +103,9 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     @Bind(R.id.txtView)
     public TextView txtView;
 
+    @Bind(R.id.chk_mybills)
+    public CheckBox chk_mybills;
+
     LinearLayout ll_tool, ll_view, ll_share, ll_pay;
 
     public static final int SAMPLE_DATA_ITEM_COUNT = 3;
@@ -153,6 +156,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
         listSelected = new ArrayList<>();
 
+        chk_mybills.setChecked(true);
     }
 
     @OnClick(R.id.back)
@@ -163,12 +167,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     @OnClick(R.id.expanded_menu)
     public void toggleMenu() {
         showMenu();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        estansaas.fonebayad.model.ModelBillInformation.DeleteBillStatement();
     }
 
     @OnClick(R.id.ll_dashboard)
@@ -251,7 +249,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
     private void InitializeTools(Boolean isEnabled) {
         chk_select.setEnabled(isEnabled);
-        chk_category.setEnabled(isEnabled);
         chk_zoom.setEnabled(isEnabled);
         chk_list_type.setEnabled(isEnabled);
         if (selected > 0) {
@@ -261,8 +258,8 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         }
     }
 
-    private void ShowMessage() {
-        if (ModelBillInformation.getBillStatement().size() > 0) {
+    private void ShowMessage(int size) {
+        if (size > 0) {
             ll_message.setVisibility(View.INVISIBLE);
             InitializeTools(true);
         } else {
@@ -272,7 +269,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     }
 
     private void InitializeData() {
-        billStatements = new ArrayList<ModelBillInformation>();
+        billStatements = new ArrayList<>();
         if (Network.isConnected(this)) {
             new MaterialDialog.Builder(this)
                     .content(R.string.action_wait)
@@ -287,7 +284,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                         public void onDismiss(DialogInterface dialog) {
                             txtNoOfBills.setText(String.valueOf(estansaas.fonebayad.model.ModelBillInformation.CountBillStatement()));
                             InitiliazeAdapters();
-                            ShowMessage();
+                            ShowMessage(ModelBillInformation.getBillStatement().size());
                         }
                     })
                     .showListener(new DialogInterface.OnShowListener() {
@@ -302,7 +299,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
             }
 
             InitiliazeAdapters();
-            ShowMessage();
+            ShowMessage(ModelBillInformation.getBillStatement().size());
         }
     }
 
@@ -359,7 +356,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                                 if (String.valueOf(i).compareTo("0") == 0) {
                                     billStatement.setNoOfDays("OVERDUE");
                                     billStatement.setType("OVERDUE");
-                                }else{
+                                } else {
                                     if (Util.getWeekDate().after(calendar.getTime())) {
                                         billStatement.setType("WEEK");
                                     } else {
@@ -445,7 +442,8 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                 } else {
                     txtSelect.setText("SELECT ALL");
                 }
-                for (ModelBillInformation billstatement : estansaas.fonebayad.model.ModelBillInformation.getBillStatement()) {
+
+                for (ModelBillInformation billstatement : billStatements) {
                     Log.i("TOTAL SELECTED", String.valueOf(totalSelected));
                     totalSelected += Double.valueOf(billstatement.getBalance());
                     billstatement.setIsSelected(isChecked);
@@ -453,7 +451,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                 }
 
                 if (isChecked) {
-                    txtNoOfSelected.setText(String.valueOf(estansaas.fonebayad.model.ModelBillInformation.CountBillStatement()));
+                    txtNoOfSelected.setText(String.valueOf(billStatements.size()));
                     txtTotalSelected.setText("PHP " + new DecimalFormat("#,##0.00").format(totalSelected < 0.00 ? (totalSelected * -1) : totalSelected));
                     selected = Integer.valueOf(txtNoOfSelected.getText().toString());
                     ll_tool.setVisibility(View.VISIBLE);
@@ -473,9 +471,10 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                 break;
             case R.id.chk_category:
                 mItems = ModelBillCategory.getCategory();
-                this.mListableItems = new String[mItems.size()];
+                this.mListableItems = new String[mItems.size() + 1];
 
-                int i = 0;
+                int i = 1;
+                mListableItems[0] = "ALL";
                 for (ModelBillCategory item : mItems) {
                     mListableItems[i++] = item.getCategory_name();
                 }
@@ -521,16 +520,15 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
     @Override
     public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-
-        Toast.makeText(ActivityMyBills.this, mListableItems[i], Toast.LENGTH_SHORT).show();
-
-        billStatements = ModelBillInformation.getBillStatementByCategory(mListableItems[i]);
-
+        billStatements = new ArrayList<>();
+        billStatements = i != 0 ? ModelBillInformation.getBillStatementByCategory(mItems.get(i).getCategory_id()) : ModelBillInformation.getBillStatement();
         txtNoOfBills.setText(String.valueOf(billStatements.size()));
         InitiliazeAdapters();
+
         iconAdapter.notifyDataSetChanged();
         listAdapter.notifyDataSetChanged();
-        ShowMessage();
+
+        ShowMessage(billStatements.size());
     }
 
     @Override
@@ -564,7 +562,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
             chk_delete.setEnabled(false);
 
             InitiliazeAdapters();
-            ShowMessage();
+            ShowMessage(ModelBillInformation.getBillStatement().size());
 
             iconAdapter.notifyDataSetChanged();
             listAdapter.notifyDataSetChanged();
@@ -580,4 +578,9 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        estansaas.fonebayad.model.ModelBillInformation.DeleteBillStatement();
+    }
 }

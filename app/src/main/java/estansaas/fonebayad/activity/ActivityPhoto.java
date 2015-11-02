@@ -91,7 +91,7 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
 
         prSurfaceHolder = surface_camera.getHolder();
         prSurfaceHolder.addCallback(this);
-        prSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_NORMAL);
+        prSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         int isVisible = getIntent().getStringExtra("photo") == null ? View.INVISIBLE : View.VISIBLE;
         int isButtonVisible = getIntent().getStringExtra("photo") == null ? View.VISIBLE : View.INVISIBLE;
@@ -117,6 +117,7 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
     @Override
     public void surfaceChanged(SurfaceHolder _holder, int _format, int _width, int _height) {
         Camera.Parameters lParam = prCamera.getParameters();
+        lParam.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
         prCamera.setParameters(lParam);
         try {
             prCamera.setPreviewDisplay(_holder);
@@ -132,11 +133,9 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
         prCamera.takePicture(null, null, new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-
                 btn_capture.setVisibility(View.INVISIBLE);
                 btnRetake.setVisibility(View.VISIBLE);
                 btnUpload.setVisibility(View.VISIBLE);
-
 
                 fileName = "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()).toString() + ".jpg";
 
@@ -302,7 +301,7 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
 
     @OnClick(R.id.back)
     public void Back() {
-        GotoDashboard();
+        GotoAddBill();
     }
 
     @Override
@@ -328,5 +327,10 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
             finish();
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        GotoAddBill();
     }
 }
