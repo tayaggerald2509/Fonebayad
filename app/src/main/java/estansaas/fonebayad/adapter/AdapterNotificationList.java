@@ -24,6 +24,7 @@ import estansaas.fonebayad.utils.Util;
  * Created by gerald.tayag on 10/29/2015.
  */
 public class AdapterNotificationList extends BaseAdapter {
+
     private ModelBillStatement billStatement;
     private List<ModelBillStatement> modelBillStatements;
     private Activity activity;

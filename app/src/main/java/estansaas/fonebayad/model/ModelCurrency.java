@@ -6,6 +6,8 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by gerald.tayag on 10/16/2015.
  */
@@ -111,12 +113,16 @@ public class ModelCurrency extends Model {
         this.currency_status = currency_status;
     }
 
-    public static String getCurrency(String currency_id){
+    public static List<ModelCurrency> getCurrency() {
+        return new Select().from(ModelCurrency.class).execute();
+    }
+
+    public static String getCurrency(String currency_id) {
         ModelCurrency modelCurrency = new Select().from(ModelCurrency.class).where("currency_id=?", currency_id).executeSingle();
         return modelCurrency.getCurrency_code();
     }
 
-    public static int count(){
+    public static int count() {
         return new Select().from(ModelCurrency.class).count();
     }
 }

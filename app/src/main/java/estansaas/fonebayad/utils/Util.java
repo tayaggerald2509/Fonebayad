@@ -66,11 +66,6 @@ public class Util {
     public static String[] Tabs = {"Dashboard", "Notifications", "Offers", "Messages"};
     public static Integer[] Tabs_Icon = {R.drawable.ic_av_timer_white_24dp_active, R.drawable.ic_action_ic_notifications_none_white_24dp_active, R.drawable.ic_action_ic_card_giftcard_black_48dp_active, R.drawable.ic_action_ic_email_white_48dp_active};
 
-    // My Bills
-    public static String[] Tabs_Bills = {"Dashboard", "My Bills", "Add Bill", "Calculator", "Reports"};
-    public static Integer[] Tabs_Icon_Bills = {R.drawable.ic_dashboard_48dp, R.drawable.ic_receipt_48dp, R.drawable.ic_add_circle_outline_48dp, R.drawable.ic_add_circle_outline_48dp, R.drawable.ic_equalizer_white_48dp};
-
-
     public static Typeface setTypeface(Context context, String font) {
         tf = Typeface.createFromAsset(context.getAssets(), font);
         return tf;

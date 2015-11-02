@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -37,7 +37,7 @@ import retrofit.Retrofit;
 /**
  * Created by gerald.tayag on 10/7/2015.
  */
-public class FragmentNotification extends Fragment implements MaterialDialog.SingleButtonCallback {
+public class FragmentNotification extends Fragment implements MaterialDialog.SingleButtonCallback, AdapterView.OnItemClickListener {
 
     private List<ModelBillStatement> billStatements;
     private AdapterNotificationList adapterListViewBillStatement;
@@ -50,9 +50,6 @@ public class FragmentNotification extends Fragment implements MaterialDialog.Sin
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TextView lblTitle = (TextView) getActivity().findViewById(R.id.lblTitle);
-        lblTitle.setText(R.string.app_notification);
-
     }
 
     @Nullable
@@ -64,7 +61,6 @@ public class FragmentNotification extends Fragment implements MaterialDialog.Sin
         ShowAuthDialog();
         return view;
     }
-
 
     private void ShowAuthDialog() {
         billStatements = new ArrayList<ModelBillStatement>();
@@ -100,9 +96,10 @@ public class FragmentNotification extends Fragment implements MaterialDialog.Sin
 
                         adapterListViewBillStatement = new AdapterNotificationList(getActivity(), billStatements);
                         list_notification.setAdapter(adapterListViewBillStatement);
+                        list_notification.setOnItemClickListener(FragmentNotification.this);
                     }
                 } else {
-
+                    Util.ShowNeutralDialog(getActivity(), "Notification", "Failed to conenct to server!", "OK", FragmentNotification.this);
                 }
                 dialogInterface.dismiss();
             }
@@ -110,8 +107,14 @@ public class FragmentNotification extends Fragment implements MaterialDialog.Sin
             @Override
             public void onFailure(Throwable t) {
                 dialogInterface.dismiss();
+                Util.ShowNeutralDialog(getActivity(), "Notification", t.getMessage(), "OK", FragmentNotification.this);
             }
         });
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
     @Override

@@ -232,9 +232,9 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
 
                                 Intent intent = new Intent(ActivityAddManualBill.this, ActivityPaymentMethod.class);
                                 intent.putExtra("ModelBillInformation", billInfoModel);
-                                finish();
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+
                             } else {
                                 Util.ShowNeutralDialog(ActivityAddManualBill.this, "fonebayad", "Sorry your bill is already added!", "OK", ActivityAddManualBill.this);
                             }

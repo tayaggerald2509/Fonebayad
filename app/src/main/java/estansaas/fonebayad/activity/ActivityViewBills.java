@@ -1,5 +1,6 @@
 package estansaas.fonebayad.activity;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -137,8 +138,11 @@ public class ActivityViewBills extends BaseActivity {
 
     @OnClick(R.id.ll_pay_now)
     public void GoToPayView() {
+        Intent intent = new Intent(this, ActivityPaymentView.class);
+        intent.putExtra("ModelBillInformation", modelBillInformation);
         finish();
-        Util.startNextActivity(this, ActivityPaymentView.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
     private void InitializeView() {

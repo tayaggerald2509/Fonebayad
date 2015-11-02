@@ -6,8 +6,10 @@ import estansaas.fonebayad.auth.Responses.AccessToken;
 import estansaas.fonebayad.auth.Responses.Response;
 import estansaas.fonebayad.auth.Responses.ResponseBankAccount;
 import estansaas.fonebayad.auth.Responses.ResponseBillStatement;
+import estansaas.fonebayad.auth.Responses.ResponseForexRate;
 import estansaas.fonebayad.auth.Responses.ResponseLogin;
 import estansaas.fonebayad.auth.Responses.ResponseNotification;
+import estansaas.fonebayad.auth.Responses.ResponseOffer;
 import estansaas.fonebayad.auth.Responses.ResponseSyncData;
 import estansaas.fonebayad.auth.Responses.ResponseUserSophisticate;
 import estansaas.fonebayad.model.ModelRegistration;
@@ -73,6 +75,15 @@ public interface RestApi {
     @POST("/fonebayad-web/public/getNotifications")
     Call<ResponseNotification> getNotification(@Field("userID") String user_id);
 
+    @FormUrlEncoded
+    @POST("/fonebayad-web/public/getOffers")
+    Call<ResponseOffer> getOffers(@Field("userID") String user_id);
+
+    @FormUrlEncoded
+    @POST("/fonebayad-web/public/getForexRate")
+    Call<ResponseForexRate> getForexRate(@Field("base_currency") String base_currency, @Field("transfer_currency") String transfer_currency);
+
     @POST("/token")
     Call<AccessToken> getAccessToken(@Query("username") String username, @Query("password") String password);
+
 }
