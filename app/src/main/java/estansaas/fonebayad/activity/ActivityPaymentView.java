@@ -1,6 +1,7 @@
 package estansaas.fonebayad.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -35,6 +36,8 @@ import retrofit.Retrofit;
  */
 public class ActivityPaymentView extends BaseActivity implements MaterialDialog.SingleButtonCallback {
 
+    public static final String ACTIVITY_PAYMENT_VIEW = "ActivityPaymentView";
+
     @Bind(R.id.txtBiller)
     public TextView txtBiller;
 
@@ -52,6 +55,9 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
 
     @Bind(R.id.txtTotalAmount)
     public TextView txtTotalAmount;
+
+    @Bind(R.id.txtPaymentMethod)
+    public TextView txtPaymentMethod;
 
     private ModelBillInformation modelBillInformation;
     private ModelCurrency modelCurrency;
@@ -163,6 +169,16 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
 
     }
 
+    @OnClick(R.id.ll_payment_method)
+    public void ShowPaymentMethod() {
+        Intent intent = new Intent(this, ActivityPaymentMethod.class);
+        intent.putExtra("ModelBillInformation", modelBillInformation);
+        intent.putExtra("PAYMENT_VIEW", ACTIVITY_PAYMENT_VIEW);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
+
     @Override
     public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
         switch (dialogAction) {
@@ -186,5 +202,18 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
     @OnClick(R.id.expanded_menu)
     public void toggleMenu() {
         showMenu();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        try {
+            txtPaymentMethod.setText(getIntent().getExtras().getString("PAY_METHOD"));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

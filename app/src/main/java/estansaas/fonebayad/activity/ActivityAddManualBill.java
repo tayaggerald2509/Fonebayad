@@ -57,6 +57,8 @@ import retrofit.Retrofit;
  */
 public class ActivityAddManualBill extends BaseActivity implements CalendarDatePickerDialogFragment.OnDateSetListener, View.OnFocusChangeListener, MaterialDialog.SingleButtonCallback {
 
+    public static final String ACTIVITY_ADDBILL_VIEW = "ActivityAddManualBill";
+
     private static final String FRAG_TAG_DATE_PICKER = "fragment_due_date";
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int FILE_CHOOSER_IMAGE_REQUEST_CODE = 200;
@@ -231,6 +233,7 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
                                 Log.i("Bill Due Date", txtDueDate.getText().toString());
 
                                 Intent intent = new Intent(ActivityAddManualBill.this, ActivityPaymentMethod.class);
+                                intent.putExtra("PAYMENT_VIEW", ACTIVITY_ADDBILL_VIEW);
                                 intent.putExtra("ModelBillInformation", billInfoModel);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);

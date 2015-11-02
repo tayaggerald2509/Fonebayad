@@ -24,13 +24,14 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import estansaas.fonebayad.R;
 import estansaas.fonebayad.adapter.AdapterBankAccount;
 import estansaas.fonebayad.auth.Responses.ResponseBankAccount;
 import estansaas.fonebayad.auth.RestClient;
 import estansaas.fonebayad.model.ModelBankAccount;
-import estansaas.fonebayad.model.ModelLogin;
 import estansaas.fonebayad.model.ModelBillInformation;
+import estansaas.fonebayad.model.ModelLogin;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import retrofit.Call;
@@ -82,6 +83,7 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
                         @Override
                         public void onDismiss(DialogInterface dialog) {
                             list_bank.setAdapter(adapterBankAccount);
+                            list_bank.setOnItemClickListener(ActivityPaymentMethod.this);
                         }
                     })
                     .showListener(new DialogInterface.OnShowListener() {
@@ -101,33 +103,33 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
 
         Call<ResponseBankAccount> responseBank = RestClient.get().getAllActiveBankAccounts(ModelLogin.getUserInfo().getApp_id());
         responseBank.enqueue(new Callback<ResponseBankAccount>() {
-                 @Override
-                 public void onResponse(Response<ResponseBankAccount> response, Retrofit retrofit) {
-                     if (response.isSuccess()) {
-                         if (response.code() == 200) {
-                             ActiveAndroid.beginTransaction();
-                             try {
-                                 for (ModelBankAccount bankaccountModelBankAccount : response.body().getModelBankAccount()) {
-                                     modelBankAccounts.add(bankaccountModelBankAccount);
+                                 @Override
+                                 public void onResponse(Response<ResponseBankAccount> response, Retrofit retrofit) {
+                                     if (response.isSuccess()) {
+                                         if (response.code() == 200) {
+                                             ActiveAndroid.beginTransaction();
+                                             try {
+                                                 for (ModelBankAccount bankaccountModelBankAccount : response.body().getModelBankAccount()) {
+                                                     modelBankAccounts.add(bankaccountModelBankAccount);
+                                                 }
+                                                 adapterBankAccount = new AdapterBankAccount(ActivityPaymentMethod.this, modelBankAccounts);
+                                                 ActiveAndroid.setTransactionSuccessful();
+                                             } finally {
+                                                 ActiveAndroid.endTransaction();
+                                             }
+                                         }
+                                     } else {
+                                         Util.ShowDialog(ActivityPaymentMethod.this, "fonebayad", "Failed to connect to server", "RETRY", "CANCEL", ActivityPaymentMethod.this);
+                                     }
+                                     dialogInterface.dismiss();
                                  }
-                                 adapterBankAccount = new AdapterBankAccount(ActivityPaymentMethod.this, modelBankAccounts);
-                                 ActiveAndroid.setTransactionSuccessful();
-                             } finally {
-                                 ActiveAndroid.endTransaction();
-                             }
-                         }
-                     } else {
-                         Util.ShowDialog(ActivityPaymentMethod.this, "fonebayad", "Failed to connect to server", "RETRY", "CANCEL", ActivityPaymentMethod.this);
-                     }
-                     dialogInterface.dismiss();
-                 }
 
-                 @Override
-                 public void onFailure(Throwable t) {
-                     dialogInterface.dismiss();
-                     Util.ShowDialog(ActivityPaymentMethod.this, "fonebayad", "Unable to connect to server", "RETRY", "CANCEL", ActivityPaymentMethod.this);
-                 }
-             }
+                                 @Override
+                                 public void onFailure(Throwable t) {
+                                     dialogInterface.dismiss();
+                                     Util.ShowDialog(ActivityPaymentMethod.this, "fonebayad", "Unable to connect to server", "RETRY", "CANCEL", ActivityPaymentMethod.this);
+                                 }
+                             }
         );
     }
 
@@ -153,7 +155,17 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
         Log.i("bill_type", modelBillInformation.getBill_type());
         Log.i("bill_user_type", modelBillInformation.getBill_user_entity());
 
-        ProcessBill();
+        if (ActivityAddManualBill.ACTIVITY_ADDBILL_VIEW.equals(getIntent().getExtras().getString("PAYMENT_VIEW")) == true) {
+            ProcessBill();
+        } else {
+            Intent i = new Intent(this, ActivityPaymentView.class);
+            i.putExtra("ModelBillInformation", modelBillInformation);
+            i.putExtra("PAY_METHOD", modelBankAccounts.get(position).getBankaccount_accountname());
+            startActivity(i);
+            finish();
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+        }
+
     }
 
     private void ProcessBill() {
@@ -276,5 +288,15 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
             default:
                 break;
         }
+    }
+
+    @OnClick(R.id.back)
+    public void Back() {
+        finish();
+    }
+
+    @OnClick(R.id.expanded_menu)
+    public void toggleMenu() {
+        showMenu();
     }
 }
