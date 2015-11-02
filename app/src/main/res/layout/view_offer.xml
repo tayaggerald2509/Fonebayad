@@ -1,6 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/activity_min_padding"
+        android:paddingBottom="@dimen/activity_min_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1.5"
+            android:layout_marginLeft="@dimen/activity_margin_min"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <estansaas.fonebayad.view.AutofitTextView
+                    android:id="@+id/txtBillerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:singleLine="false"
+                    android:text="PLDT"
+                    android:textSize="@dimen/abc_text_size_small_material"
+                    autofit:minTextSize="8sp"
+                    android:lines="2" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <estansaas.fonebayad.view.AutofitTextView
+                android:id="@+id/txtInstruction"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:singleLine="false"
+                android:text="PLDT offer limited edition internet with landline as 1000/month
+                "
+                android:textSize="@dimen/abc_text_size_small_material"
+                autofit:minTextSize="9sp"
+                android:minLines="1"
+                android:nestedScrollingEnabled="false"
+                android:gravity="left|center"
+                android:maxLines="3"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/activity_margin_min"
+            android:layout_gravity="center|right"
+            android:layout_weight="1.5">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/activity_margin_max">
+
+                <ImageView
+                    android:id="@+id/imageView21"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/points_container" />
+
+                <estansaas.fonebayad.view.AutofitTextView
+                    android:id="@+id/txtPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:padding="@dimen/activity_min_padding"
+                    android:singleLine="true"
+                    android:text="100"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/abc_text_size_menu_material"
+                    android:textStyle="bold"
+                    autofit:minTextSize="8sp" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/imageView22"
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_margin_min"
+                android:src="@drawable/ic_hardware_keyboard_arrow_right" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

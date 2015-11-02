@@ -94,12 +94,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 android:singleLine="true"
                 android:text="PHP 123,4456,789.00"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/abc_text_size_medium_material"
-                autofit:minTextSize="8sp"
-                android:gravity="center" />
+                autofit:minTextSize="8sp" />
 
             <estansaas.fonebayad.view.AutofitTextView
                 android:id="@+id/txtNoOfDays"

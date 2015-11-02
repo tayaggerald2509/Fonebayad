@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/custom_tab_layout_height"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,18 +17,21 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/ll_dashboard"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/ll_dashboard">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imageView18"
+                <CheckBox
+                    android:id="@+id/chk_dashboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_dashboard_48dp" />
+                    android:button="@drawable/icon_dashboard_selector"
+                    android:checked="true"
+                    android:enabled="false"
+                    android:clickable="false" />
 
                 <TextView
                     android:id="@+id/textView34"
@@ -40,18 +43,21 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_bills"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/ll_bills">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imageView18"
+                <CheckBox
+                    android:id="@+id/chk_mybills"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_receipt_48dp" />
+                    android:button="@drawable/icon_mybill_selector"
+                    android:checked="false"
+                    android:enabled="false"
+                    android:clickable="false" />
 
                 <TextView
                     android:id="@+id/textView34"
@@ -63,18 +69,21 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_add_bill"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/ll_add_bill">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imageView18"
+                <CheckBox
+                    android:id="@+id/chk_addbill"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_add_circle_outline_48dp" />
+                    android:button="@drawable/icon_addbill_selector"
+                    android:checked="false"
+                    android:enabled="false"
+                    android:clickable="false" />
 
                 <TextView
                     android:id="@+id/textView34"
@@ -86,18 +95,21 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_cal"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/ll_cal">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imageView18"
+                <CheckBox
+                    android:id="@+id/chk_calc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_add_circle_outline_48dp" />
+                    android:button="@drawable/icon_addbill_selector"
+                    android:checked="false"
+                    android:enabled="false"
+                    android:clickable="false" />
 
                 <TextView
                     android:id="@+id/textView34"
@@ -109,18 +121,21 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_report"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:id="@+id/ll_report">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imageView18"
+                <CheckBox
+                    android:id="@+id/chk_reports"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_equalizer_white_48dp" />
+                    android:button="@drawable/icon_reports_selector"
+                    android:checked="false"
+                    android:enabled="false"
+                    android:clickable="false" />
 
                 <TextView
                     android:id="@+id/textView34"
