@@ -171,7 +171,6 @@ public class ActivityViewBills extends BaseActivity {
     }
 
     private void InitializeData() {
-
         txtService.setText(ModelBillers.getBillers(modelBillInformation.getBill_biller()).getBiller_name());
         txtCategory.setText(ModelBillCategory.getCategoryName(Integer.valueOf(ModelBillers.getBillers(modelBillInformation.getBill_biller()).getBiller_category())));
         txtAccountNo.setText(modelBillInformation.getBill_account_number());
@@ -185,11 +184,27 @@ public class ActivityViewBills extends BaseActivity {
 
     @OnClick(R.id.back)
     public void Back() {
-        finish();
+        if (getIntent().getExtras().getBoolean("EXTRA_BILL_ADDED", false)) {
+            finish();
+            Util.startNextActivity(this, ActivityMyBills.class);
+        } else {
+            onBackPressed();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getIntent().getExtras().getBoolean("EXTRA_BILL_ADDED", false)) {
+            finish();
+            Util.startNextActivity(this, ActivityMyBills.class);
+        } else {
+            return;
+        }
     }
 
     @OnClick(R.id.expanded_menu)
     public void toggleMenu() {
         showMenu();
     }
+
 }

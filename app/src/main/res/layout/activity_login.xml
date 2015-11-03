@@ -122,10 +122,11 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/abc_control_inset_material"
                 android:layout_marginTop="@dimen/abc_dialog_list_padding_vertical_material"
-                android:text="Problem with login?"
+                android:text="Problem with login? \n v 1.0.0-1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#ffffff"
-                android:textSize="@dimen/abc_text_size_small_material" />
+                android:textSize="@dimen/abc_text_size_small_material"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout

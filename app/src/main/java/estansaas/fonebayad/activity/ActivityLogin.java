@@ -34,7 +34,7 @@ import estansaas.fonebayad.R;
 import estansaas.fonebayad.auth.Responses.ResponseLogin;
 import estansaas.fonebayad.auth.RestClient;
 import estansaas.fonebayad.model.ModelLogin;
-import estansaas.fonebayad.utils.Constants;
+import estansaas.fonebayad.utils.Connection;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import estansaas.fonebayad.view.PinView;
@@ -270,11 +270,11 @@ public class ActivityLogin extends AppCompatActivity implements MaterialDialog.S
                     ResponseLogin loginResponse = response.body();
                     clearPins();
                     Log.i("Status Code", String.valueOf(response.code()));
-                    if (loginResponse.getStatus().contains(Constants.STATUS_NOTFOUND)) {
+                    if (loginResponse.getStatus().contains(Connection.STATUS_NOTFOUND)) {
                         Util.ShowNeutralDialog(ActivityLogin.this, "fonebayad", "You have entered Invalid PIN", "OK", ActivityLogin.this);
-                    } else if (loginResponse.getStatus().contains(Constants.STATUS_NOTACCEPTABLE)) {
+                    } else if (loginResponse.getStatus().contains(Connection.STATUS_NOTACCEPTABLE)) {
                         Util.ShowNeutralDialog(ActivityLogin.this, "fonebayad", "Entered PIN is not yet valid." + '\n' + "You need to verify your email first.", "OK", ActivityLogin.this);
-                    } else if (loginResponse.getStatus().contains(Constants.STATUS_NODEVICE)) {
+                    } else if (loginResponse.getStatus().contains(Connection.STATUS_NODEVICE)) {
                         Util.ShowDialog(ActivityLogin.this, "Register", "Entered PIN doesn't have and account. Would you like to: ", "REGISTER", "CANCEL", new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {

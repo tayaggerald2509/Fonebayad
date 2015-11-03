@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:autofit="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -314,7 +315,6 @@
                                     android:id="@+id/txtPaymentMethod"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Medium Text"
                                     android:textAppearance="?android:attr/textAppearanceMedium" />
                             </LinearLayout>
 
@@ -365,5 +365,92 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bill_paid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/img_stamp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="false"
+            android:layout_marginBottom="@dimen/abc_text_size_display_3_material"
+            android:layout_marginLeft="@dimen/abc_text_size_display_3_material"
+            android:layout_marginRight="@dimen/abc_text_size_display_3_material"
+            android:src="@drawable/paid_successful" />
+
+        <RelativeLayout
+            android:id="@+id/ll_bill_added"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#8C000000">
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/color_total"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_min_padding"
+                    android:id="@+id/ll_finish">
+
+                    <TextView
+                        android:id="@+id/txtDashboard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="FINISH"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/abc_text_size_large_material"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/app_color"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:id="@+id/ll_bill"
+                    android:padding="@dimen/activity_min_padding"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/txtBill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="NEXT BILL"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/abc_text_size_large_material"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
 

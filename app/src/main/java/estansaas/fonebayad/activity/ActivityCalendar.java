@@ -227,7 +227,7 @@ public class ActivityCalendar extends BaseActivity implements MaterialDialog.Sin
                                     if (new Date().before(Util.convertDate(modelBillStatement.getBill_duedate()))) {
                                         calendar.setTime(Util.convertDate(modelBillStatement.getBill_duedate()));
                                         eventStart = calendar.getTimeInMillis();
-                                        calendar.add(Calendar.HOUR, 12);
+                                        calendar.add(Calendar.HOUR, 1);
                                         eventEnd = calendar.getTimeInMillis();
                                         if (Util.getWeekDate().before(calendar.getTime())) {
                                             due = new Event("", eventStart, eventEnd);
@@ -241,7 +241,7 @@ public class ActivityCalendar extends BaseActivity implements MaterialDialog.Sin
                                     } else {
                                         calendar.setTime(Util.convertDate(modelBillStatement.getBill_duedate()));
                                         eventStart = calendar.getTimeInMillis();
-                                        calendar.add(Calendar.HOUR, 12);
+                                        calendar.add(Calendar.HOUR, 1);
                                         eventEnd = calendar.getTimeInMillis();
 
                                         overdue = new Event("", eventStart, eventEnd);

@@ -63,10 +63,10 @@ public class AdapterIconViewBillStatement extends BaseAdapter {
         billStatement = getItem(position);
         if (convertView == null) {
             inflater = (LayoutInflater) activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            if (billStatement.getType().contains("OVERDUE")) {
+            if (billStatement.getType() == "OVERDUE") {
                 convertView = inflater.inflate(R.layout.view_list_icon_overdue, parent, false);
             } else {
-                if (billStatement.getType().contains("WEEK")) {
+                if (billStatement.getType() == "WEEK") {
                     convertView = inflater.inflate(R.layout.view_list_icon_week, parent, false);
                 } else {
                     convertView = inflater.inflate(R.layout.view_list_icon, parent, false);

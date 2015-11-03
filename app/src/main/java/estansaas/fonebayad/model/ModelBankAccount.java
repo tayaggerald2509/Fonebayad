@@ -3,11 +3,13 @@ package estansaas.fonebayad.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by gerald.tayag on 10/21/2015.
  */
 
-public class ModelBankAccount {
+public class ModelBankAccount implements Serializable {
 
     @SerializedName("bankaccount_id")
     @Expose

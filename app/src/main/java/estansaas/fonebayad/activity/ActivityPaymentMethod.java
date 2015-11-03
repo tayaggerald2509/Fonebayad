@@ -140,7 +140,6 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
         modelBillInformation.setBill_currency(modelBankAccounts.get(position).getBankaccount_currency());
         modelBillInformation.setBill_payment_method(modelBankAccounts.get(position).getBankaccount_id());
 
-
         Log.i("bill_biller", modelBillInformation.getBill_biller());
         Log.i("bill_account_number", modelBillInformation.getBill_account_number());
         Log.i("bill_transaction_number", modelBillInformation.getBill_transaction_number());
@@ -160,7 +159,7 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
         } else {
             Intent i = new Intent(this, ActivityPaymentView.class);
             i.putExtra("ModelBillInformation", modelBillInformation);
-            i.putExtra("PAY_METHOD", modelBankAccounts.get(position).getBankaccount_accountname());
+            i.putExtra("PAY_METHOD", modelBankAccounts.get(position));
             startActivity(i);
             finish();
             overridePendingTransition(R.anim.slide_in, R.anim.slide_out);

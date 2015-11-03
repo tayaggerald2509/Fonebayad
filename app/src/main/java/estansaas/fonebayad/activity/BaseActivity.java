@@ -92,7 +92,7 @@ public class BaseActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
 
             case 4:
-                mclass = ActivityTransactionHistory.class;
+                mclass = ActivityPaymentMethods.class;
                 break;
 
             case 5:

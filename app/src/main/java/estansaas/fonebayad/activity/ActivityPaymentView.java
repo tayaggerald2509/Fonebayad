@@ -6,15 +6,21 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,8 +28,11 @@ import butterknife.OnClick;
 import estansaas.fonebayad.R;
 import estansaas.fonebayad.auth.Responses.ResponseForexRate;
 import estansaas.fonebayad.auth.RestClient;
+import estansaas.fonebayad.model.ModelBankAccount;
 import estansaas.fonebayad.model.ModelBillInformation;
 import estansaas.fonebayad.model.ModelCurrency;
+import estansaas.fonebayad.model.ModelLogin;
+import estansaas.fonebayad.utils.Connection;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import retrofit.Call;
@@ -37,6 +46,9 @@ import retrofit.Retrofit;
 public class ActivityPaymentView extends BaseActivity implements MaterialDialog.SingleButtonCallback {
 
     public static final String ACTIVITY_PAYMENT_VIEW = "ActivityPaymentView";
+
+    @Bind(R.id.rl_bill_paid)
+    public RelativeLayout rl_bill_paid;
 
     @Bind(R.id.txtBiller)
     public TextView txtBiller;
@@ -59,7 +71,11 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
     @Bind(R.id.txtPaymentMethod)
     public TextView txtPaymentMethod;
 
+    @Bind(R.id.btnProceed)
+    public Button btnProceed;
+
     private ModelBillInformation modelBillInformation;
+    private ModelBankAccount modelBankAccount;
     private ModelCurrency modelCurrency;
     private String[] currency;
 
@@ -179,24 +195,106 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
+    @OnClick(R.id.btnProceed)
+    public void Proceed() {
+        if (modelBankAccount != null) {
+            Util.ShowDialog(this, "Payment Confirmation", "Are you sure you want to pay now?", "YES", "NO", this);
+        } else {
+            Util.ShowNeutralDialog(this, "fonebayad", "Please choose your payment method.", "OK", this);
+        }
+    }
+
     @Override
     public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
         switch (dialogAction) {
             case POSITIVE:
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(modelBillInformation.getDue_date());
+                if (new Date().before(calendar.getTime())) {
+                    if (Double.valueOf(modelBankAccount.getBankaccount_amount()) >= Double.valueOf(modelBillInformation.getBill_amount())) {
+                        ShowDialogAuth();
+                    } else {
+                        Util.ShowNeutralDialog(this, "Warning", "Payment unsuccessful. Insufficient credit.", "OK", this);
+                    }
+                } else {
+                    Util.ShowNeutralDialog(this, "Warning", "Unable to proceed with payment. Your bill is already overdue", "Ok", this);
+                }
 
                 break;
             case NEGATIVE:
-
-                break;
             case NEUTRAL:
                 materialDialog.dismiss();
                 break;
         }
     }
 
+    private void ShowDialogAuth() {
+        if (Network.isConnected(this)) {
+            new MaterialDialog.Builder(this)
+                    .content("Loading")
+                    .contentGravity(GravityEnum.CENTER)
+                    .theme(Theme.DARK)
+                    .widgetColor(Color.WHITE)
+                    .progressIndeterminateStyle(false)
+                    .progress(true, 0)
+                    .cancelable(true)
+                    .showListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            AuthPayment(dialogInterface);
+                        }
+                    }).show();
+        } else {
+            Util.ShowNeutralDialog(this, "fonebayad", "No Internet connection!", "OK", this);
+        }
+    }
+
+    private void AuthPayment(final DialogInterface dialogInterface) {
+
+        /*ModelPaybill modelPaybill = new ModelPaybill();
+        modelPaybill.setStatementID(modelBillInformation.getBill_Id());
+        modelPaybill.setUserID(ModelLogin.getUserInfo().getApp_id());
+        modelPaybill.setStatus("Paid");
+        modelPaybill.setPaymentAmount(modelBillInformation.getBill_amount());
+        modelPaybill.setNewBalance("0.00");
+        modelPaybill.setBankId(modelBankAccount.getBankaccount_id());
+        modelPaybill.setTransactionAmount(modelBillInformation.getBill_amount());
+        modelPaybill.setTransactionLine("1");*/
+
+        Double newBalance = Double.valueOf(modelBankAccount.getBankaccount_amount()) - Double.valueOf(modelBillInformation.getBill_amount());
+        Call<estansaas.fonebayad.auth.Responses.Response> responseCall = RestClient.get().paybillsMobile(modelBillInformation.getBill_Id(), ModelLogin.getUserInfo().getApp_id(), "Paid", modelBillInformation.getBill_amount(), newBalance.toString(), modelBankAccount.getBankaccount_id(), modelBillInformation.getBill_amount(), "1");
+
+        responseCall.enqueue(new Callback<estansaas.fonebayad.auth.Responses.Response>() {
+            @Override
+            public void onResponse(Response<estansaas.fonebayad.auth.Responses.Response> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    if (response.body().getStatus().equals(Connection.STATUS_ACCEPTED)) {
+                        rl_bill_paid.setVisibility(View.VISIBLE);
+                        YoYo.with(Techniques.Landing).duration(1200).playOn(findViewById(R.id.img_stamp));
+                    }
+                } else {
+                    Util.ShowNeutralDialog(ActivityPaymentView.this, "Warning", "Failed to connect to server!", "OK", ActivityPaymentView.this);
+                }
+                dialogInterface.dismiss();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+                dialogInterface.dismiss();
+                Util.ShowNeutralDialog(ActivityPaymentView.this, "fonebayad", "Unable to connect to server!", "OK", ActivityPaymentView.this);
+            }
+        });
+    }
+
+    @OnClick(R.id.ll_finish)
+    public void goto_finish() {
+        onBackPressed();
+    }
+
     @OnClick(R.id.back)
     public void Back() {
-        finish();
+        onBackPressed();
     }
 
     @OnClick(R.id.expanded_menu)
@@ -209,11 +307,22 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
         super.onResume();
 
         try {
-            txtPaymentMethod.setText(getIntent().getExtras().getString("PAY_METHOD"));
+            modelBankAccount = (ModelBankAccount) getIntent().getSerializableExtra("PAY_METHOD");
+            txtPaymentMethod.setText(modelBankAccount.getBankaccount_accountname());
         } catch (NullPointerException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (rl_bill_paid.getVisibility() == View.VISIBLE) {
+            finish();
+        } else {
+            finish();
+            Util.startNextActivity(this, ActivityMyBills.class);
         }
     }
 }

@@ -32,6 +32,7 @@ import estansaas.fonebayad.auth.Responses.Response;
 import estansaas.fonebayad.auth.RestClient;
 import estansaas.fonebayad.model.ModelRegistration;
 import estansaas.fonebayad.model.ModelSalutation;
+import estansaas.fonebayad.utils.Connection;
 import estansaas.fonebayad.utils.Constants;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
@@ -178,10 +179,10 @@ public class ActivityRegister extends AppCompatActivity implements View.OnFocusC
                 public void onResponse(retrofit.Response<Response> response, Retrofit retrofit) {
                     dialogInterface.dismiss();
                     if (response.isSuccess()) {
-                        if (response.body().getStatus().contains(Constants.STATUS_ACCEPTED)) {
+                        if (response.body().getStatus().contains(Connection.STATUS_ACCEPTED)) {
                             finish();
                             Util.startNextActivity(ActivityRegister.this, ActivityRegisterSuccess.class);
-                        } else if (response.body().getStatus().contains(Constants.STATUS_LOOP)) {
+                        } else if (response.body().getStatus().contains(Connection.STATUS_LOOP)) {
                             Util.ShowMessage(coordinatorLayout, "You have an existing account on this phone.");
                         }
                     } else {
@@ -265,10 +266,10 @@ public class ActivityRegister extends AppCompatActivity implements View.OnFocusC
             public void onResponse(retrofit.Response<Response> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     VerifyFoneEmail.setVisibility(View.VISIBLE);
-                    if (response.body().getStatus().contains(Constants.STATUS_OK)) {
+                    if (response.body().getStatus().contains(Connection.STATUS_OK)) {
                         //CheckPersonalEmail();
                         VerifyFoneEmail.setImageDrawable(Util.resizeDrawable(ActivityRegister.this, R.drawable.ic_action_ic_done_white_48dp));
-                    } else if (response.body().getStatus().contains(Constants.STATUS_CONFLICT)) {
+                    } else if (response.body().getStatus().contains(Connection.STATUS_CONFLICT)) {
                         VerifyFoneEmail.setImageDrawable(Util.resizeDrawable(ActivityRegister.this, R.drawable.ic_action_ic_clear_white_48dp));
                         Util.ShowMessage(coordinatorLayout, "Sorry fonebayad email already exist!");
                     }
@@ -291,10 +292,10 @@ public class ActivityRegister extends AppCompatActivity implements View.OnFocusC
             @Override
             public void onResponse(retrofit.Response<Response> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    if (response.body().getStatus().contains(Constants.STATUS_ACCEPTED)) {
+                    if (response.body().getStatus().contains(Connection.STATUS_ACCEPTED)) {
                         txtPersonalEmail.setError(null, Util.resizeDrawable(ActivityRegister.this, R.drawable.ic_action_ic_done_white_48dp));
                         ValidateAccount();
-                    } else if (response.body().getStatus().contains(Constants.STATUS_CONFLICT)) {
+                    } else if (response.body().getStatus().contains(Connection.STATUS_CONFLICT)) {
                         txtPersonalEmail.setError(null, Util.resizeDrawable(ActivityRegister.this, R.drawable.ic_action_ic_clear_white_48dp));
                         Util.ShowMessage(coordinatorLayout, "Sorry your Personal email has been used!");
                     } else {

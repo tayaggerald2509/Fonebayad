@@ -83,6 +83,10 @@ public interface RestApi {
     @POST("/fonebayad-web/public/getForexRate")
     Call<ResponseForexRate> getForexRate(@Field("base_currency") String base_currency, @Field("transfer_currency") String transfer_currency);
 
+    @FormUrlEncoded
+    @POST("/fonebayad-web/public/paybillsMobile")
+    Call<Response> paybillsMobile(@Field("statementID") String statementID, @Field("userID") String userID, @Field("status") String status, @Field("paymentAmount") String paymentAmount, @Field("newBalance") String newBalance, @Field("bankId") String bankId, @Field("transactionAmount") String transactionAmount, @Field("transactionLine") String transactionLine);
+
     @POST("/token")
     Call<AccessToken> getAccessToken(@Query("username") String username, @Query("password") String password);
 

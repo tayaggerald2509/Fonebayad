@@ -42,7 +42,7 @@ import estansaas.fonebayad.model.ModelBankAccount;
 import estansaas.fonebayad.model.ModelBillStatement;
 import estansaas.fonebayad.model.ModelLogin;
 import estansaas.fonebayad.model.ModelSophisticate;
-import estansaas.fonebayad.utils.Constants;
+import estansaas.fonebayad.utils.Connection;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import estansaas.fonebayad.view.AutofitTextView;
@@ -208,6 +208,7 @@ public class FragmentDashboard extends Fragment {
     @OnClick(R.id.ll_total_due)
     public void ShowTotalDue() {
         Intent intent = new Intent(getActivity(), ActivityMyBills.class);
+        intent.putExtra("EXTRA_SESSION_ID", 0);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
@@ -244,7 +245,7 @@ public class FragmentDashboard extends Fragment {
 
                         for (ModelBankAccount modelBankAccount : response.body().getModelBankAccount()) {
                             if (modelBankAccount.getBankaccount_sortorder().equals("1")) {
-                                txtTranspera.setText(new DecimalFormat("#,##0.00").format(Double.valueOf(modelBankAccount.getBankaccount_amount())));
+                                txtTranspera.setText("Php " + new DecimalFormat("#,##0.00").format(Double.valueOf(modelBankAccount.getBankaccount_amount())));
                             }
                         }
                     }
@@ -266,7 +267,7 @@ public class FragmentDashboard extends Fragment {
             public void onResponse(Response<ResponseUserSophisticate> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     String msg;
-                    if (response.body().getStatus().contains(Constants.STATUS_ACCEPTED)) {
+                    if (response.body().getStatus().contains(Connection.STATUS_ACCEPTED)) {
                         ModelSophisticate modelSophisticate = response.body().getModelSophisticate();
                         if (modelSophisticate.getSop_status().equals("reject")) {
                             msg = "Your application has been rejected. Do you want to proceed to the KYC verification again";

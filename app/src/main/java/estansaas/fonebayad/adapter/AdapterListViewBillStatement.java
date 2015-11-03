@@ -64,10 +64,10 @@ public class AdapterListViewBillStatement extends BaseAdapter {
         billStatement = getItem(position);
         if (Util.checkIfNull(convertView)) {
             LayoutInflater inflater = activity.getLayoutInflater();
-            if (billStatement.getType().contains("OVERDUE")) {
+            if (billStatement.getType() == "OVERDUE") {
                 convertView = inflater.inflate(R.layout.view_list_overdue, parent, false);
             } else {
-                if (billStatement.getType().contains("WEEK")) {
+                if (billStatement.getType() == "WEEK") {
                     convertView = inflater.inflate(R.layout.view_list_week, parent, false);
                 } else {
                     convertView = inflater.inflate(R.layout.view_list, parent, false);

@@ -41,7 +41,7 @@ import estansaas.fonebayad.model.ModelBillInformation;
 import estansaas.fonebayad.model.ModelBillers;
 import estansaas.fonebayad.model.ModelLogin;
 import estansaas.fonebayad.model.ModelStatus;
-import estansaas.fonebayad.utils.Constants;
+import estansaas.fonebayad.utils.Connection;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import estansaas.fonebayad.view.FormSelector;
@@ -222,7 +222,7 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
                     if (response.isSuccess()) {
                         if (response.code() == 200) {
                             Log.i("response", response.body().getStatus());
-                            if (response.body().getStatus().contains(Constants.STATUS_ACCEPTED)) {
+                            if (response.body().getStatus().contains(Connection.STATUS_ACCEPTED)) {
 
                                 billInfoModel.setBill_biller(bill_id);
                                 billInfoModel.setBill_account_number(txtAccount.getText().toString());

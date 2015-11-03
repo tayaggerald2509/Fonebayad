@@ -37,8 +37,10 @@ import butterknife.OnClick;
 import estansaas.fonebayad.R;
 import estansaas.fonebayad.adapter.AdapterIconViewBillStatement;
 import estansaas.fonebayad.adapter.AdapterListViewBillStatement;
+import estansaas.fonebayad.auth.Responses.ResponseBankAccount;
 import estansaas.fonebayad.auth.Responses.ResponseBillStatement;
 import estansaas.fonebayad.auth.RestClient;
+import estansaas.fonebayad.model.ModelBankAccount;
 import estansaas.fonebayad.model.ModelBillCategory;
 import estansaas.fonebayad.model.ModelBillInformation;
 import estansaas.fonebayad.model.ModelBillStatement;
@@ -106,6 +108,9 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     @Bind(R.id.chk_mybills)
     public CheckBox chk_mybills;
 
+    @Bind(R.id.txtAccountBalance)
+    public TextView txtAccountBalance;
+
     LinearLayout ll_tool, ll_view, ll_share, ll_pay;
 
     public static final int SAMPLE_DATA_ITEM_COUNT = 3;
@@ -116,6 +121,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     private AdapterListViewBillStatement listAdapter;
     private int selected = 0;
     private Double totalSelected = 0.0;
+    private Double AccountBalance = 0.0;
     private Animation bottom_up, bottom_down;
     private List<ModelBillCategory> mItems;
     private String[] mListableItems;
@@ -157,6 +163,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         listSelected = new ArrayList<>();
 
         chk_mybills.setChecked(true);
+        AuthPrimaryBankDetails();
     }
 
     @OnClick(R.id.back)
@@ -200,11 +207,13 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ll_share:
+                Toast.makeText(this, "SHARE", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.ll_view:
+            case R.id.ll_pay:
                 if (selected == 1) {
-
                     Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show();
-
                     modelBillInfo = estansaas.fonebayad.model.ModelBillInformation.viewBillStatement(listSelected.get(0));
                     SimpleDateFormat sdf = new SimpleDateFormat("ccc MMMM dd hh:mm:ss zzzz yyyy");
 
@@ -220,14 +229,10 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                     intent.putExtra("EXTRA_BILL_ADDED", true);
                     intent.putExtra("ModelBillInformation", modelBillInfo);
                     startActivity(intent);
+                    finish();
                     this.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
 
                 }
-                break;
-            case R.id.ll_share:
-                Toast.makeText(this, "SHARE", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.ll_pay:
                 Toast.makeText(this, "PAY", Toast.LENGTH_SHORT).show();
                 break;
             default:
@@ -250,6 +255,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     private void InitializeTools(Boolean isEnabled) {
         chk_select.setEnabled(isEnabled);
         chk_zoom.setEnabled(isEnabled);
+        chk_category.setEnabled(isEnabled);
         chk_list_type.setEnabled(isEnabled);
         if (selected > 0) {
             chk_delete.setEnabled(true);
@@ -282,9 +288,9 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                     .dismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            txtNoOfBills.setText(String.valueOf(estansaas.fonebayad.model.ModelBillInformation.CountBillStatement()));
+                            txtNoOfBills.setText(String.valueOf(billStatements.size()));
                             InitiliazeAdapters();
-                            ShowMessage(ModelBillInformation.getBillStatement().size());
+                            ShowMessage(billStatements.size());
                         }
                     })
                     .showListener(new DialogInterface.OnShowListener() {
@@ -337,35 +343,20 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                                 e.printStackTrace();
                             }
                         }
-                        Calendar calendar = Calendar.getInstance();
-                        for (ModelBillInformation billStatement : estansaas.fonebayad.model.ModelBillInformation.getBillStatement()) {
-                            calendar.setTime(billStatement.getDue_date());
-                            Calendar today = Calendar.getInstance();
-                            long diff = calendar.getTimeInMillis() - today.getTimeInMillis();
-                            long days = diff / (24 * 60 * 60 * 1000);
-                            long i = days * -1;
 
-                            if (new Date().after(calendar.getTime())) {
-                                if (String.valueOf(i).compareTo("0") == 0) {
-                                    billStatement.setNoOfDays("OVERDUE");
-                                } else {
-                                    billStatement.setNoOfDays(String.valueOf(i) + " DAYS OVERDUE");
-                                }
-                                billStatement.setType("OVERDUE");
-                            } else {
-                                if (String.valueOf(i).compareTo("0") == 0) {
-                                    billStatement.setNoOfDays("OVERDUE");
-                                    billStatement.setType("OVERDUE");
-                                } else {
-                                    if (Util.getWeekDate().after(calendar.getTime())) {
-                                        billStatement.setType("WEEK");
-                                    } else {
-                                        billStatement.setType("DUE");
-                                    }
-                                    billStatement.setNoOfDays(String.valueOf(days) + " DAYS LEFT");
-                                }
-                            }
-                            billStatements.add(billStatement);
+                        switch (getIntent().getIntExtra("EXTRA_SESSION_ID", 0)) {
+                            //OverDue
+                            case 1:
+                                InitializeOverDue();
+                                break;
+                            //Week
+                            case 2:
+                                InitializeWeek();
+                                break;
+                            //ALL
+                            default:
+                                InitializeAll();
+                                break;
                         }
                     } else {
                         Util.ShowMessage(coordinatorLayout, "Can't fetch data from server.");
@@ -381,6 +372,101 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                 dialogInterface.dismiss();
             }
         });
+    }
+
+    private void InitializeOverDue() {
+        Calendar calendar = Calendar.getInstance();
+        for (ModelBillInformation billStatement : estansaas.fonebayad.model.ModelBillInformation.getBillStatement()) {
+            calendar.setTime(billStatement.getDue_date());
+            Calendar today = Calendar.getInstance();
+            long diff = calendar.getTimeInMillis() - today.getTimeInMillis();
+            long days = diff / (24 * 60 * 60 * 1000);
+            long i = days * -1;
+
+            if (new Date().after(calendar.getTime())) {
+                if (String.valueOf(i).compareTo("0") == 0) {
+                    billStatement.setNoOfDays("OVERDUE");
+                } else {
+                    billStatement.setNoOfDays(String.valueOf(Util.getDifferenceDays(calendar, today)) + " DAYS OVERDUE");
+                }
+                billStatement.setType("OVERDUE");
+                billStatements.add(billStatement);
+            }
+        }
+    }
+
+    private void InitializeWeek() {
+        Calendar calendar = Calendar.getInstance();
+        for (ModelBillInformation billStatement : estansaas.fonebayad.model.ModelBillInformation.getBillStatement()) {
+            calendar.setTime(billStatement.getDue_date());
+            Calendar today = Calendar.getInstance();
+            long diff = calendar.getTimeInMillis() - today.getTimeInMillis();
+            long days = diff / (24 * 60 * 60 * 1000);
+            long i = days * -1;
+
+            if (new Date().before(calendar.getTime())) {
+                if (Util.getWeekDate().after(calendar.getTime())) {
+                    billStatement.setType("WEEK");
+                    billStatement.setNoOfDays(String.valueOf(Util.getDifferenceDays(calendar, today)) + " DAYS LEFT");
+                    billStatements.add(billStatement);
+                }
+            }
+        }
+    }
+
+    private void InitializeAll() {
+        Calendar calendar = Calendar.getInstance();
+        for (ModelBillInformation billStatement : estansaas.fonebayad.model.ModelBillInformation.getBillStatement()) {
+            calendar.setTime(billStatement.getDue_date());
+            Calendar today = Calendar.getInstance();
+            long diff = calendar.getTimeInMillis() - today.getTimeInMillis();
+            long aday = 24 * 60 * 60 * 1000;
+            long days = diff / aday;
+            long i = days * -1;
+
+            if (new Date().before(calendar.getTime())) {
+                if (Util.getWeekDate().before(calendar.getTime())) {
+                    billStatement.setType("DUE");
+                } else {
+                    billStatement.setType("WEEK");
+                }
+                billStatement.setNoOfDays(String.valueOf(Util.getDifferenceDays(calendar, today)) + " DAYS LEFT");
+            } else {
+                if (String.valueOf(i).compareTo("0") == 0) {
+                    billStatement.setNoOfDays("OVERDUE");
+                } else {
+                    billStatement.setNoOfDays(String.valueOf(Util.getDifferenceDays(calendar, today)) + " DAYS OVERDUE");
+                }
+                billStatement.setType("OVERDUE");
+            }
+            billStatements.add(billStatement);
+        }
+    }
+
+    private void AuthPrimaryBankDetails() {
+        if (Network.isConnected(this)) {
+            Call<ResponseBankAccount> responseBankAccountCall = RestClient.get().getAllActiveBankAccounts(ModelLogin.getUserInfo().getApp_id());
+            responseBankAccountCall.enqueue(new Callback<ResponseBankAccount>() {
+                @Override
+                public void onResponse(Response<ResponseBankAccount> response, Retrofit retrofit) {
+                    if (response.isSuccess()) {
+
+                        for (ModelBankAccount modelBankAccount : response.body().getModelBankAccount()) {
+                            if (modelBankAccount.getBankaccount_sortorder().equals("1")) {
+                                AccountBalance = Double.valueOf(modelBankAccount.getBankaccount_amount());
+                                txtAccountBalance.setText("Php " + new DecimalFormat("#,##0.00").format(Double.valueOf(modelBankAccount.getBankaccount_amount())));
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+        }
     }
 
     @Override
@@ -407,6 +493,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         if (selected > 0) {
             chk_delete.setEnabled(true);
         } else {
+            listSelected.clear();
             chk_select.setChecked(false);
             chk_delete.setEnabled(false);
             totalSelected = 0.00;
@@ -414,7 +501,8 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
         animateToolPay();
         txtNoOfSelected.setText(String.valueOf(selected));
-        txtTotalSelected.setText("PHP " + new DecimalFormat("#,##0.00").format(totalSelected < 0.00 ? (totalSelected * -1) : totalSelected));
+        txtTotalSelected.setText("Php " + new DecimalFormat("#,##0.00").format(totalSelected < 0.00 ? (totalSelected * -1) : totalSelected));
+        txtAccountBalance.setText("Php " + new DecimalFormat("#,##0.00").format(AccountBalance - totalSelected));
     }
 
     private void animateToolPay() {
@@ -520,8 +608,16 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
     @Override
     public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-        billStatements = new ArrayList<>();
-        billStatements = i != 0 ? ModelBillInformation.getBillStatementByCategory(mItems.get(i).getCategory_id()) : ModelBillInformation.getBillStatement();
+        billStatements.clear();
+        switch (i) {
+            case 0:
+                billStatements = ModelBillInformation.getBillStatement();
+                break;
+            default:
+                billStatements = ModelBillInformation.getBillStatementByCategory(mItems.get(i - 1).getCategory_id());
+                break;
+        }
+
         txtNoOfBills.setText(String.valueOf(billStatements.size()));
         InitiliazeAdapters();
 
@@ -552,12 +648,15 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     @Override
     public void onResume() {
         super.onResume();
+        listSelected.clear();
         try {
             for (ModelBillInformation billstatement : estansaas.fonebayad.model.ModelBillInformation.getBillStatement()) {
                 billstatement.setIsSelected(false);
                 billstatement.save();
             }
 
+            AuthPrimaryBankDetails();
+            //InitializeData();
             ll_tool.setVisibility(View.INVISIBLE);
             chk_delete.setEnabled(false);
 
@@ -572,7 +671,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
             selected = 0;
             totalSelected = 0.00;
-
         } catch (Exception e) {
             e.printStackTrace();
         }
