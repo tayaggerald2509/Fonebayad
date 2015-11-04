@@ -18,7 +18,10 @@
     <string name="app_bill_view">Bill View</string>
     <string name="app_payment">Payment</string>
     <string name="app_transaction_history">Transaction History</string>
+    <string name="app_transaction_details">Transaction Details</string>
     <string name="app_reload_ewallet">Reload E-Wallet</string>
+
+    <string name="bullet">&#8226;</string>
 
     <string name="app_ewallet_header">What can your e-wallet do?</string>
     <string name="app_ewallet_desc">With e-wallet, you can pay bills and remit money anytime, anywhere. We have a list of banks located in several countries. Just pick one, deposit your desired amount and wait for our confirmation. It\'s simple! Pay your bills and send money to anyone without worrying about extra charges.</string>
@@ -71,7 +74,7 @@
 
     <string-array name="nav_drawer_items">
         <item>Transaction History</item>
-        <item>Rate Matrix</item>
+        <!--item>Rate Matrix</item -->
         <item>Reload E-Wallet</item>
         <item>Payment Method</item>
         <item>Foreign Exchange</item>

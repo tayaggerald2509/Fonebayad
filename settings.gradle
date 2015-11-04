@@ -1,3 +1,4 @@
-include ':app', ':oauthio', ':ExpandableListView'
+include ':app', ':oauthio', ':ExpandableListView', ':library'
 project(':oauthio').projectDir = new File('libs/oauthio')
 project(':ExpandableListView').projectDir = new File('libs/ExpandableListView')
+project(':library').projectDir = new File('libs/library')

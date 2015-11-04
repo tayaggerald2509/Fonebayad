@@ -84,37 +84,33 @@ public class BaseActivity extends AppCompatActivity implements AdapterView.OnIte
             case 0:
                 mclass = ActivityTransactionHistory.class;
                 break;
-            case 2:
+            case 1:
                 mclass = ActivityReloadEWallet.class;
+                break;
+            case 2:
+                mclass = ActivityPaymentMethods.class;
                 break;
             case 3:
                 mclass = ActivityTransactionHistory.class;
                 break;
-
             case 4:
                 mclass = ActivityPaymentMethods.class;
                 break;
-
             case 5:
                 mclass = ActivityTransactionHistory.class;
                 break;
-
             case 6:
                 mclass = ActivityTransactionHistory.class;
                 break;
-
             case 7:
                 mclass = ActivityTransactionHistory.class;
                 break;
-
             case 8:
                 mclass = ActivityTransactionHistory.class;
                 break;
-
             case 9:
                 mclass = ActivityTransactionHistory.class;
                 break;
-
             case 10:
                 mclass = ActivityTransactionHistory.class;
                 break;

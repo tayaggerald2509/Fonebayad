@@ -11,6 +11,7 @@ import estansaas.fonebayad.auth.Responses.ResponseLogin;
 import estansaas.fonebayad.auth.Responses.ResponseNotification;
 import estansaas.fonebayad.auth.Responses.ResponseOffer;
 import estansaas.fonebayad.auth.Responses.ResponseSyncData;
+import estansaas.fonebayad.auth.Responses.ResponseTransaction;
 import estansaas.fonebayad.auth.Responses.ResponseUserSophisticate;
 import estansaas.fonebayad.model.ModelRegistration;
 import retrofit.Call;
@@ -86,6 +87,10 @@ public interface RestApi {
     @FormUrlEncoded
     @POST("/fonebayad-web/public/paybillsMobile")
     Call<Response> paybillsMobile(@Field("statementID") String statementID, @Field("userID") String userID, @Field("status") String status, @Field("paymentAmount") String paymentAmount, @Field("newBalance") String newBalance, @Field("bankId") String bankId, @Field("transactionAmount") String transactionAmount, @Field("transactionLine") String transactionLine);
+
+    @FormUrlEncoded
+    @POST("/fonebayad-web/public/getUserTransactionHistory")
+    Call<ResponseTransaction> getUserTransactionHistory(@Field("userid") String userid);
 
     @POST("/token")
     Call<AccessToken> getAccessToken(@Query("username") String username, @Query("password") String password);

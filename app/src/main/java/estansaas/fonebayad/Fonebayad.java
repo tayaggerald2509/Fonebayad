@@ -20,7 +20,7 @@ public class Fonebayad extends Application {
 
         ActiveAndroid.initialize(this);
         initImageLoader(getApplicationContext());
-        
+
     }
 
     public static void initImageLoader(Context context) {
