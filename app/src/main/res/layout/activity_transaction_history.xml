@@ -78,7 +78,7 @@
             android:paddingLeft="@dimen/activity_margin_20dp"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_min_padding"
-            android:text="FONE BAYAD - TRANSACTION HISTORY"
+            android:text="FONEBAYAD - TRANSACTION HISTORY"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/black"
             android:textSize="@dimen/abc_text_size_menu_material"

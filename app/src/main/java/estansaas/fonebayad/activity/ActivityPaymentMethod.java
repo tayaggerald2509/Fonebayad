@@ -1,5 +1,6 @@
 package estansaas.fonebayad.activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.afollestad.materialdialogs.DialogAction;
@@ -140,27 +140,14 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
         modelBillInformation.setBill_currency(modelBankAccounts.get(position).getBankaccount_currency());
         modelBillInformation.setBill_payment_method(modelBankAccounts.get(position).getBankaccount_id());
 
-        Log.i("bill_biller", modelBillInformation.getBill_biller());
-        Log.i("bill_account_number", modelBillInformation.getBill_account_number());
-        Log.i("bill_transaction_number", modelBillInformation.getBill_transaction_number());
-        Log.i("bill_currency", modelBillInformation.getBill_currency());
-        Log.i("bill_amount", modelBillInformation.getBill_amount());
-        Log.i("bill_status", modelBillInformation.getBill_status());
-        Log.i("bill_attachment", modelBillInformation.getBill_attachment());
-        Log.i("bill_due_date", modelBillInformation.getBill_due_date());
-        Log.i("billscheduleofpayment", modelBillInformation.getBill_schedule_of_payment());
-        Log.i("bill_user_id", modelBillInformation.getBill_user_id());
-        Log.i("bill_payment_method", modelBillInformation.getBill_payment_method());
-        Log.i("bill_type", modelBillInformation.getBill_type());
-        Log.i("bill_user_type", modelBillInformation.getBill_user_entity());
-
         if (ActivityAddManualBill.ACTIVITY_ADDBILL_VIEW.equals(getIntent().getExtras().getString("PAYMENT_VIEW")) == true) {
             ProcessBill();
         } else {
-            Intent i = new Intent(this, ActivityPaymentView.class);
-            i.putExtra("ModelBillInformation", modelBillInformation);
-            i.putExtra("PAY_METHOD", modelBankAccounts.get(position));
-            startActivity(i);
+            Intent resultIntent = new Intent();
+            // TODO Add extras or a data URI to this intent as appropriate.
+            resultIntent.putExtra("ModelBillInformation", modelBillInformation);
+            resultIntent.putExtra("PAY_METHOD", modelBankAccounts.get(position));
+            setResult(Activity.RESULT_OK, resultIntent);
             finish();
             overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
         }
@@ -200,7 +187,6 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
 
                 if (response.isSuccess()) {
                     if (response.code() == 200) {
-                        Toast.makeText(ActivityPaymentMethod.this, modelBillInformation.getBill_attachment(), Toast.LENGTH_SHORT).show();
                         if (!modelBillInformation.getBill_attachment().isEmpty()) {
                             uploadFile(dialogInterface);
                             return;
@@ -269,7 +255,6 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
         switch (dialogAction) {
             case POSITIVE:
                 switch (ACTIVITY_CURRENT_PROCESS) {
-
                     case 101:
                         LoadData();
                         break;

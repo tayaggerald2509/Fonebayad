@@ -1,6 +1,7 @@
 package estansaas.fonebayad.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -116,8 +117,12 @@ public class ActivityTransactionHistory extends BaseActivity implements Material
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Util.startNextActivity(this, ActivityTransactionDetails.class);
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id) {
+        Intent intent = new Intent(this, ActivityTransactionDetails.class);
+        intent.putExtra("TRANSACTION", modelTransactionList.get(position));
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
     @OnClick(R.id.expanded_menu)

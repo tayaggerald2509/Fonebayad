@@ -168,7 +168,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
     @OnClick(R.id.back)
     public void Back() {
-        finish();
+        onBackPressed();
     }
 
     @OnClick(R.id.expanded_menu)
@@ -179,7 +179,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     @OnClick(R.id.ll_dashboard)
     public void GoToDashboard() {
         finish();
-        Util.startNextActivity(this, ActivityDashboard.class);
+        Util.startNextActivity(this, ActivityCalendar.class);
     }
 
     @OnClick(R.id.ll_bills)
@@ -208,12 +208,12 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_share:
-                Toast.makeText(this, "SHARE", Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.ll_view:
             case R.id.ll_pay:
                 if (selected == 1) {
-                    Toast.makeText(this, "CLICKED", Toast.LENGTH_SHORT).show();
+
                     modelBillInfo = estansaas.fonebayad.model.ModelBillInformation.viewBillStatement(listSelected.get(0));
                     SimpleDateFormat sdf = new SimpleDateFormat("ccc MMMM dd hh:mm:ss zzzz yyyy");
 
@@ -233,7 +233,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                     this.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
 
                 }
-                Toast.makeText(this, "PAY", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -472,37 +471,42 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if (selected == 0) totalSelected = 0.00;
+        try {
+            if (selected == 0) totalSelected = 0.00;
 
-        CheckBox selected_ = (CheckBox) view.findViewById(R.id.chk_select);
+            CheckBox selected_ = (CheckBox) view.findViewById(R.id.chk_select);
 
-        if (selected_.isChecked()) {
-            selected -= 1;
-            selected_.setChecked(false);
-            selected_.setVisibility(View.INVISIBLE);
-            totalSelected -= Double.valueOf(billStatements.get(position).getBalance());
-            listSelected.remove(billStatements.get(position).getBill_Id());
-        } else {
-            selected += 1;
-            selected_.setChecked(true);
-            selected_.setVisibility(View.VISIBLE);
-            totalSelected += Double.valueOf(billStatements.get(position).getBalance());
-            listSelected.add(billStatements.get(position).getBill_Id());
+            if (selected_.isChecked()) {
+                selected -= 1;
+                selected_.setChecked(false);
+                selected_.setVisibility(View.INVISIBLE);
+                totalSelected -= Double.valueOf(billStatements.get(position).getBalance());
+                listSelected.remove(billStatements.get(position).getBill_Id());
+            } else {
+                selected += 1;
+                selected_.setChecked(true);
+                selected_.setVisibility(View.VISIBLE);
+                totalSelected += Double.valueOf(billStatements.get(position).getBalance());
+                listSelected.add(billStatements.get(position).getBill_Id());
+            }
+
+            if (selected > 0) {
+                chk_delete.setEnabled(true);
+            } else {
+                listSelected.clear();
+                chk_select.setChecked(false);
+                chk_delete.setEnabled(false);
+                totalSelected = 0.00;
+            }
+
+            animateToolPay();
+            txtNoOfSelected.setText(String.valueOf(selected));
+            txtTotalSelected.setText("Php " + new DecimalFormat("#,##0.00").format(totalSelected < 0.00 ? (totalSelected * -1) : totalSelected));
+            txtAccountBalance.setText("Php " + new DecimalFormat("#,##0.00").format(AccountBalance - totalSelected));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
-        if (selected > 0) {
-            chk_delete.setEnabled(true);
-        } else {
-            listSelected.clear();
-            chk_select.setChecked(false);
-            chk_delete.setEnabled(false);
-            totalSelected = 0.00;
-        }
-
-        animateToolPay();
-        txtNoOfSelected.setText(String.valueOf(selected));
-        txtTotalSelected.setText("Php " + new DecimalFormat("#,##0.00").format(totalSelected < 0.00 ? (totalSelected * -1) : totalSelected));
-        txtAccountBalance.setText("Php " + new DecimalFormat("#,##0.00").format(AccountBalance - totalSelected));
     }
 
     private void animateToolPay() {
@@ -680,5 +684,11 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     protected void onDestroy() {
         super.onDestroy();
         estansaas.fonebayad.model.ModelBillInformation.DeleteBillStatement();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Util.startNextActivity(this, ActivityDashboard.class);
     }
 }

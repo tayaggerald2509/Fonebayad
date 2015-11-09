@@ -1,5 +1,6 @@
 package estansaas.fonebayad.auth.Responses;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import estansaas.fonebayad.model.ModelUserBillStatemenetData;
@@ -9,9 +10,11 @@ import estansaas.fonebayad.model.ModelUserBillStatemenetData;
  */
 public class ResponseNotification {
 
+    @Expose
     @SerializedName("message")
     private String message;
 
+    @Expose
     @SerializedName("data")
     private ModelUserBillStatemenetData modelUserBillStatemenetData;
 

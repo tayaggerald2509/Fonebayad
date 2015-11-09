@@ -5,9 +5,11 @@ package estansaas.fonebayad.utils;
  */
 public interface Constants {
 
-    String URL = "http://192.168.1.236";
+    //String URL = "http://192.168.1.236";
     //String URL = "http://demo.fonebayad.com/public";
-    //String URL = "http://122.49.212.82";
+    //String URL = "http://beta.fonebayad.com";
+    String URL = "http://122.49.212.82";
+
 
     /*String STATUS_OK = "200";
     String STATUS_ACCEPTED = "202";

@@ -2,16 +2,18 @@ package estansaas.fonebayad.auth;
 
 import com.squareup.okhttp.RequestBody;
 
-import estansaas.fonebayad.auth.Responses.AccessToken;
 import estansaas.fonebayad.auth.Responses.Response;
+import estansaas.fonebayad.auth.Responses.ResponseAccess;
 import estansaas.fonebayad.auth.Responses.ResponseBankAccount;
 import estansaas.fonebayad.auth.Responses.ResponseBillStatement;
+import estansaas.fonebayad.auth.Responses.ResponseCountryDetails;
 import estansaas.fonebayad.auth.Responses.ResponseForexRate;
 import estansaas.fonebayad.auth.Responses.ResponseLogin;
 import estansaas.fonebayad.auth.Responses.ResponseNotification;
 import estansaas.fonebayad.auth.Responses.ResponseOffer;
 import estansaas.fonebayad.auth.Responses.ResponseSyncData;
 import estansaas.fonebayad.auth.Responses.ResponseTransaction;
+import estansaas.fonebayad.auth.Responses.ResponseUser;
 import estansaas.fonebayad.auth.Responses.ResponseUserSophisticate;
 import estansaas.fonebayad.model.ModelRegistration;
 import retrofit.Call;
@@ -19,6 +21,7 @@ import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
@@ -66,7 +69,7 @@ public interface RestApi {
     Call<Response> upload(@Part("uploadedImage\"; filename=\"pp.png\" ") RequestBody image, @Part("createdby") RequestBody createdBy, @Part("device_guid") RequestBody device_guid, @Part("device") RequestBody device);
 
     @GET("/fonebayad-web/public/api/getremotedata")
-    Call<Response> getremotedata(@Query("user_pin") String user_pin, @Query("device_guid") String device_guid);
+    Call<ResponseUser> getremotedata(@Header("Authorization") String authorization, @Query("user_pin") String user_pin, @Query("device_guid") String device_guid);
 
     @FormUrlEncoded
     @POST("/fonebayad-web/public/checkUserSophisticate")
@@ -92,7 +95,16 @@ public interface RestApi {
     @POST("/fonebayad-web/public/getUserTransactionHistory")
     Call<ResponseTransaction> getUserTransactionHistory(@Field("userid") String userid);
 
-    @POST("/token")
-    Call<AccessToken> getAccessToken(@Query("username") String username, @Query("password") String password);
+    @FormUrlEncoded
+    @POST("/fonebayad-web/public/saveReloadWalletDetails")
+    Call<Response> saveReloadWalletDetails(@Field("userid") String userid, @Field("uploadedbank_image") String uploadedbank_image, @Field("uploadedbank_deviceguid") String uploadedbank_deviceguid, @Field("uploadedbank_device") String uploadedbank_device, @Field("uploadedbank_currency") String uploadedbank_currency, @Field("uploadedbank_amount") String uploadedbank_amount, @Field("uploadedbank_countryid") String uploadedbank_countryid, @Field("uploadedbank_stateid") String uploadedbank_stateid);
+
+    @FormUrlEncoded
+    @POST("/fonebayad-web/public/getTransperaDetailsBasedOnCountry")
+    Call<ResponseCountryDetails> getTransperaDetailsBasedOnCountry(@Field("country_id") String country_id);
+
+    @FormUrlEncoded
+    @POST("/fonebayad-web/public/oauth/access_token")
+    Call<ResponseAccess> getAccessToken(@Field("grant_type") String grant_type, @Field("client_id") String client_id, @Field("client_secret") String client_secret, @Field("username") String username, @Field("password") String password);
 
 }

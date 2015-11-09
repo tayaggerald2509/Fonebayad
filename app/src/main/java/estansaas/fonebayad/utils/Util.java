@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -65,6 +66,20 @@ public class Util {
     // Main
     public static String[] Tabs = {"Dashboard", "Notifications", "Offers", "Messages"};
     public static Integer[] Tabs_Icon = {R.drawable.ic_av_timer_white_24dp_active, R.drawable.ic_action_ic_notifications_none_white_24dp_active, R.drawable.ic_action_ic_card_giftcard_black_48dp_active, R.drawable.ic_action_ic_email_white_48dp_active};
+
+    private static MaterialDialog.Builder materialBuilder;
+
+
+    public static SharedPreferences sharedPreferences(Context context) {
+        return context.getSharedPreferences("fonebayad", Context.MODE_PRIVATE);
+    }
+
+    public static void AddSharedPrefEditor(Context context, String key, String value) {
+        SharedPreferences sharedPreferences = sharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
 
     public static Typeface setTypeface(Context context, String font) {
         tf = Typeface.createFromAsset(context.getAssets(), font);
@@ -228,40 +243,49 @@ public class Util {
     }
 
     public static void ShowNeutralDialog(Context context, String title, String content, String neutral, MaterialDialog.SingleButtonCallback callback) {
-        new MaterialDialog.Builder(context)
-                .title(title)
-                .content(content)
-                .contentGravity(GravityEnum.CENTER)
-                .titleGravity(GravityEnum.CENTER)
-                .titleColor(context.getResources().getColor(R.color.app_color))
-                .theme(Theme.LIGHT)
-                .neutralText(neutral)
-                .onNeutral(callback)
-                .buttonsGravity(GravityEnum.CENTER)
-                .cancelable(false)
-                .neutralColor(context.getResources().getColor(R.color.app_color))
-                .show();
+
+        materialBuilder = new MaterialDialog.Builder(context);
+
+        if (!title.equals(null) && !title.equals("")) {
+            materialBuilder.title(title);
+        }
+        materialBuilder.dividerColorRes(R.color.app_color);
+        materialBuilder.content(content);
+        materialBuilder.contentGravity(GravityEnum.CENTER);
+        materialBuilder.titleGravity(GravityEnum.CENTER);
+        materialBuilder.titleColor(context.getResources().getColor(R.color.app_color));
+        materialBuilder.theme(Theme.LIGHT);
+        materialBuilder.neutralText(neutral);
+        materialBuilder.onNeutral(callback);
+        materialBuilder.buttonsGravity(GravityEnum.CENTER);
+        materialBuilder.cancelable(false);
+        materialBuilder.neutralColor(context.getResources().getColor(R.color.app_color));
+        materialBuilder.show();
+
     }
 
     public static void ShowDialog(Context context, String title, String content, String postive, String negative, MaterialDialog.SingleButtonCallback callback) {
-        new MaterialDialog.Builder(context)
-                .title(title)
-                .content(content)
-                .contentGravity(GravityEnum.CENTER)
-                .titleGravity(GravityEnum.CENTER)
 
-                .theme(Theme.LIGHT)
-                .positiveText(postive)
-                .negativeText(negative)
-                .onAny(callback)
-                .buttonsGravity(GravityEnum.CENTER)
-                .cancelable(false)
-                .positiveColor(context.getResources().getColor(R.color.app_color))
-                .negativeColor(context.getResources().getColor(R.color.app_color))
-                .show();
+        materialBuilder = new MaterialDialog.Builder(context);
+
+        if (!title.equals(null) && !title.equals("")) {
+            materialBuilder.title(title);
+        }
+        materialBuilder.content(content);
+        materialBuilder.contentGravity(GravityEnum.CENTER);
+        materialBuilder.titleGravity(GravityEnum.CENTER);
+        materialBuilder.theme(Theme.LIGHT);
+        materialBuilder.positiveText(postive);
+        materialBuilder.negativeText(negative);
+        materialBuilder.onAny(callback);
+        materialBuilder.buttonsGravity(GravityEnum.CENTER);
+        materialBuilder.cancelable(false);
+        materialBuilder.positiveColor(context.getResources().getColor(R.color.app_color));
+        materialBuilder.negativeColor(context.getResources().getColor(R.color.color_overdue));
+        materialBuilder.show();
     }
 
-    public static int getDifferenceDays(Calendar day1, Calendar day2){
+    public static int getDifferenceDays(Calendar day1, Calendar day2) {
         Calendar dayOne = (Calendar) day1.clone(),
                 dayTwo = (Calendar) day2.clone();
 
@@ -284,7 +308,7 @@ public class Util {
                 extraDays += dayOne.getActualMaximum(Calendar.DAY_OF_YEAR);
             }
 
-            return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays ;
+            return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays;
         }
     }
 

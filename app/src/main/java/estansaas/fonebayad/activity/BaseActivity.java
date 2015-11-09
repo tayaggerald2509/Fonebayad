@@ -22,7 +22,9 @@ import estansaas.fonebayad.utils.Util;
 /**
  * Created by gerald.tayag on 10/5/2015.
  */
-public class BaseActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class BaseActivity extends AppCompatActivity {
+
+    public static final String TAG = "SampleActivityBase";
 
     private ArrayList<ModelMenu> modelMenuArrayList;
     protected ListFragment mFrag;
@@ -46,6 +48,7 @@ public class BaseActivity extends AppCompatActivity implements AdapterView.OnIte
         slideMenu.setFadeDegree(0.35f);
         slideMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
         setMenu(slideMenu);
+
     }
 
     private void setMenu(SlidingMenu menu) {
@@ -61,7 +64,7 @@ public class BaseActivity extends AppCompatActivity implements AdapterView.OnIte
 
         adapter = new AdapterMenu(this, modelMenuArrayList);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
+        listView.setOnItemClickListener(onItemClickListener);
         menu.setMenu(view);
     }
 
@@ -77,48 +80,50 @@ public class BaseActivity extends AppCompatActivity implements AdapterView.OnIte
         navMenuIcons.recycle();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Class<?> mclass = null;
-        switch (position) {
-            case 0:
-                mclass = ActivityTransactionHistory.class;
-                break;
-            case 1:
-                mclass = ActivityReloadEWallet.class;
-                break;
-            case 2:
-                mclass = ActivityPaymentMethods.class;
-                break;
-            case 3:
-                mclass = ActivityTransactionHistory.class;
-                break;
-            case 4:
-                mclass = ActivityPaymentMethods.class;
-                break;
-            case 5:
-                mclass = ActivityTransactionHistory.class;
-                break;
-            case 6:
-                mclass = ActivityTransactionHistory.class;
-                break;
-            case 7:
-                mclass = ActivityTransactionHistory.class;
-                break;
-            case 8:
-                mclass = ActivityTransactionHistory.class;
-                break;
-            case 9:
-                mclass = ActivityTransactionHistory.class;
-                break;
-            case 10:
-                mclass = ActivityTransactionHistory.class;
-                break;
-            default:
-                break;
-        }
+    public AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Class<?> mclass = null;
+            switch (position) {
+                case 0:
+                    mclass = ActivityTransactionHistory.class;
+                    break;
+                case 1:
+                    mclass = ActivityReloadEWallet.class;
+                    break;
+                case 2:
+                    mclass = ActivityPaymentMethods.class;
+                    break;
+                case 3:
+                    mclass = ActivityTransactionHistory.class;
+                    break;
+                case 4:
+                    mclass = ActivityPaymentMethods.class;
+                    break;
+                case 5:
+                    mclass = ActivityTransactionHistory.class;
+                    break;
+                case 6:
+                    mclass = ActivityTransactionHistory.class;
+                    break;
+                case 7:
+                    mclass = ActivityTransactionHistory.class;
+                    break;
+                case 8:
+                    mclass = ActivityTransactionHistory.class;
+                    break;
+                case 9:
+                    mclass = ActivityTransactionHistory.class;
+                    break;
+                case 10:
+                    mclass = ActivityTransactionHistory.class;
+                    break;
+                default:
+                    break;
+            }
 
-        finish();
-        Util.startNextActivity(this, mclass);
-    }
+            finish();
+            Util.startNextActivity(BaseActivity.this, mclass);
+        }
+    };
 }

@@ -212,7 +212,7 @@
                                 <ImageView
                                     android:id="@+id/img_currency"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:src="@drawable/php" />
                             </LinearLayout>
 
@@ -233,11 +233,12 @@
                                     android:text="PHP"
                                     android:textAppearance="?android:attr/textAppearanceSmall"
                                     android:textSize="@dimen/abc_text_size_caption_material"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:visibility="invisible" />
 
                                 <estansaas.fonebayad.view.AutofitTextView
                                     android:id="@+id/txtTotalAmount"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="right"
@@ -245,7 +246,8 @@
                                     android:text="0.00"
                                     android:textAppearance="?android:attr/textAppearanceSmall"
                                     android:textSize="@dimen/abc_text_size_medium_material"
-                                    autofit:minTextSize="8sp" />
+                                    autofit:minTextSize="8sp"
+                                    android:layout_weight="1.5" />
 
                                 <ImageView
                                     android:id="@+id/imageView3"

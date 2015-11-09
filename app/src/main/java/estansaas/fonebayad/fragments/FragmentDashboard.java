@@ -185,6 +185,7 @@ public class FragmentDashboard extends Fragment {
     public void ShowCalendar() {
         Intent intent = new Intent(getActivity(), ActivityCalendar.class);
         startActivity(intent);
+        getActivity().finish();
         getActivity().overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
@@ -194,6 +195,7 @@ public class FragmentDashboard extends Fragment {
         Intent intent = new Intent(getActivity(), ActivityMyBills.class);
         intent.putExtra("EXTRA_SESSION_ID", 1);
         startActivity(intent);
+        getActivity().finish();
         getActivity().overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
@@ -202,6 +204,7 @@ public class FragmentDashboard extends Fragment {
         Intent intent = new Intent(getActivity(), ActivityMyBills.class);
         intent.putExtra("EXTRA_SESSION_ID", 2);
         startActivity(intent);
+        getActivity().finish();
         getActivity().overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
@@ -210,6 +213,7 @@ public class FragmentDashboard extends Fragment {
         Intent intent = new Intent(getActivity(), ActivityMyBills.class);
         intent.putExtra("EXTRA_SESSION_ID", 0);
         startActivity(intent);
+        getActivity().finish();
         getActivity().overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 

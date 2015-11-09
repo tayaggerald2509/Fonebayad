@@ -1,5 +1,6 @@
 package estansaas.fonebayad.auth.Responses;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import estansaas.fonebayad.model.Login;
@@ -9,12 +10,15 @@ import estansaas.fonebayad.model.Login;
  */
 public class ResponseLogin {
 
+    @Expose
     @SerializedName("message")
     public String message;
 
+    @Expose
     @SerializedName("data")
     private Login loginModel;
 
+    @Expose
     @SerializedName("status")
     private String status;
 

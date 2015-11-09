@@ -17,6 +17,7 @@ allprojects {
         jcenter()
         mavenLocal()
         mavenCentral()
+        maven { url 'https://dl.bintray.com/abozaid/maven' }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://repo.commonsware.com.s3.amazonaws.com" }
         maven { url "http://jzaccone.github.io/SlidingMenu-aar" }

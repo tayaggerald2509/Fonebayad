@@ -54,7 +54,8 @@
                         android:layout_height="wrap_content"
                         android:text="Processing"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textSize="@dimen/abc_text_size_small_material" />
+                        android:textSize="@dimen/abc_text_size_small_material"
+                        android:textColor="@color/color_week" />
                 </LinearLayout>
 
 

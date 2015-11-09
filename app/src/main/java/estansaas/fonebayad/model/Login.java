@@ -1,5 +1,6 @@
 package estansaas.fonebayad.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -7,15 +8,19 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Login {
 
+    @Expose
     @SerializedName("id")
     private String id;
 
+    @Expose
     @SerializedName("username")
     private String username;
 
+    @Expose
     @SerializedName("password")
     private String password;
 
+    @Expose
     @SerializedName("secret")
     private String secret;
 

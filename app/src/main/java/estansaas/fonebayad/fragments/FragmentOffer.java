@@ -1,5 +1,6 @@
 package estansaas.fonebayad.fragments;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -47,12 +48,16 @@ public class FragmentOffer extends Fragment implements MaterialDialog.SingleButt
     @Bind(R.id.list_offer)
     public ListView list_offer;
 
+    private static Intent intent;
+    private static Activity activity;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_offers, container, false);
         ButterKnife.bind(this, view);
+
+        activity = getActivity();
 
         ShowAuthDialog();
         return view;
@@ -109,15 +114,14 @@ public class FragmentOffer extends Fragment implements MaterialDialog.SingleButt
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-        Util.ShowDialog(getActivity(), "fonebatad", "Do you want to go to this site " + modelOfferList.get(position).getUrl() + "?", "YES", "NO", new MaterialDialog.SingleButtonCallback() {
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id) {
+        Util.ShowDialog(getActivity(), "fonebayad", "Do you want to go to this site " + modelOfferList.get(position).getUrl() + "?", "YES", "NO", new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                 switch (dialogAction) {
                     case POSITIVE:
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(modelOfferList.get(position).getUrl()));
-                        startActivity(i);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + modelOfferList.get(position).getUrl()));
+                        activity.startActivity(intent);
                         break;
                     case NEGATIVE:
                         materialDialog.dismiss();

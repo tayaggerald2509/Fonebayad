@@ -1,138 +1,183 @@
 package estansaas.fonebayad.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 
 /**
  * Created by gerald.tayag on 11/4/2015.
  */
-public class ModelTransaction {
+public class ModelTransaction implements Serializable {
 
+    @Expose
     @SerializedName("transfer_id")
     private String transfer_id;
 
+    @Expose
     @SerializedName("transfer_userid")
     private String transfer_userid;
 
+    @Expose
     @SerializedName("transfer_base_amount")
     private String transfer_base_amount;
 
+    @Expose
     @SerializedName("transfer_base_currency")
     private String transfer_base_currency;
 
+    @Expose
     @SerializedName("transfer_amount")
     private String transfer_amount;
 
+    @Expose
     @SerializedName("transfer_fee")
     private String transfer_fee;
 
+    @Expose
     @SerializedName("transfer_amount_currency")
     private String transfer_amount_currency;
 
+    @Expose
     @SerializedName("transfer_rate")
     private String transfer_rate;
 
+    @Expose
     @SerializedName("transfer_purpose")
     private String transfer_purpose;
 
+    @Expose
     @SerializedName("transfer_email")
     private String transfer_email;
 
+    @Expose
     @SerializedName("transfer_type")
     private String transfer_type;
 
+    @Expose
     @SerializedName("transfer_status")
     private int transfer_status;
 
+    @Expose
     @SerializedName("transfer_code")
     private String transfer_code;
 
+    @Expose
     @SerializedName("transfer_date")
     private String transfer_date;
 
+    @Expose
     @SerializedName("transfer_schedule")
     private String transfer_schedule;
 
+    @Expose
     @SerializedName("transfer_auth")
     private String transfer_auth;
 
+    @Expose
     @SerializedName("transfer_origin")
     private String transfer_origin;
 
+    @Expose
     @SerializedName("transfer_bankname")
     private String transfer_bankname;
 
+    @Expose
     @SerializedName("transfer_currency")
     private String transfer_currency;
 
+    @Expose
     @SerializedName("transfer_receiverid")
     private String transfer_receiverid;
 
+    @Expose
     @SerializedName("transfer_datecreated")
     private String transfer_datecreated;
 
+    @Expose
     @SerializedName("bpo_id")
     private String bpo_id;
 
+    @Expose
     @SerializedName("transfer_bank_from")
     private String transfer_bank_from;
 
+    @Expose
     @SerializedName("transfer_step")
     private String transfer_step;
 
+    @Expose
     @SerializedName("transfer_batch")
     private String transfer_batch;
 
     @SerializedName("transfer_verify")
     private String transfer_verify;
 
+    @Expose
     @SerializedName("transfer_countryid")
     private String transfer_countryid;
 
+    @Expose
     @SerializedName("transfer_stateid")
     private String transfer_stateid;
 
+    @Expose
     @SerializedName("transfer_attachment")
     private String transfer_attachment;
 
+    @Expose
     @SerializedName("transfer_reason")
     private String transfer_reason;
 
+    @Expose
     @SerializedName("transfer_reference")
     private String transfer_reference;
 
+    @Expose
     @SerializedName("recipient_id")
     private String recipient_id;
 
+    @Expose
     @SerializedName("recipient_ofw_id")
     private String recipient_ofw_id;
 
+    @Expose
     @SerializedName("recipient_user_id")
     private String recipient_user_id;
 
+    @Expose
     @SerializedName("recipient_name")
     private String recipient_name;
 
+    @Expose
     @SerializedName("recipient_bank")
     private String recipient_bank;
 
+    @Expose
     @SerializedName("recipient_bankaccount_name")
     private String recipient_bankaccount_name;
 
+    @Expose
     @SerializedName("recipient_bankaccount_number")
     private String recipient_bankaccount_number;
 
+    @Expose
     @SerializedName("recipient_contact_no")
     private String recipient_contact_no;
 
+    @Expose
     @SerializedName("recipient_email")
     private String recipient_email;
 
+    @Expose
     @SerializedName("recipient_address")
     private String recipient_address;
 
+    @Expose
     @SerializedName("recipient_image")
     private String recipient_image;
 
+    @Expose
     @SerializedName("recipient_status")
     private String recipient_status;
 

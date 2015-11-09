@@ -1,9 +1,9 @@
 package estansaas.fonebayad.activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +46,7 @@ import retrofit.Retrofit;
 public class ActivityPaymentView extends BaseActivity implements MaterialDialog.SingleButtonCallback {
 
     public static final String ACTIVITY_PAYMENT_VIEW = "ActivityPaymentView";
+    public static final int REQUEST_PAYMENT_METHOD = 201;
 
     @Bind(R.id.rl_bill_paid)
     public RelativeLayout rl_bill_paid;
@@ -99,16 +100,11 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
     @OnClick(R.id.ll_currency)
     public void ShowCurrency() {
 
-        /*int i = 0;
+        int i = 0;
+        currency = new String[ModelCurrency.getCurrency().size()];
         for (ModelCurrency modelCurrency : ModelCurrency.getCurrency()) {
             currency[i++] = modelCurrency.getCurrency_code();
         }
-        */
-
-        currency = new String[3];
-        currency[0] = "PHP";
-        currency[1] = "AUD";
-        currency[2] = "USD";
 
         new MaterialDialog.Builder(this)
                 .title("Select Country")
@@ -116,22 +112,9 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-                        final String currency_selected = currency[i];
-                        Drawable drawable = null;
-                        switch (i) {
-                            case 0:
-                                drawable = getResources().getDrawable(R.drawable.php);
-                                break;
-                            case 1:
-                                drawable = getResources().getDrawable(R.drawable.aud);
-                                break;
-                            case 2:
-                                drawable = getResources().getDrawable(R.drawable.usd);
-                                break;
-                            default:
-                                break;
-                        }
-                        img_currency.setImageDrawable(drawable);
+                        final ModelCurrency currency = ModelCurrency.getCurrency().get(i);
+                        int imageResource = getResources().getIdentifier(currency.getCurrency_code().toLowerCase(), "drawable", getPackageName());
+                        img_currency.setImageDrawable(getResources().getDrawable(imageResource));
 
                         new MaterialDialog.Builder(ActivityPaymentView.this)
                                 .content("Loading")
@@ -144,7 +127,7 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
                                 .showListener(new DialogInterface.OnShowListener() {
                                     @Override
                                     public void onShow(DialogInterface dialogInterface) {
-                                        AuthForexRate(dialogInterface, currency_selected);
+                                        AuthForexRate(dialogInterface, currency.getCurrency_code());
                                     }
                                 }).show();
 
@@ -166,7 +149,7 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
                         Double totalAmnt = Double.valueOf(modelBillInformation.getBill_amount()) * Double.valueOf(response.body().getRate());
                         lblCurrency.setText(currency);
                         txtConvertion.setText("1 PHP = " + response.body().getRate() + " " + response.body().getTarget());
-                        txtTotalAmount.setText(new DecimalFormat("#,##0.00").format(totalAmnt));
+                        txtTotalAmount.setText(currency.toUpperCase() + " " + new DecimalFormat("#,##0.00").format(totalAmnt));
                     }
 
                     dialogInterface.dismiss();
@@ -190,8 +173,7 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
         Intent intent = new Intent(this, ActivityPaymentMethod.class);
         intent.putExtra("ModelBillInformation", modelBillInformation);
         intent.putExtra("PAYMENT_VIEW", ACTIVITY_PAYMENT_VIEW);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, REQUEST_PAYMENT_METHOD);
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
@@ -251,16 +233,6 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
 
     private void AuthPayment(final DialogInterface dialogInterface) {
 
-        /*ModelPaybill modelPaybill = new ModelPaybill();
-        modelPaybill.setStatementID(modelBillInformation.getBill_Id());
-        modelPaybill.setUserID(ModelLogin.getUserInfo().getApp_id());
-        modelPaybill.setStatus("Paid");
-        modelPaybill.setPaymentAmount(modelBillInformation.getBill_amount());
-        modelPaybill.setNewBalance("0.00");
-        modelPaybill.setBankId(modelBankAccount.getBankaccount_id());
-        modelPaybill.setTransactionAmount(modelBillInformation.getBill_amount());
-        modelPaybill.setTransactionLine("1");*/
-
         Double newBalance = Double.valueOf(modelBankAccount.getBankaccount_amount()) - Double.valueOf(modelBillInformation.getBill_amount());
         Call<estansaas.fonebayad.auth.Responses.Response> responseCall = RestClient.get().paybillsMobile(modelBillInformation.getBill_Id(), ModelLogin.getUserInfo().getApp_id(), "Paid", modelBillInformation.getBill_amount(), newBalance.toString(), modelBankAccount.getBankaccount_id(), modelBillInformation.getBill_amount(), "1");
 
@@ -287,6 +259,19 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+            case REQUEST_PAYMENT_METHOD:
+                if(resultCode == Activity.RESULT_OK){
+                    modelBankAccount = (ModelBankAccount) data.getSerializableExtra("PAY_METHOD");
+                    txtPaymentMethod.setText(modelBankAccount.getBankaccount_accountname());
+                }
+                break;
+        }
+    }
+
     @OnClick(R.id.ll_finish)
     public void goto_finish() {
         onBackPressed();
@@ -306,7 +291,7 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
     protected void onResume() {
         super.onResume();
 
-        try {
+        /*try {
             modelBankAccount = (ModelBankAccount) getIntent().getSerializableExtra("PAY_METHOD");
             txtPaymentMethod.setText(modelBankAccount.getBankaccount_accountname());
         } catch (NullPointerException e) {
@@ -314,12 +299,14 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 
     @Override
     public void onBackPressed() {
         if (rl_bill_paid.getVisibility() == View.VISIBLE) {
             finish();
+            Util.startNextActivity(this, ActivityDashboard.class);
         } else {
             finish();
             Util.startNextActivity(this, ActivityMyBills.class);

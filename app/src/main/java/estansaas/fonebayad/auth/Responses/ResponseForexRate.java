@@ -1,5 +1,6 @@
 package estansaas.fonebayad.auth.Responses;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -7,15 +8,19 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ResponseForexRate {
 
+    @Expose
     @SerializedName("success")
     private String success;
 
+    @Expose
     @SerializedName("source")
     private String source;
 
+    @Expose
     @SerializedName("target")
     private String target;
 
+    @Expose
     @SerializedName("rate")
     private String rate;
 

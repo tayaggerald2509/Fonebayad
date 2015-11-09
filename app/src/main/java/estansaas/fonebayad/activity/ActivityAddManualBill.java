@@ -145,8 +145,6 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
         txtStatus.setOnItemSelectedListener(new FormSelector.OnItemSelectedListener<ModelStatus>() {
             @Override
             public void onItemSelectedListener(ModelStatus status, int selectedIndex) {
-                //txtStatus.setError(null, Util.resizeDrawable(ActivityAddManualBill.this, R.drawable.ic_keyboard_arrow_down_black_48dp));
-                Toast.makeText(ActivityAddManualBill.this, status.getStatus(), Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -26,18 +26,23 @@ import com.afollestad.materialdialogs.Theme;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.pass.Spass;
 import com.samsung.android.sdk.pass.SpassFingerprint;
+import com.venmo.android.pin.util.PinHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import estansaas.fonebayad.R;
+import estansaas.fonebayad.auth.Responses.ResponseAccess;
 import estansaas.fonebayad.auth.Responses.ResponseLogin;
+import estansaas.fonebayad.auth.Responses.ResponseUser;
 import estansaas.fonebayad.auth.RestClient;
+import estansaas.fonebayad.model.Login;
 import estansaas.fonebayad.model.ModelLogin;
 import estansaas.fonebayad.utils.Connection;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import estansaas.fonebayad.view.PinView;
+import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -46,6 +51,10 @@ import retrofit.Retrofit;
  * Created by gerald.tayag on 10/5/2015.
  */
 public class ActivityLogin extends AppCompatActivity implements MaterialDialog.SingleButtonCallback {
+
+
+    private static String CLIENT_ID;
+    private static String CLIENT_SECRET;
 
     private static boolean AUTHENTICATED;
     private static boolean FINGERPRINT_PROVIDED = false;
@@ -265,10 +274,8 @@ public class ActivityLogin extends AppCompatActivity implements MaterialDialog.S
         loginResponseCall.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Response<ResponseLogin> response, Retrofit retrofit) {
-
                 if (response.isSuccess()) {
                     ResponseLogin loginResponse = response.body();
-                    clearPins();
                     Log.i("Status Code", String.valueOf(response.code()));
                     if (loginResponse.getStatus().contains(Connection.STATUS_NOTFOUND)) {
                         Util.ShowNeutralDialog(ActivityLogin.this, "fonebayad", "You have entered Invalid PIN", "OK", ActivityLogin.this);
@@ -289,9 +296,10 @@ public class ActivityLogin extends AppCompatActivity implements MaterialDialog.S
                             }
                         });
                     } else {
-                        OAuthCredentials(dialogInterface, loginResponse.getLoginModel().getId());
+                        OAuthCredentials(dialogInterface, loginResponse.getLoginModel());
                         return;
                     }
+                    clearPins();
                     dialogInterface.dismiss();
                 } else {
                     switch (response.code()) {
@@ -311,30 +319,75 @@ public class ActivityLogin extends AppCompatActivity implements MaterialDialog.S
                 TextChangedListener();
                 loginResponseCall.cancel();
                 dialogInterface.dismiss();
-                Util.ShowDialog(ActivityLogin.this, "fonebayad", "An error occurred while trying to connect to server.", "RETRY", "CANCEL", ActivityLogin.this);
+                Util.ShowDialog(ActivityLogin.this, "", "An error occurred while trying to connect to server.", "RETRY", "CANCEL", ActivityLogin.this);
             }
         });
 
     }
 
-    private void OAuthCredentials(DialogInterface dialogInterface, String app_id) {
-        dialogInterface.dismiss();
-        ModelLogin modelLogin;
-        if (ModelLogin.countUser() > 0) {
-            modelLogin = new Select().from(ModelLogin.class).limit(1).executeSingle();
-            modelLogin.setApp_id(app_id);
-        } else {
-            modelLogin = new ModelLogin();
-            modelLogin.setApp_id(app_id);
-        }
-        modelLogin.save();
-        finish();
-        Util.startNextActivity(ActivityLogin.this, ActivityDashboard.class);
+    private void OAuthCredentials(final DialogInterface dialogInterface, Login login) {
+
+        Call<ResponseAccess> responseAccessCall = RestClient.get().getAccessToken("password", login.getId(), login.getSecret(), login.getUsername(), login.getPassword());
+        responseAccessCall.enqueue(new Callback<ResponseAccess>() {
+            @Override
+            public void onResponse(Response<ResponseAccess> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    AuthUserInformation(dialogInterface, response.body());
+                } else {
+                    Util.ShowNeutralDialog(ActivityLogin.this, "", "An error occurred while trying to connect to server.", "OK", ActivityLogin.this);
+                }
+                dialogInterface.dismiss();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+                dialogInterface.dismiss();
+                Util.ShowNeutralDialog(ActivityLogin.this, "", "An error occurred while trying to connect to server.", "OK", ActivityLogin.this);
+            }
+        });
     }
 
-    @Override
-    public void overridePendingTransition(int enterAnim, int exitAnim) {
-        super.overridePendingTransition(enterAnim, exitAnim);
+    private void AuthUserInformation(final DialogInterface dialogInterface, ResponseAccess response) {
+
+        Call<ResponseUser> callUser = RestClient.get().getremotedata(response.getToken_type() + " " + response.getAccess_token(), txtPin.getText().toString(), Util.getGUID(this));
+        callUser.enqueue(new Callback<ResponseUser>() {
+            @Override
+            public void onResponse(Response<ResponseUser> response, Retrofit retrofit) {
+
+                ResponseUser.UserModel.User user = response.body().getData().getUser().get(0);
+
+                if (response.isSuccess()) {
+                    if (response.body().getStatus().equals(Connection.STATUS_ACCEPTED)) {
+                        ModelLogin modelLogin;
+                        dialogInterface.dismiss();
+                        if (ModelLogin.countUser() > 0) {
+                            modelLogin = new Select().from(ModelLogin.class).limit(1).executeSingle();
+                            modelLogin.setApp_id(user.getId());
+                        } else {
+                            modelLogin = new ModelLogin();
+                            modelLogin.setApp_id(user.getId());
+                        }
+                        modelLogin.save();
+                        finish();
+                        PinHelper.saveDefaultPin(ActivityLogin.this, txtPin.getText().toString());
+                        Util.startNextActivity(ActivityLogin.this, ActivityDashboard.class);
+                        dialogInterface.dismiss();
+                        return;
+                    }
+                }
+                dialogInterface.dismiss();
+                Util.ShowNeutralDialog(ActivityLogin.this, "", "An error occurred while trying to connect to server.", "OK", ActivityLogin.this);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+                dialogInterface.dismiss();
+                Util.ShowNeutralDialog(ActivityLogin.this, "", "An error occurred while trying to connect to server.", "OK", ActivityLogin.this);
+            }
+        });
+
     }
 
     public TextWatcher PinWatcher() {

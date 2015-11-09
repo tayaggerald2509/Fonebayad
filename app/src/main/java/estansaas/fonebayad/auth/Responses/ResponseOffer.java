@@ -1,5 +1,6 @@
 package estansaas.fonebayad.auth.Responses;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -11,12 +12,15 @@ import estansaas.fonebayad.model.ModelOffer;
  */
 public class ResponseOffer {
 
+    @Expose
     @SerializedName("message")
     public String message;
 
+    @Expose
     @SerializedName("status")
     public String status;
 
+    @Expose
     @SerializedName("data")
     public List<ModelOffer> modelOfferList;
 

@@ -351,8 +351,12 @@ public class ActivityCalendar extends BaseActivity implements MaterialDialog.Sin
 
     @OnClick(R.id.back)
     public void Back() {
-        finish();
+        onBackPressed();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        Util.startNextActivity(this, ActivityDashboard.class);
+    }
 }
