@@ -18,7 +18,7 @@ public class ResponseTransaction {
     private String message;
 
     @SerializedName("data")
-    private List<ModelTransaction> modelTransaction;
+    public List<ModelTransaction> modelTransaction;
 
     public ResponseTransaction() {
     }

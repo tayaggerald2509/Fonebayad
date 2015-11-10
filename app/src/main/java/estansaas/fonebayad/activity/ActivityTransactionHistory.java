@@ -23,6 +23,7 @@ import estansaas.fonebayad.R;
 import estansaas.fonebayad.adapter.AdapterListTransaction;
 import estansaas.fonebayad.auth.Responses.ResponseTransaction;
 import estansaas.fonebayad.auth.RestClient;
+import estansaas.fonebayad.model.ModelLogin;
 import estansaas.fonebayad.model.ModelTransaction;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
@@ -77,7 +78,7 @@ public class ActivityTransactionHistory extends BaseActivity implements Material
     }
 
     private void AuthTransactionHistory(final DialogInterface dialogInterface) {
-        Call<ResponseTransaction> responseTransactionCall = RestClient.get().getUserTransactionHistory("249");
+        Call<ResponseTransaction> responseTransactionCall = RestClient.get().getUserTransactionHistory(ModelLogin.getUserInfo().getApp_id());
         responseTransactionCall.enqueue(new Callback<ResponseTransaction>() {
             @Override
             public void onResponse(Response<ResponseTransaction> response, Retrofit retrofit) {
@@ -90,8 +91,9 @@ public class ActivityTransactionHistory extends BaseActivity implements Material
 
             @Override
             public void onFailure(Throwable t) {
+                t.printStackTrace();
                 dialogInterface.dismiss();
-                Util.ShowNeutralDialog(ActivityTransactionHistory.this, "warning", "Unable to connect to server!", "OK", ActivityTransactionHistory.this);
+                Util.ShowNeutralDialog(ActivityTransactionHistory.this, "", "Unable to connect to server!", "OK", ActivityTransactionHistory.this);
             }
         });
     }

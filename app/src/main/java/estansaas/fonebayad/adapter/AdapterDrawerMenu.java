@@ -18,13 +18,13 @@ import estansaas.fonebayad.model.ModelMenu;
 /**
  * Created by gerald.tayag on 10/9/2015.
  */
-public class AdapterMenu extends BaseAdapter {
+public class AdapterDrawerMenu extends BaseAdapter {
 
     private Context context;
     private ArrayList<ModelMenu> navDrawerItems;
     private Typeface tf;
 
-    public AdapterMenu(Context context, ArrayList<ModelMenu> navDrawerItems) {
+    public AdapterDrawerMenu(Context context, ArrayList<ModelMenu> navDrawerItems) {
         this.context = context;
         this.navDrawerItems = navDrawerItems;
     }

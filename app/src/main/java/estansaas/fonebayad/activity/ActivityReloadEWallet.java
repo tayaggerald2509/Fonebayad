@@ -66,7 +66,7 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
     public TextView txtAcntName;
 
     @Bind(R.id.txtBSB)
-    public TextView txtBSE;
+    public TextView txtBSB;
 
     @Bind(R.id.txtAcntNo)
     public TextView txtAcntNo;
@@ -105,9 +105,7 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
     private void InitializeViews() {
         txtHeader.setTypeface(Util.setTypeface(this, Util.ROBOTO), Typeface.BOLD);
         txtContent.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT));
-
-        txtCountry.setError(null, Util.resizeDrawable(this, R.drawable.ic_keyboard_arrow_down_black_48dp));
-
+        txtCountry.setCompoundDrawables(null, null, Util.resizeDrawable(this, R.drawable.ic_keyboard_arrow_down_black_48dp), null);
         lblAmntDeposit.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD_ITALIC);
         lblUpload.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD_ITALIC);
     }
@@ -127,8 +125,8 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
         ShowAuthDialog();
     }
 
-    private void ShowAuthDialog(){
-        if(Network.isConnected(this)){
+    private void ShowAuthDialog() {
+        if (Network.isConnected(this)) {
             new MaterialDialog.Builder(this)
                     .content(R.string.action_wait)
                     .contentGravity(GravityEnum.CENTER)
@@ -142,20 +140,33 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
                             AuthReloadEWallet(dialogInterface);
                         }
                     }).show();
-        }else{
+        } else {
             Util.ShowNeutralDialog(this, "Warning", "Please connect to internet!", "OK", this);
         }
     }
 
-    private void AuthReloadEWallet(final DialogInterface dialogInterface){
+    private void AuthReloadEWallet(final DialogInterface dialogInterface) {
         Call<Response> responseCall = RestClient.get().saveReloadWalletDetails(ModelLogin.getUserInfo().getApp_id(), file.getName(), Util.getGUID(this), Util.getDeviceName(), "", txtAmntDeposit.getText().toString(), "1", "1");
         responseCall.enqueue(new Callback<Response>() {
             @Override
             public void onResponse(retrofit.Response<Response> response, Retrofit retrofit) {
-                if(response.isSuccess()){
-                    if(response.body().getStatus().equals(Connection.STATUS_ACCEPTED)){
-                        Util.ShowNeutralDialog(ActivityReloadEWallet.this, "", "Your E-Wallet reload receipt will be received by our Fonebayad team. Please wait for up to 24 hours for the amount to reflect on your E-Wallet account. For further inquired, e-mail us at support@fonebayad.com", "OK", ActivityReloadEWallet.this);
+                if (response.isSuccess()) {
+                    if (response.body().getStatus().equals(Connection.STATUS_ACCEPTED)) {
+                        Util.ShowNeutralDialog(ActivityReloadEWallet.this, "", "Your E-Wallet reload receipt will be received by our Fonebayad team. Please wait for up to 24 hours for the amount to reflect on your E-Wallet account. For further inquired, e-mail us at support@fonebayad.com", "OK", new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
+                                switch (dialogAction) {
+                                    case NEUTRAL:
+                                        onBackPressed();
+                                        break;
+                                }
+                            }
+                        });
+                    } else {
+                        Util.ShowNeutralDialog(ActivityReloadEWallet.this, "", "Sorry failed to reload your e-wallet", "OK", ActivityReloadEWallet.this);
                     }
+                } else {
+                    Util.ShowNeutralDialog(ActivityReloadEWallet.this, "", "An error occurred while trying to connect to server.", "OK", ActivityReloadEWallet.this);
                 }
 
                 dialogInterface.dismiss();
@@ -164,18 +175,19 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
             @Override
             public void onFailure(Throwable t) {
                 dialogInterface.dismiss();
-                Util.ShowNeutralDialog(ActivityReloadEWallet.this, "Warning", t.getMessage(), "OK", ActivityReloadEWallet.this);
+                Util.ShowNeutralDialog(ActivityReloadEWallet.this, "", "An error occurred while trying to connect to server.", "OK", ActivityReloadEWallet.this);
             }
         });
 
     }
 
     @OnClick(R.id.ll_country)
-    public void SelectCountry(){
-        int i = 0;
+    public void SelectCountry() {
+        //int i = 0;
         currency = new String[ModelCurrency.getCurrency().size()];
-        for (ModelCurrency modelCurrency : ModelCurrency.getCurrency()) {
-            currency[i++] = modelCurrency.getCurrency_name();
+
+        for (int i = ModelCurrency.getCurrency().size() - 1; i >= 0; i--) {
+            currency[i] = ModelCurrency.getCurrency().get(i).getCurrency_name();
         }
 
         new MaterialDialog.Builder(this)
@@ -184,9 +196,10 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-                        final ModelCurrency currency = ModelCurrency.getCurrency().get(i-1);
+                        final ModelCurrency currency = ModelCurrency.getCurrency().get(i);
+
                         int imageResource = getResources().getIdentifier(currency.getCurrency_code().toLowerCase(), "drawable", getPackageName());
-                        country_id = currency.getCurrency_id();
+                        country_id = currency.getCurrency_countryid();
                         img_currency.setImageDrawable(getResources().getDrawable(imageResource));
                         txtCountry.setText(currency.getCurrency_name());
                         ShowDialogDetail();
@@ -198,8 +211,8 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
                 .show();
     }
 
-    private void ShowDialogDetail(){
-        if(Network.isConnected(this)){
+    private void ShowDialogDetail() {
+        if (Network.isConnected(this)) {
             new MaterialDialog.Builder(this)
                     .content(R.string.action_wait)
                     .contentGravity(GravityEnum.CENTER)
@@ -213,23 +226,25 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
                             AuthCountryDetails(dialogInterface);
                         }
                     }).show();
-        }else{
+        } else {
             Util.ShowNeutralDialog(this, "", "An error occured while trying to connect to server", "OK", this);
         }
     }
 
-    private void AuthCountryDetails(final DialogInterface dialogInterface){
+    private void AuthCountryDetails(final DialogInterface dialogInterface) {
         Log.i("country_id", country_id);
         Call<ResponseCountryDetails> responseCountryDetailsCall = RestClient.get().getTransperaDetailsBasedOnCountry(country_id);
         responseCountryDetailsCall.enqueue(new Callback<ResponseCountryDetails>() {
             @Override
             public void onResponse(retrofit.Response<ResponseCountryDetails> response, Retrofit retrofit) {
-                if(response.isSuccess()){
-
+                if (response.isSuccess()) {
                     ModelCountryDetail modelCountryDetail = response.body().getModelCountryDetails().get(0);
-
-                    txtBankName.setText(modelCountryDetail.getTransperabank_name());
+                    txtBankName.setText(modelCountryDetail.getTransperabankname());
+                    txtAcntName.setText(modelCountryDetail.getTransperabank_accountname());
+                    txtBSB.setText(modelCountryDetail.getTransperabank_bsbnumber());
+                    txtAcntNo.setText(modelCountryDetail.getTransperabank_accountnumberv());
                 }
+                dialogInterface.dismiss();
             }
 
             @Override
@@ -242,6 +257,7 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
 
     @OnClick(R.id.ll_upload)
     public void UploadPhoto() {
+        file = null;
         Intent intent = new Intent(this, ImagePickerActivity.class);
         Config config = new Config.Builder()
                 .setTabBackgroundColor(R.color.app_color)    // set tab background color. Default white.
@@ -284,7 +300,7 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
 
     @Override
     public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-        switch (dialogAction){
+        switch (dialogAction) {
             case POSITIVE:
                 break;
             case NEGATIVE:

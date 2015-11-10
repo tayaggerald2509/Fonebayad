@@ -2,6 +2,7 @@ package estansaas.fonebayad;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Handler;
 
 import com.activeandroid.ActiveAndroid;
@@ -26,7 +27,7 @@ public class Fonebayad extends Application {
     public static void initImageLoader(Context context) {
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheOnDisk(false).handler(new Handler()).build();
+                .cacheOnDisk(false).handler(new Handler()).bitmapConfig(Bitmap.Config.ARGB_8888).build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
                 context).defaultDisplayImageOptions(defaultOptions).build();
         ImageLoader.getInstance().init(config);

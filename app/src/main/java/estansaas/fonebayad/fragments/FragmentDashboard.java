@@ -282,6 +282,8 @@ public class FragmentDashboard extends Fragment {
                         } else {
                             Util.startNextActivity(getActivity(), ActivityTranspera.class);
                         }
+                    } else {
+                        Util.ShowDialog(getActivity(), "", "We are required by law to verify your address and identity. Do you want to proceed to the KYC verification", "CONTINUE", "CANCEL", sophisticateCallback);
                     }
                 } else {
                     Util.ShowNeutralDialog(getActivity(), "fonebayad", response.message(), "OK", sophisticateCallback);
@@ -292,7 +294,7 @@ public class FragmentDashboard extends Fragment {
             @Override
             public void onFailure(Throwable t) {
                 dialogInterface.dismiss();
-                Util.ShowDialog(getActivity(), "fonebayad", "We are required by law to verify your address and identity. Do you want to proceed to the KYC verification", "CONTINUE", "CANCEL", sophisticateCallback);
+                Util.ShowNeutralDialog(getActivity(), "", "An error occured while trying to connect to servr", "OK", sophisticateCallback);
             }
         });
     }

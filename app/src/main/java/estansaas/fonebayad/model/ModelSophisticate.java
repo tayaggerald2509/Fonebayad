@@ -95,7 +95,6 @@ public class ModelSophisticate {
     private String status_third_kyc;
 
     public ModelSophisticate() {
-
     }
 
     public ModelSophisticate(String sop_id, String userId, String ofwId, String sop_mobilecon, String sop_homecon, String sop_officecon, String sop_flatno, String sop_streetname, String sop_streettype, String sop_streetno, String sop_suburb, String sop_state, String sop_countryid, String sop_postalcode, String sop_status, String sop_statusdescription, String sop_dateofbirth, String sop_datecreated, String sop_datemodified, String greenid_status, String greenid_ruleid, String greenid_transid, String greenid_userid, String first_kyc_id, String status_first_kyc, String second_kyc_id, String status_second_kyc, String third_kyc_id, String status_third_kyc) {

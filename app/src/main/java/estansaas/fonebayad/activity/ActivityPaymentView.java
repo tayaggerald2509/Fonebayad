@@ -245,7 +245,7 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
                         YoYo.with(Techniques.Landing).duration(1200).playOn(findViewById(R.id.img_stamp));
                     }
                 } else {
-                    Util.ShowNeutralDialog(ActivityPaymentView.this, "Warning", "Failed to connect to server!", "OK", ActivityPaymentView.this);
+                    Util.ShowNeutralDialog(ActivityPaymentView.this, "", "An error occured while trying to connect to server.", "OK", ActivityPaymentView.this);
                 }
                 dialogInterface.dismiss();
             }
@@ -254,7 +254,7 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
             public void onFailure(Throwable t) {
                 t.printStackTrace();
                 dialogInterface.dismiss();
-                Util.ShowNeutralDialog(ActivityPaymentView.this, "fonebayad", "Unable to connect to server!", "OK", ActivityPaymentView.this);
+                Util.ShowNeutralDialog(ActivityPaymentView.this, "", "An error occured while trying to connect to server.", "OK", ActivityPaymentView.this);
             }
         });
     }
@@ -285,21 +285,6 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
     @OnClick(R.id.expanded_menu)
     public void toggleMenu() {
         showMenu();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        /*try {
-            modelBankAccount = (ModelBankAccount) getIntent().getSerializableExtra("PAY_METHOD");
-            txtPaymentMethod.setText(modelBankAccount.getBankaccount_accountname());
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
     }
 
     @Override

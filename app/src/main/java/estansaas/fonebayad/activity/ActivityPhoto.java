@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,7 +26,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 
@@ -103,15 +103,35 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
         surface_camera.setVisibility(isButtonVisible);
 
         try {
-            ImageLoader imageLoader = ImageLoader.getInstance();
 
-            imageLoader.displayImage("file://" + getIntent().getStringExtra("photo"), img_captured);
+            Bitmap myBitmap = BitmapFactory.decodeFile(getIntent().getStringExtra("photo"));
+            ExifInterface exif = new ExifInterface(getIntent().getStringExtra("photo"));
+            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int rotationInDegrees = exifToDegrees(rotation);
+            int deg = rotationInDegrees;
+            Matrix matrix = new Matrix();
+            if (rotation != 0f) {
+                matrix.preRotate(rotationInDegrees);
+                myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
+            }
 
+            img_captured.setImageBitmap(myBitmap);
             YoYo.with(Techniques.Landing).duration(1200).playOn(findViewById(R.id.img_stamp));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+        return 0;
     }
 
     @Override

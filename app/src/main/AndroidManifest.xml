@@ -28,7 +28,7 @@
         android:name=".Fonebayad"
         android:allowBackup="true"
         android:exported="false"
-        android:hardwareAccelerated="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -175,6 +175,11 @@
         <activity
             android:name=".activity.ActivityPaymentView"
             android:label="@string/app_payment"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityMultiplePayment"
+            android:label="@string/app_payment_multiple"
             android:screenOrientation="portrait" />
 
         <activity android:name="nl.changer.polypicker.ImagePickerActivity" />

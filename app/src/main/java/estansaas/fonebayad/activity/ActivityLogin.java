@@ -325,13 +325,16 @@ public class ActivityLogin extends AppCompatActivity implements MaterialDialog.S
 
     }
 
-    private void OAuthCredentials(final DialogInterface dialogInterface, Login login) {
+    private void OAuthCredentials(final DialogInterface dialogInterface, final Login login) {
 
         Call<ResponseAccess> responseAccessCall = RestClient.get().getAccessToken("password", login.getId(), login.getSecret(), login.getUsername(), login.getPassword());
         responseAccessCall.enqueue(new Callback<ResponseAccess>() {
             @Override
             public void onResponse(Response<ResponseAccess> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+                    Util.AddSharedPrefEditor(ActivityLogin.this, "CLIENT_SECRET", login.getSecret());
+                    Util.AddSharedPrefEditor(ActivityLogin.this, "USERNAME", login.getUsername());
+                    Util.AddSharedPrefEditor(ActivityLogin.this, "PASSWORD", login.getPassword());
                     AuthUserInformation(dialogInterface, response.body());
                 } else {
                     Util.ShowNeutralDialog(ActivityLogin.this, "", "An error occurred while trying to connect to server.", "OK", ActivityLogin.this);

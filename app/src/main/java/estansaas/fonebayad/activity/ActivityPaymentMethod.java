@@ -3,6 +3,7 @@ package estansaas.fonebayad.activity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import estansaas.fonebayad.R;
 import estansaas.fonebayad.adapter.AdapterBankAccount;
+import estansaas.fonebayad.auth.Responses.ResponseAccess;
 import estansaas.fonebayad.auth.Responses.ResponseBankAccount;
 import estansaas.fonebayad.auth.RestClient;
 import estansaas.fonebayad.model.ModelBankAccount;
@@ -55,6 +57,13 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
     private ArrayList<ModelBankAccount> modelBankAccounts;
     private AdapterBankAccount adapterBankAccount;
     private ModelBillInformation modelBillInformation;
+    private SharedPreferences pref;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        pref = Util.sharedPreferences(this);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,7 +177,7 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
                         @Override
                         public void onShow(DialogInterface dialogInterface) {
                             ACTIVITY_CURRENT_PROCESS = 201;
-                            CreateBillStatement(dialogInterface);
+                            OAuthCredentials(dialogInterface);
                         }
                     }).show();
 
@@ -177,8 +186,31 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
         }
     }
 
-    private void CreateBillStatement(final DialogInterface dialogInterface) {
-        Call<estansaas.fonebayad.auth.Responses.Response> responseCall = RestClient.get().createBillStatement(modelBillInformation.getBill_biller(), modelBillInformation.getBill_account_number(), modelBillInformation.getBill_transaction_number(), modelBillInformation.getBill_currency(), modelBillInformation.getBill_amount(), modelBillInformation.getBill_status(), modelBillInformation.getBill_attachment(), modelBillInformation.getBill_due_date().toString(), modelBillInformation.getBill_schedule_of_payment(), modelBillInformation.getBill_user_id(), modelBillInformation.getBill_payment_method(), modelBillInformation.getBill_type(), modelBillInformation.getBill_user_entity());
+    private void OAuthCredentials(final DialogInterface dialogInterface) {
+        Call<ResponseAccess> responseAccessCall = RestClient.get().getAccessToken("password", ModelLogin.getUserInfo().getApp_id(), pref.getString("CLIENT_SECRET", ""), pref.getString("USERNAME", ""), pref.getString("PASSWORD", ""));
+        responseAccessCall.enqueue(new Callback<ResponseAccess>() {
+            @Override
+            public void onResponse(Response<ResponseAccess> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    CreateBillStatement(dialogInterface, response.body());
+                } else {
+                    Util.ShowNeutralDialog(ActivityPaymentMethod.this, "", "An error occurred while trying to connect to server.", "OK", ActivityPaymentMethod.this);
+                }
+                dialogInterface.dismiss();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+                dialogInterface.dismiss();
+                Util.ShowNeutralDialog(ActivityPaymentMethod.this, "", "An error occurred while trying to connect to server.", "OK", ActivityPaymentMethod.this);
+            }
+        });
+    }
+
+    private void CreateBillStatement(final DialogInterface dialogInterface, ResponseAccess access) {
+
+        Call<estansaas.fonebayad.auth.Responses.Response> responseCall = RestClient.get().createBillStatement(access.getToken_type() + " " + access.getAccess_token(), modelBillInformation.getBill_biller(), modelBillInformation.getBill_account_number(), modelBillInformation.getBill_transaction_number(), modelBillInformation.getBill_currency(), modelBillInformation.getBill_amount(), modelBillInformation.getBill_status(), modelBillInformation.getBill_attachment(), modelBillInformation.getBill_due_date().toString(), modelBillInformation.getBill_schedule_of_payment(), modelBillInformation.getBill_user_id(), modelBillInformation.getBill_payment_method(), modelBillInformation.getBill_type(), modelBillInformation.getBill_user_entity());
         responseCall.enqueue(new Callback<estansaas.fonebayad.auth.Responses.Response>() {
             @Override
             public void onResponse(Response<estansaas.fonebayad.auth.Responses.Response> response, Retrofit retrofit) {

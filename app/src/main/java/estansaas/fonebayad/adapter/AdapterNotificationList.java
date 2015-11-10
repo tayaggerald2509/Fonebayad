@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -72,15 +73,18 @@ public class AdapterNotificationList extends BaseAdapter {
             holder.ll_row.setBackgroundColor(Color.WHITE);
         }
 
+        Calendar calendar = Calendar.getInstance();
+
         try {
             holder.txtBillername.setText(ModelBillers.getBillers(billStatement.getBill_biller()).getBiller_name());
             try {
-                if (new Date().before(Util.convertDate(billStatement.getBill_duedate()))) {
+                calendar.setTime(Util.convertDate(billStatement.getBill_duedate()));
+                if (new Date().after(calendar.getTime())) {
                     holder.txtMsg.setText("Your bill is now overdue.");
                 } else {
-                holder.txtMsg.setText("will due on " + billStatement.getBill_duedate() + ".");
-            }
-        } catch (ParseException e) {
+                    holder.txtMsg.setText("will due on " + billStatement.getBill_duedate() + ".");
+                }
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
             holder.txtCategory.setText("");

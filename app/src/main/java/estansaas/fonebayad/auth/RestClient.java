@@ -3,7 +3,12 @@ package estansaas.fonebayad.auth;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
@@ -16,7 +21,10 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
+import estansaas.fonebayad.auth.Responses.ResponseTransaction;
+import estansaas.fonebayad.auth.Responses.ResponseUserSophisticate;
 import estansaas.fonebayad.utils.Constants;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -35,8 +43,7 @@ public class RestClient {
 
     private static void setupRestClient() {
 
-        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
-
+        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).registerTypeAdapter(ResponseTransaction.class, new Deserializer()).registerTypeAdapter(ResponseUserSophisticate.class, new SophisticateDeserializer()).create();
 
         OkHttpClient client = new OkHttpClient();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -50,7 +57,7 @@ public class RestClient {
 
                 Request request = original.newBuilder()
                         .header("Accept", "application/json")
-                                //.method(original.method(), original.body())
+                        .method(original.method(), original.body())
                         .build();
 
                 Response response = chain.proceed(request);
@@ -90,4 +97,35 @@ public class RestClient {
         }
     }
 
+    static class Deserializer<T> implements JsonDeserializer<T> {
+
+        @Override
+        public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            JsonObject obj = json.getAsJsonObject();
+            JsonElement e = obj.get("data");
+            if (e.isJsonPrimitive()) // it's a String
+            {
+                obj.remove("data");
+                obj.add("data", new JsonArray());
+            }
+
+            return new Gson().fromJson(obj, typeOfT);
+        }
+    }
+
+    static class SophisticateDeserializer<T> implements JsonDeserializer<ResponseUserSophisticate> {
+
+        @Override
+        public ResponseUserSophisticate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            JsonObject obj = json.getAsJsonObject();
+            JsonElement e = obj.get("data");
+            if (e.isJsonPrimitive()) // it's a String
+            {
+                obj.remove("data");
+                obj.add("data", null);
+            }
+
+            return new Gson().fromJson(obj, ResponseUserSophisticate.class);
+        }
+    }
 }

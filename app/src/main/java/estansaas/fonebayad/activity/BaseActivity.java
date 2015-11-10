@@ -15,7 +15,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import java.util.ArrayList;
 
 import estansaas.fonebayad.R;
-import estansaas.fonebayad.adapter.AdapterMenu;
+import estansaas.fonebayad.adapter.AdapterDrawerMenu;
 import estansaas.fonebayad.model.ModelMenu;
 import estansaas.fonebayad.utils.Util;
 
@@ -32,7 +32,7 @@ public class BaseActivity extends AppCompatActivity {
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
     private LayoutInflater layoutInflater;
-    private AdapterMenu adapter;
+    private AdapterDrawerMenu adapter;
     private ListView listView;
 
     @Override
@@ -62,7 +62,7 @@ public class BaseActivity extends AppCompatActivity {
 
         addMenuLayout();
 
-        adapter = new AdapterMenu(this, modelMenuArrayList);
+        adapter = new AdapterDrawerMenu(this, modelMenuArrayList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(onItemClickListener);
         menu.setMenu(view);

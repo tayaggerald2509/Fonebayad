@@ -2,6 +2,7 @@ package estansaas.fonebayad.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -46,7 +47,6 @@ import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import estansaas.fonebayad.view.FormSelector;
 import estansaas.fonebayad.view.FormView;
-import nl.changer.polypicker.Config;
 import nl.changer.polypicker.ImagePickerActivity;
 import retrofit.Call;
 import retrofit.Callback;
@@ -62,6 +62,7 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
     private static final String FRAG_TAG_DATE_PICKER = "fragment_due_date";
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int FILE_CHOOSER_IMAGE_REQUEST_CODE = 200;
+    private static final int SELECT_PHOTO = 1;
 
     private Uri fileUri; // file url to store image/video
 
@@ -272,7 +273,7 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
 
     @OnClick(R.id.ll_attach)
     public void ShowFileChoose() {
-        Intent intent = new Intent(this, ImagePickerActivity.class);
+        /*Intent intent = new Intent(this, ImagePickerActivity.class);
         Config config = new Config.Builder()
                 .setTabBackgroundColor(R.color.app_color)    // set tab background color. Default white.
                 .setTabSelectionIndicatorColor(R.color.app_color)
@@ -281,6 +282,10 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
                 .build();
         ImagePickerActivity.setConfig(config);
         startActivityForResult(intent, FILE_CHOOSER_IMAGE_REQUEST_CODE);
+        */
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
     }
 
     private void ConvertCurrency() {
@@ -329,6 +334,10 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
                 billInfoModel.setFile_path(fileUri.getPath());
                 Toast.makeText(ActivityAddManualBill.this, "Captured Image Attached as a file.", Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == SELECT_PHOTO) {
+            File file = new File(getPath(data));
+            billInfoModel.setBill_attachment(file.getName());
+            billInfoModel.setFile_path(file.getPath());
         } else {
             if (resultCode == RESULT_OK) {
                 Parcelable[] parcelableUris = data.getParcelableArrayExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
@@ -353,6 +362,19 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
                 Toast.makeText(ActivityAddManualBill.this, "Canceled", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private String getPath(Intent data) {
+        String realPath = null;
+        if (Build.VERSION.SDK_INT < 15) {
+            realPath = Util.getRealPathFromURI_BelowAPI11(this, data.getData());
+        } else if (Build.VERSION.SDK_INT < 19) {
+            realPath = Util.getRealPathFromURI_API11to18(this, data.getData());
+        } else {
+            realPath = Util.getRealPathFromURI_API19(this, data.getData());
+
+        }
+        return realPath;
     }
 
     @Override

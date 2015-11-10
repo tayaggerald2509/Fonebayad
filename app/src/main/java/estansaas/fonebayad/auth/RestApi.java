@@ -62,7 +62,7 @@ public interface RestApi {
 
     @FormUrlEncoded
     @POST("/fonebayad-web/public/createBillStatement")
-    Call<Response> createBillStatement(@Field("bill_biller") String bill_biller, @Field("bill_account_number") String bill_account_number, @Field("bill_transaction_number") String bill_transaction_number, @Field("bill_currency") String bill_currency, @Field("bill_amount") String bill_amount, @Field("bill_status") String bill_status, @Field("bill_attachment") String bill_attachment, @Field("bill_due_date") String bill_due_date, @Field("bill_schedule_of_payment") String bill_schedule_of_payment, @Field("bill_user_id") String bill_user_id, @Field("bill_payment_method") String bill_payment_method, @Field("bill_type") String bill_type, @Field("bill_user_entity") String bill_user_entity);
+    Call<Response> createBillStatement(@Header("Authorization") String authorization, @Field("bill_biller") String bill_biller, @Field("bill_account_number") String bill_account_number, @Field("bill_transaction_number") String bill_transaction_number, @Field("bill_currency") String bill_currency, @Field("bill_amount") String bill_amount, @Field("bill_status") String bill_status, @Field("bill_attachment") String bill_attachment, @Field("bill_due_date") String bill_due_date, @Field("bill_schedule_of_payment") String bill_schedule_of_payment, @Field("bill_user_id") String bill_user_id, @Field("bill_payment_method") String bill_payment_method, @Field("bill_type") String bill_type, @Field("bill_user_entity") String bill_user_entity);
 
     @Multipart
     @POST("/fonebayad-web/public/upload")

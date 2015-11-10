@@ -126,6 +126,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     private List<ModelBillCategory> mItems;
     private String[] mListableItems;
     private List<String> listSelected;
+    private List<ModelBillInformation> selectedBill;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,6 +162,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         chk_category.setOnCheckedChangeListener(this);
 
         listSelected = new ArrayList<>();
+        selectedBill = new ArrayList<>();
 
         chk_mybills.setChecked(true);
         AuthPrimaryBankDetails();
@@ -230,8 +232,12 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                     intent.putExtra("ModelBillInformation", modelBillInfo);
                     startActivity(intent);
                     finish();
-                    this.overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                } else {
+                    ActivityMultiplePayment.selectedBill = selectedBill;
+                    Intent intent = new Intent(this, ActivityMultiplePayment.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                 }
                 break;
             default:
@@ -482,12 +488,14 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                 selected_.setVisibility(View.INVISIBLE);
                 totalSelected -= Double.valueOf(billStatements.get(position).getBalance());
                 listSelected.remove(billStatements.get(position).getBill_Id());
+                selectedBill.remove(ModelBillInformation.viewBillStatement(billStatements.get(position).getBill_Id()));
             } else {
                 selected += 1;
                 selected_.setChecked(true);
                 selected_.setVisibility(View.VISIBLE);
                 totalSelected += Double.valueOf(billStatements.get(position).getBalance());
                 listSelected.add(billStatements.get(position).getBill_Id());
+                selectedBill.add(ModelBillInformation.viewBillStatement(billStatements.get(position).getBill_Id()));
             }
 
             if (selected > 0) {
@@ -528,12 +536,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         switch (buttonView.getId()) {
             case R.id.chk_select:
                 totalSelected = 0.00;
-
-                if (isChecked) {
-                    txtSelect.setText("UNSELECT ALL");
-                } else {
-                    txtSelect.setText("SELECT ALL");
-                }
 
                 for (ModelBillInformation billstatement : billStatements) {
                     Log.i("TOTAL SELECTED", String.valueOf(totalSelected));

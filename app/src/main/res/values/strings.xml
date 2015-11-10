@@ -17,6 +17,7 @@
     <string name="app_payment_method">Payment Methods</string>
     <string name="app_bill_view">Bill View</string>
     <string name="app_payment">Payment</string>
+    <string name="app_payment_multiple">Multiple Payment</string>
     <string name="app_transaction_history">Transaction History</string>
     <string name="app_transaction_details">Transaction Details</string>
     <string name="app_reload_ewallet">Reload E-Wallet</string>
