@@ -197,7 +197,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
     @OnClick(R.id.ll_cal)
     public void GoToCalculator() {
-
     }
 
     @OnClick(R.id.ll_report)
