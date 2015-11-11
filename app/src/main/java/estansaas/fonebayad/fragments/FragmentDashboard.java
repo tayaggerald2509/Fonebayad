@@ -153,7 +153,7 @@ public class FragmentDashboard extends Fragment {
 
         txtDateDay.setTypeface(Util.setTypeface(getActivity(), Util.ROBOTO), Typeface.BOLD);
         txtDay.setTypeface(Util.setTypeface(getActivity(), Util.ROBOTO), Typeface.BOLD);
-        txtMonth.setTypeface(Util.setTypeface(getActivity(), Util.ROBOTO));
+        txtMonth.setTypeface(Util.setTypeface(getActivity(), Util.ROBOTO), Typeface.BOLD);
 
         lblTotal.setTypeface(Util.setTypeface(getActivity(), Util.ROBOTO));
         lblBillsDue.setTypeface(Util.setTypeface(getActivity(), Util.ROBOTO_LIGHT));

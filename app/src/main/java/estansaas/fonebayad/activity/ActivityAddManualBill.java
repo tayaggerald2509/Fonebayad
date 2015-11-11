@@ -1,10 +1,9 @@
 package estansaas.fonebayad.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
@@ -47,7 +46,6 @@ import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import estansaas.fonebayad.view.FormSelector;
 import estansaas.fonebayad.view.FormView;
-import nl.changer.polypicker.ImagePickerActivity;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Retrofit;
@@ -171,13 +169,13 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
     }
 
     private void InitializeViews() {
-        categoryModelFormSelector.setTypeface(Util.setTypeface(this, Util.ROBOTO));
-        txtBillername.setTypeface(Util.setTypeface(this, Util.ROBOTO));
-        txtAccount.setTypeface(Util.setTypeface(this, Util.ROBOTO));
-        txtBillAmount.setTypeface(Util.setTypeface(this, Util.ROBOTO));
-        txtStatus.setTypeface(Util.setTypeface(this, Util.ROBOTO));
-        txtDueDate.setTypeface(Util.setTypeface(this, Util.ROBOTO));
-        btnCreate.setTypeface(Util.setTypeface(this, Util.ROBOTO));
+        categoryModelFormSelector.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD);
+        txtBillername.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD);
+        txtAccount.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD);
+        txtBillAmount.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD);
+        txtStatus.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD);
+        txtDueDate.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD);
+        btnCreate.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD);
 
         txtDueDate.setKeyListener(null);
     }
@@ -273,19 +271,9 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
 
     @OnClick(R.id.ll_attach)
     public void ShowFileChoose() {
-        /*Intent intent = new Intent(this, ImagePickerActivity.class);
-        Config config = new Config.Builder()
-                .setTabBackgroundColor(R.color.app_color)    // set tab background color. Default white.
-                .setTabSelectionIndicatorColor(R.color.app_color)
-                .setCameraButtonColor(R.color.white)
-                .setSelectionLimit(1)
-                .build();
-        ImagePickerActivity.setConfig(config);
-        startActivityForResult(intent, FILE_CHOOSER_IMAGE_REQUEST_CODE);
-        */
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, SELECT_PHOTO);
     }
 
     private void ConvertCurrency() {
@@ -335,46 +323,10 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
                 Toast.makeText(ActivityAddManualBill.this, "Captured Image Attached as a file.", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == SELECT_PHOTO) {
-            File file = new File(getPath(data));
+            File file = new File(Util.getPath(this, data));
             billInfoModel.setBill_attachment(file.getName());
             billInfoModel.setFile_path(file.getPath());
-        } else {
-            if (resultCode == RESULT_OK) {
-                Parcelable[] parcelableUris = data.getParcelableArrayExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
-
-                if (parcelableUris == null) {
-                    Toast.makeText(ActivityAddManualBill.this, "Please select a file or capture image.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Uri[] uris = new Uri[parcelableUris.length];
-                System.arraycopy(parcelableUris, 0, uris, 0, parcelableUris.length);
-
-                if (uris != null) {
-                    for (Uri uri : uris) {
-                        Log.i("FILE", " uri: " + uri);
-                        File file = new File(uri.getPath());
-                        billInfoModel.setBill_attachment(file.getName());
-                        billInfoModel.setFile_path(uri.getPath());
-                    }
-                }
-            } else {
-                Toast.makeText(ActivityAddManualBill.this, "Canceled", Toast.LENGTH_SHORT).show();
-            }
         }
-    }
-
-    private String getPath(Intent data) {
-        String realPath = null;
-        if (Build.VERSION.SDK_INT < 15) {
-            realPath = Util.getRealPathFromURI_BelowAPI11(this, data.getData());
-        } else if (Build.VERSION.SDK_INT < 19) {
-            realPath = Util.getRealPathFromURI_API11to18(this, data.getData());
-        } else {
-            realPath = Util.getRealPathFromURI_API19(this, data.getData());
-
-        }
-        return realPath;
     }
 
     @Override

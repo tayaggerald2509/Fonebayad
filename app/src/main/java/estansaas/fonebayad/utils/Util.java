@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -20,6 +21,7 @@ import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,6 +76,8 @@ public class Util {
 
     private static MaterialDialog.Builder materialBuilder;
 
+    private static Display display;
+    private static Point size;
 
     public static SharedPreferences sharedPreferences(Context context) {
         return context.getSharedPreferences("fonebayad", Context.MODE_PRIVATE);
@@ -369,4 +373,23 @@ public class Util {
         return cursor.getString(column_index);
     }
 
+    public static String getPath(Context context, Intent data) {
+        return getRealPathFromURI_BelowAPI11(context, data.getData());
+    }
+
+    public static int getScreenWidth(Activity activity) {
+        display = activity.getWindowManager().getDefaultDisplay();
+        size = new Point();
+        display.getSize(size);
+
+        return size.x;
+    }
+
+    public static int getScreenHeight(Activity activity) {
+        display = activity.getWindowManager().getDefaultDisplay();
+        size = new Point();
+        display.getSize(size);
+
+        return size.y;
+    }
 }

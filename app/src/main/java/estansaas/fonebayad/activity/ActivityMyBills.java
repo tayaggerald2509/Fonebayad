@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -538,7 +537,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                 totalSelected = 0.00;
 
                 for (ModelBillInformation billstatement : billStatements) {
-                    Log.i("TOTAL SELECTED", String.valueOf(totalSelected));
                     totalSelected += Double.valueOf(billstatement.getBalance());
                     billstatement.setIsSelected(isChecked);
                     billstatement.save();
@@ -550,18 +548,18 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                     selected = Integer.valueOf(txtNoOfSelected.getText().toString());
                     ll_tool.setVisibility(View.VISIBLE);
                     chk_delete.setEnabled(true);
+                    selectedBill.addAll(billStatements);
                 } else {
                     selected = 0;
                     txtNoOfSelected.setText("0");
                     txtTotalSelected.setText("0.00");
                     chk_delete.setEnabled(false);
+                    selectedBill.removeAll(billStatements);
                 }
 
                 iconAdapter.notifyDataSetChanged();
                 listAdapter.notifyDataSetChanged();
-
                 animateToolPay();
-
                 break;
             case R.id.chk_category:
                 mItems = ModelBillCategory.getCategory();

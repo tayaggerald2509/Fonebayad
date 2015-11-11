@@ -102,25 +102,25 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
         btn_capture.setVisibility(isButtonVisible);
         surface_camera.setVisibility(isButtonVisible);
 
-        try {
+        if (getIntent().getStringExtra("photo") != null) {
+            try {
+                Bitmap myBitmap = BitmapFactory.decodeFile(getIntent().getStringExtra("photo"));
+                ExifInterface exif = new ExifInterface(getIntent().getStringExtra("photo"));
+                int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                int rotationInDegrees = exifToDegrees(rotation);
+                int deg = rotationInDegrees;
+                Matrix matrix = new Matrix();
+                if (rotation != 0f) {
+                    matrix.preRotate(rotationInDegrees);
+                    myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
+                }
 
-            Bitmap myBitmap = BitmapFactory.decodeFile(getIntent().getStringExtra("photo"));
-            ExifInterface exif = new ExifInterface(getIntent().getStringExtra("photo"));
-            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            int rotationInDegrees = exifToDegrees(rotation);
-            int deg = rotationInDegrees;
-            Matrix matrix = new Matrix();
-            if (rotation != 0f) {
-                matrix.preRotate(rotationInDegrees);
-                myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true);
+                img_captured.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, Util.getScreenWidth(ActivityPhoto.this), Util.getScreenHeight(ActivityPhoto.this), false));
+                YoYo.with(Techniques.Landing).duration(1200).playOn(findViewById(R.id.img_stamp));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            img_captured.setImageBitmap(myBitmap);
-            YoYo.with(Techniques.Landing).duration(1200).playOn(findViewById(R.id.img_stamp));
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
     }
 
     private static int exifToDegrees(int exifOrientation) {
@@ -187,7 +187,7 @@ public class ActivityPhoto extends BaseActivity implements SurfaceHolder.Callbac
 
                     bitmap = toBitmap(data);
                     bitmap = rotate(bitmap, rotation);
-                    img_captured.setImageBitmap(bitmap);
+                    img_captured.setImageBitmap(Bitmap.createScaledBitmap(bitmap, Util.getScreenWidth(ActivityPhoto.this), Util.getScreenHeight(ActivityPhoto.this), false));
                     img_captured.setVisibility(View.VISIBLE);
                     surface_camera.setVisibility(View.INVISIBLE);
 

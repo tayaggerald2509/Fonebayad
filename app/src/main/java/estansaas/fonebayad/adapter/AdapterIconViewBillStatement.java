@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.activeandroid.query.Select;
@@ -80,6 +81,7 @@ public class AdapterIconViewBillStatement extends BaseAdapter {
 
         Log.i("Over Due", billStatement.getBalance());
         holder.paramId = billStatement.getBill_Id();
+        holder.img_shared.setVisibility(billStatement.getBill_share() == 0 ? View.GONE : View.VISIBLE);
         holder.paramBillerName.setText(billStatement.getBiller_name());
         holder.paramNoOfDays.setText(billStatement.getNoOfDays());
         holder.paramOverDue.setText("PHP " + new DecimalFormat("#,##0.00").format(Double.valueOf(billStatement.getBalance())));
@@ -104,6 +106,9 @@ public class AdapterIconViewBillStatement extends BaseAdapter {
     }
 
     static class ViewHolder {
+
+        @Bind(R.id.img_shared)
+        ImageView img_shared;
 
         @Bind(R.id.chk_select)
         CheckBox paramSelect;

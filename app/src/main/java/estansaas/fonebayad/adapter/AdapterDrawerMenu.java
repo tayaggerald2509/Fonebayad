@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import estansaas.fonebayad.R;
 import estansaas.fonebayad.model.ModelMenu;
 
@@ -46,17 +48,35 @@ public class AdapterDrawerMenu extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.menu_item, null);
+            convertView = mInflater.inflate(R.layout.menu_item, parent, false);
+
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
-        TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
 
-        imgIcon.setImageResource(navDrawerItems.get(position).getIcon());
-        txtTitle.setText(navDrawerItems.get(position).getTitle());
+        holder.imgIcon.setImageResource(navDrawerItems.get(position).getIcon());
+        holder.txtTitle.setText(navDrawerItems.get(position).getTitle());
 
         return convertView;
+    }
+
+    static class ViewHolder {
+
+        @Bind(R.id.icon)
+        ImageView imgIcon;
+
+        @Bind(R.id.title)
+        TextView txtTitle;
+
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

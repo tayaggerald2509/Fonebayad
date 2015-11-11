@@ -59,6 +59,7 @@ public class BaseActivity extends AppCompatActivity {
         layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.fragment_menu, null);
         listView = (ListView) view.findViewById(R.id.list_item);
+        listView.setScrollingCacheEnabled(false);
 
         addMenuLayout();
 

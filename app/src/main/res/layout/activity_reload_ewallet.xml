@@ -90,7 +90,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/txtHeader"
+                        android:id="@+id/lblHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/app_ewallet_header"
@@ -100,14 +100,14 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/txtContent"
+                        android:id="@+id/lblContent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:text="@string/app_ewallet_desc"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/text_currency" />
+                        android:textSize="@dimen/abc_text_size_caption_material" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -152,15 +152,13 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="@dimen/activity_vertical_margin"
-                                    android:editable="false"
-                                    android:ems="10"
-                                    android:enabled="false"
-                                    android:focusable="false"
                                     android:paddingBottom="@dimen/abc_control_padding_material"
                                     android:singleLine="true"
                                     android:text="PHILIPPINES"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textColor="@color/app_color"
-                                    android:textSize="@dimen/abc_text_size_menu_material" />
+                                    android:textSize="@dimen/abc_text_size_menu_material"
+                                    android:clickable="true" />
 
                             </LinearLayout>
 
@@ -354,13 +352,16 @@
                                     android:layout_height="wrap_content"
                                     android:background="@null"
                                     android:digits="@string/numeric_amount"
-                                    android:ems="10"
+                                    android:ellipsize="end"
                                     android:gravity="right"
-                                    android:hint="0"
+                                    android:hint="0.00"
+                                    android:imeOptions="actionDone|flagNoExtractUi"
                                     android:inputType="number|numberDecimal"
                                     android:singleLine="true"
                                     android:textAlignment="gravity"
-                                    android:textSize="@dimen/abc_text_size_menu_material" />
+                                    android:textSize="@dimen/abc_text_size_menu_material"
+                                    android:elegantTextHeight="false"
+                                    android:numeric="decimal" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -385,8 +386,8 @@
                                             android:id="@+id/lblUpload"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_margin="@dimen/activity_margin_min"
                                             android:layout_weight="1"
+                                            android:padding="@dimen/activity_margin_min"
                                             android:singleLine="true"
                                             android:text="UPLOAD BANK DEPOSIT SLIP"
                                             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -448,6 +449,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="@dimen/activity_margin_30dp"
                     android:layout_marginRight="@dimen/activity_margin_30dp"
+                    android:layout_marginTop="@dimen/activity_min_padding"
                     android:gravity="center"
                     android:orientation="vertical">
 

@@ -67,9 +67,10 @@
 
 
         <ScrollView
-            android:id="@+id/scrollView4"
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/white"
             android:scrollbars="none">
 
             <LinearLayout
@@ -97,12 +98,22 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <ListView
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#e6e6e6" />
+
+                <estansaas.fonebayad.view.NestedListView
                     android:id="@+id/bill_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:listSelector="@android:color/transparent"
-                    android:background="@android:color/white" />
+                    android:background="@android:color/white"
+                    android:listSelector="@android:color/transparent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#e6e6e6" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -128,6 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#e6e6e6" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -172,10 +184,12 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#e6e6e6" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

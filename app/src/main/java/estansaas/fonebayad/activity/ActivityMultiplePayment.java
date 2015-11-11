@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -88,22 +87,16 @@ public class ActivityMultiplePayment extends BaseActivity implements View.OnTouc
     }
 
     private void InitializeDataView() {
-
         adapterMultiplePayment = new AdapterMultiplePayment(this, selectedBill);
         bill_list.setAdapter(adapterMultiplePayment);
-        bill_list.setOnTouchListener(this);
-        setListViewHeightBasedOnChildren(bill_list);
-
         for (ModelBillInformation modelbillInfo : selectedBill) {
             ttlAmnt += Double.valueOf(modelbillInfo.getBill_amount());
         }
-
         txtAmountDue.setText(new DecimalFormat("#,##0.00").format(ttlAmnt));
     }
 
     @OnClick(R.id.ll_currency)
     public void ShowCurrency() {
-
         int i = 0;
         currency = new String[ModelCurrency.getCurrency().size()];
         for (ModelCurrency modelCurrency : ModelCurrency.getCurrency()) {
@@ -216,26 +209,30 @@ public class ActivityMultiplePayment extends BaseActivity implements View.OnTouc
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        v.getParent().requestDisallowInterceptTouchEvent(true);
+
+        switch (v.getId()) {
+            case R.id.bill_list:
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                break;
+        }
+
         return false;
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
+        if (listAdapter == null) {
+            // pre-condition
             return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
         }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);

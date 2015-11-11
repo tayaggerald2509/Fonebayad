@@ -9,9 +9,9 @@
         android:layout_height="fill_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/AppBarLayout"
@@ -68,6 +68,11 @@
                     app:tabGravity="fill"
                     app:tabMode="fixed" />
             </android.support.design.widget.AppBarLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/app_color" />
 
             <estansaas.fonebayad.view.ViewPagerView
                 android:id="@+id/viewpager"

@@ -1,18 +1,21 @@
 package estansaas.fonebayad.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -20,6 +23,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 
 import java.io.File;
+import java.text.DecimalFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,8 +38,6 @@ import estansaas.fonebayad.model.ModelLogin;
 import estansaas.fonebayad.utils.Connection;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
-import nl.changer.polypicker.Config;
-import nl.changer.polypicker.ImagePickerActivity;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Retrofit;
@@ -43,18 +45,19 @@ import retrofit.Retrofit;
 /**
  * Created by gerald.tayag on 10/28/2015.
  */
-public class ActivityReloadEWallet extends BaseActivity implements MaterialDialog.SingleButtonCallback {
+public class ActivityReloadEWallet extends BaseActivity implements MaterialDialog.SingleButtonCallback, View.OnFocusChangeListener {
 
-    private static final int FILE_CHOOSER_IMAGE_REQUEST_CODE = 200;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int SELECT_PHOTO = 1;
 
     @Bind(R.id.toolbar)
     public Toolbar toolbar;
 
-    @Bind(R.id.txtHeader)
-    public TextView txtHeader;
+    @Bind(R.id.lblHeader)
+    public TextView lblHeader;
 
-    @Bind(R.id.txtContent)
-    public TextView txtContent;
+    @Bind(R.id.lblContent)
+    public TextView lblContent;
 
     @Bind(R.id.txtCountry)
     public TextView txtCountry;
@@ -75,7 +78,7 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
     public TextView lblAmntDeposit;
 
     @Bind(R.id.txtAmntDeposit)
-    public TextView txtAmntDeposit;
+    public EditText txtAmntDeposit;
 
     @Bind(R.id.lblUpload)
     public TextView lblUpload;
@@ -88,6 +91,7 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
 
     private ModelCurrency modelCurrency;
     private String[] currency;
+    private Uri fileUri;
     private File file; // file url to store image/video
     private String country_id;
 
@@ -103,11 +107,29 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
     }
 
     private void InitializeViews() {
-        txtHeader.setTypeface(Util.setTypeface(this, Util.ROBOTO), Typeface.BOLD);
-        txtContent.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT));
+        lblHeader.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD);
+        lblContent.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT));
         txtCountry.setCompoundDrawables(null, null, Util.resizeDrawable(this, R.drawable.ic_keyboard_arrow_down_black_48dp), null);
+        txtAmntDeposit.setTypeface(Util.setTypeface(this, Util.ROBOTO));
         lblAmntDeposit.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD_ITALIC);
         lblUpload.setTypeface(Util.setTypeface(this, Util.ROBOTO_LIGHT), Typeface.BOLD_ITALIC);
+
+        txtAmntDeposit.setOnFocusChangeListener(this);
+        txtAmntDeposit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == 6 || actionId == KeyEvent.KEYCODE_BACK) {
+                    String bill_amount = txtAmntDeposit.getText().toString();
+                    if (!txtAmntDeposit.getText().toString().equals("") && !txtAmntDeposit.getText().equals(null)) {
+                        txtAmntDeposit.setText("Php " + new DecimalFormat("#,##0.00").format(Double.valueOf(bill_amount.toString())));
+                    }
+                    InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.toggleSoftInput(0, 0);
+                    txtAmntDeposit.clearFocus();
+                }
+                return false;
+            }
+        });
     }
 
     @OnClick(R.id.btnSubmit)
@@ -123,6 +145,17 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
         }
 
         ShowAuthDialog();
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()) {
+            case R.id.txtAmntDeposit:
+                if (hasFocus) {
+                    txtAmntDeposit.setText(txtAmntDeposit.getText().toString().replace("Php", "").replace(",", "").trim());
+                }
+                break;
+        }
     }
 
     private void ShowAuthDialog() {
@@ -179,6 +212,11 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
             }
         });
 
+    }
+
+    @OnClick(R.id.txtCountry)
+    public void txtCountry() {
+        SelectCountry();
     }
 
     @OnClick(R.id.ll_country)
@@ -257,44 +295,53 @@ public class ActivityReloadEWallet extends BaseActivity implements MaterialDialo
 
     @OnClick(R.id.ll_upload)
     public void UploadPhoto() {
-        file = null;
-        Intent intent = new Intent(this, ImagePickerActivity.class);
-        Config config = new Config.Builder()
-                .setTabBackgroundColor(R.color.app_color)    // set tab background color. Default white.
-                .setTabSelectionIndicatorColor(R.color.app_color)
-                .setCameraButtonColor(R.color.white)
-                .setSelectionLimit(1)
-                .build();
-        ImagePickerActivity.setConfig(config);
-        startActivityForResult(intent, FILE_CHOOSER_IMAGE_REQUEST_CODE);
+
+        String[] photo = new String[2];
+        photo[0] = "Camera";
+        photo[1] = "Upload Photo";
+        new MaterialDialog.Builder(this)
+                .title("Upload Photo")
+                .items(photo)
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                        Intent intent;
+                        switch (i) {
+                            case 0:
+                                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                fileUri = Util.getMediaFile();
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                                startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                                break;
+                            case 1:
+                                intent = new Intent(Intent.ACTION_PICK);
+                                fileUri = Util.getMediaFile();
+                                intent.setType("image/*");
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                                startActivityForResult(intent, SELECT_PHOTO);
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText(R.string.ok)
+                .show();
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == FILE_CHOOSER_IMAGE_REQUEST_CODE) {
+        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Parcelable[] parcelableUris = data.getParcelableArrayExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
-
-                if (parcelableUris == null) {
-                    return;
-                }
-
-                Uri[] uris = new Uri[parcelableUris.length];
-                System.arraycopy(parcelableUris, 0, uris, 0, parcelableUris.length);
-
-                if (uris != null) {
-                    for (Uri uri : uris) {
-                        Log.i("FILE", " uri: " + uri);
-                        file = new File(uri.getPath());
-                        txtAttachment.setVisibility(View.VISIBLE);
-                        txtAttachment.setText(file.getName());
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
+                file = new File(fileUri.getPath());
+                txtAttachment.setVisibility(View.VISIBLE);
+                txtAttachment.setText(file.getName());
             }
+        } else if (requestCode == SELECT_PHOTO) {
+            file = new File(Util.getPath(this, data));
+            txtAttachment.setVisibility(View.VISIBLE);
+            txtAttachment.setText(file.getName());
         }
     }
 
