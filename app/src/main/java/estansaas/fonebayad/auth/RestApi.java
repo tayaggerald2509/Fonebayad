@@ -7,6 +7,7 @@ import estansaas.fonebayad.auth.Responses.ResponseAccess;
 import estansaas.fonebayad.auth.Responses.ResponseBankAccount;
 import estansaas.fonebayad.auth.Responses.ResponseBillStatement;
 import estansaas.fonebayad.auth.Responses.ResponseCountryDetails;
+import estansaas.fonebayad.auth.Responses.ResponseCreateBills;
 import estansaas.fonebayad.auth.Responses.ResponseForexRate;
 import estansaas.fonebayad.auth.Responses.ResponseLogin;
 import estansaas.fonebayad.auth.Responses.ResponseNotification;
@@ -45,7 +46,7 @@ public interface RestApi {
     Call<Response> checkFonebayadEmail(@Query("ezibills_email") String email);
 
     @FormUrlEncoded
-    @POST("/fonebayad-web/public/syncrecord")
+    @POST("/fonebayad-web/public/api/syncrecord")
     Call<ResponseBillStatement> SyncDashboardRecord(@Field("userid") String userid, @Field("device_guid") String deviceguid);
 
     @FormUrlEncoded
@@ -61,8 +62,8 @@ public interface RestApi {
     Call<Response> validateBillEntry(@Field("bill_biller") String bill_biller, @Field("bill_accountnumber") String bill_accountnumber, @Field("bill_transactionnumber") String bill_transactionnumber, @Field("bill_userid") String bill_userid);
 
     @FormUrlEncoded
-    @POST("/fonebayad-web/public/createBillStatement")
-    Call<Response> createBillStatement(@Header("Authorization") String authorization, @Field("bill_biller") String bill_biller, @Field("bill_account_number") String bill_account_number, @Field("bill_transaction_number") String bill_transaction_number, @Field("bill_currency") String bill_currency, @Field("bill_amount") String bill_amount, @Field("bill_status") String bill_status, @Field("bill_attachment") String bill_attachment, @Field("bill_due_date") String bill_due_date, @Field("bill_schedule_of_payment") String bill_schedule_of_payment, @Field("bill_user_id") String bill_user_id, @Field("bill_payment_method") String bill_payment_method, @Field("bill_type") String bill_type, @Field("bill_user_entity") String bill_user_entity);
+    @POST("/fonebayad-web/public/api/createBillStatement")
+    Call<ResponseCreateBills> createBillStatement(@Header("Authorization") String authorization, @Field("bill_biller") String bill_biller, @Field("bill_account_number") String bill_account_number, @Field("bill_transaction_number") String bill_transaction_number, @Field("bill_currency") String bill_currency, @Field("bill_amount") String bill_amount, @Field("bill_status") String bill_status, @Field("bill_attachment") String bill_attachment, @Field("bill_due_date") String bill_due_date, @Field("bill_schedule_of_payment") String bill_schedule_of_payment, @Field("bill_user_id") String bill_user_id, @Field("bill_payment_method") String bill_payment_method, @Field("bill_type") String bill_type, @Field("bill_user_entity") String bill_user_entity);
 
     @Multipart
     @POST("/fonebayad-web/public/upload")

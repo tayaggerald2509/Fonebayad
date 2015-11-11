@@ -435,14 +435,16 @@
                                 android:text="PHP"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                            <TextView
+                            <estansaas.fonebayad.view.AutofitTextView
                                 android:id="@+id/txtAmountDue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1,350.00"
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:textColor="@color/color_overdue"
-                                android:textSize="@dimen/abc_text_size_display_1_material" />
+                                android:textSize="@dimen/abc_text_size_display_1_material"
+                                app:minTextSize="12sp"
+                                android:singleLine="true" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -563,7 +565,8 @@
             android:id="@+id/ll_bill_added"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#8C000000">
+            android:background="#8C000000"
+            android:clickable="true">
 
         </RelativeLayout>
 

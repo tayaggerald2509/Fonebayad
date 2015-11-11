@@ -7,7 +7,6 @@
     android:background="@android:color/white">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -120,7 +119,9 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="@dimen/activity_margin_min"
+                            android:layout_marginRight="@dimen/activity_margin_min">
 
                             <TextView
                                 android:id="@+id/txtCurrency"
@@ -131,14 +132,16 @@
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:textSize="@dimen/abc_text_size_menu_material" />
 
-                            <TextView
+                            <estansaas.fonebayad.view.AutofitTextView
                                 android:id="@+id/txtAmountDue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:singleLine="true"
                                 android:text="1,350.00"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:textColor="@color/color_overdue"
-                                android:textSize="@dimen/abc_text_size_display_1_material" />
+                                android:textSize="@dimen/abc_text_size_display_1_material"
+                                app:minTextSize="12sp" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -241,13 +244,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
+                                    android:layout_weight="1.5"
                                     android:gravity="right"
                                     android:singleLine="true"
                                     android:text="0.00"
                                     android:textAppearance="?android:attr/textAppearanceSmall"
                                     android:textSize="@dimen/abc_text_size_medium_material"
-                                    autofit:minTextSize="8sp"
-                                    android:layout_weight="1.5" />
+                                    autofit:minTextSize="8sp" />
 
                                 <ImageView
                                     android:id="@+id/imageView3"
@@ -396,9 +399,9 @@
             android:id="@+id/ll_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -408,14 +411,14 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/ll_finish"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/color_total"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="@dimen/activity_min_padding"
-                    android:id="@+id/ll_finish">
+                    android:padding="@dimen/activity_min_padding">
 
                     <TextView
                         android:id="@+id/txtDashboard"
@@ -430,13 +433,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_bill"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/app_color"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:id="@+id/ll_bill"
                     android:padding="@dimen/activity_min_padding"
                     android:visibility="gone">
 

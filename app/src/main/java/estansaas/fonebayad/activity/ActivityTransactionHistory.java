@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -45,6 +46,9 @@ public class ActivityTransactionHistory extends BaseActivity implements Material
 
     private List<ModelTransaction> modelTransactionList;
     private AdapterListTransaction adapterListTransaction;
+
+    @Bind(R.id.ll_no_data)
+    public LinearLayout ll_no_data;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +106,7 @@ public class ActivityTransactionHistory extends BaseActivity implements Material
         adapterListTransaction = new AdapterListTransaction(this, modelTransactionList);
         list_transaction.setAdapter(adapterListTransaction);
         list_transaction.setOnItemClickListener(this);
+        ll_no_data.setVisibility(modelTransactionList.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
 

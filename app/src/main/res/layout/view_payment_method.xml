@@ -70,19 +70,19 @@
                     android:layout_marginRight="@dimen/activity_margin_min"
                     android:text="PHP"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textSize="@dimen/abc_text_size_button_material" />
-
+                    android:textSize="@dimen/abc_text_size_button_material"
+                    android:visibility="gone" />
 
                 <estansaas.fonebayad.view.AutofitTextView
                     android:id="@+id/txtAmount"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="0.00"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textSize="@dimen/abc_text_size_large_material"
-                    autofit:minTextSize="8sp" />
-
+                    autofit:minTextSize="8sp"
+                    android:gravity="right" />
 
             </LinearLayout>
 

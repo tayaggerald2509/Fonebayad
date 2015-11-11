@@ -112,20 +112,21 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
     LinearLayout ll_tool, ll_view, ll_share, ll_pay;
 
-    public static final int SAMPLE_DATA_ITEM_COUNT = 3;
-
-    private ModelBillInformation modelBillInfo;
-    private List<ModelBillInformation> billStatements;
     private AdapterIconViewBillStatement iconAdapter;
     private AdapterListViewBillStatement listAdapter;
+
+    private ModelBillInformation modelBillInfo;
+
+    private List<ModelBillInformation> billStatements;
+    private List<ModelBillInformation> selectedBill;
+    private List<ModelBillCategory> mItems;
+    private List<String> listSelected;
+    private String[] mListableItems;
+
     private int selected = 0;
     private Double totalSelected = 0.0;
     private Double AccountBalance = 0.0;
     private Animation bottom_up, bottom_down;
-    private List<ModelBillCategory> mItems;
-    private String[] mListableItems;
-    private List<String> listSelected;
-    private List<ModelBillInformation> selectedBill;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -232,10 +233,20 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                     finish();
                     overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                 } else {
-                    ActivityMultiplePayment.selectedBill = selectedBill;
-                    Intent intent = new Intent(this, ActivityMultiplePayment.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    for (ModelBillInformation modelBillInformation : selectedBill) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(modelBillInformation.getDue_date());
+                        if (new Date().before(calendar.getTime())) {
+                            ActivityMultiplePayment.selectedBill = selectedBill;
+                            Intent intent = new Intent(this, ActivityMultiplePayment.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                            break;
+                        } else {
+                            Util.ShowNeutralDialog(this, "Warning", "Unable to proceed with payment. Your bill " + modelBillInformation.getBiller_name() + " is already overdue", "Ok", this);
+                            break;
+                        }
+                    }
                 }
                 break;
             default:
@@ -265,116 +276,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         } else {
             chk_delete.setEnabled(false);
         }
-    }
-
-    private void ShowMessage(int size) {
-        if (size > 0) {
-            ll_message.setVisibility(View.INVISIBLE);
-            InitializeTools(true);
-        } else {
-            ll_message.setVisibility(View.VISIBLE);
-            InitializeTools(false);
-        }
-    }
-
-    private void InitializeData() {
-        billStatements = new ArrayList<>();
-        if (Network.isConnected(this)) {
-            new MaterialDialog.Builder(this)
-                    .content(R.string.action_wait)
-                    .contentGravity(GravityEnum.CENTER)
-                    .theme(Theme.DARK)
-                    .widgetColor(Color.WHITE)
-                    .progressIndeterminateStyle(false)
-                    .progress(true, 0)
-                    .cancelable(false)
-                    .dismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            txtNoOfBills.setText(String.valueOf(billStatements.size()));
-                            InitiliazeAdapters();
-                            ShowMessage(billStatements.size());
-                        }
-                    })
-                    .showListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialogInterface) {
-                            AuthMyBillsData(dialogInterface);
-                        }
-                    }).show();
-        } else {
-            for (ModelBillInformation billStatement : estansaas.fonebayad.model.ModelBillInformation.getBillStatement()) {
-                billStatements.add(billStatement);
-            }
-
-            InitiliazeAdapters();
-            ShowMessage(ModelBillInformation.getBillStatement().size());
-        }
-    }
-
-    private void AuthMyBillsData(final DialogInterface dialogInterface) {
-
-        Call<ResponseBillStatement> billStatementResponseCall = RestClient.get().SyncDashboardRecord(ModelLogin.getUserInfo().getApp_id(), Util.getGUID(this));
-        billStatementResponseCall.enqueue(new Callback<ResponseBillStatement>() {
-            @Override
-            public void onResponse(Response<ResponseBillStatement> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    if (response.code() == 200) {
-                        estansaas.fonebayad.model.ModelBillInformation.DeleteBillStatement();
-                        for (ModelBillStatement modelBillStatement : response.body().getModelBillStatementData().getModelBillStatementList()) {
-                            try {
-                                String[] date = Util.StringconvertDate(modelBillStatement.getBill_duedate()).split("-");
-                                ModelBillInformation billStatement = new ModelBillInformation();
-                                billStatement.setBill_Id(modelBillStatement.getBillId());
-                                billStatement.setBill_biller(modelBillStatement.getBill_biller());
-                                billStatement.setBiller_name(modelBillStatement.getBiller_name());
-                                billStatement.setBill_account_number(modelBillStatement.getBill_accountnumber());
-                                billStatement.setBill_transaction_number(modelBillStatement.getBill_transactionnumber());
-                                billStatement.setBill_amount(modelBillStatement.getBill_amount());
-                                billStatement.setBalance(modelBillStatement.getBill_balance());
-                                billStatement.setBill_status(modelBillStatement.getBill_status());
-                                billStatement.setMonth(String.valueOf(Integer.valueOf(date[1])));
-                                billStatement.setYear(date[2]);
-                                billStatement.setBill_biller(modelBillStatement.getBill_biller());
-                                billStatement.setBiller_category(Integer.valueOf(modelBillStatement.getBiller_category()));
-                                billStatement.setBill_share(Integer.valueOf(modelBillStatement.getBill_share()));
-                                billStatement.setBill_due_date(modelBillStatement.getBill_duedate());
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-                                billStatement.setDue_date(simpleDateFormat.parse(modelBillStatement.getBill_duedate()));
-                                billStatement.save();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        switch (getIntent().getIntExtra("EXTRA_SESSION_ID", 0)) {
-                            //OverDue
-                            case 1:
-                                InitializeOverDue();
-                                break;
-                            //Week
-                            case 2:
-                                InitializeWeek();
-                                break;
-                            //ALL
-                            default:
-                                InitializeAll();
-                                break;
-                        }
-                    } else {
-                        Util.ShowMessage(coordinatorLayout, "Can't fetch data from server.");
-                    }
-                } else {
-                    Util.ShowMessage(coordinatorLayout, "Can't fetch data from server.");
-                }
-                dialogInterface.dismiss();
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                dialogInterface.dismiss();
-            }
-        });
     }
 
     private void InitializeOverDue() {
@@ -446,6 +347,116 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         }
     }
 
+    private void InitializeData() {
+        billStatements = new ArrayList<>();
+        if (Network.isConnected(this)) {
+            new MaterialDialog.Builder(this)
+                    .content(R.string.action_wait)
+                    .contentGravity(GravityEnum.CENTER)
+                    .theme(Theme.DARK)
+                    .widgetColor(Color.WHITE)
+                    .progressIndeterminateStyle(false)
+                    .progress(true, 0)
+                    .cancelable(false)
+                    .dismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            txtNoOfBills.setText(String.valueOf(billStatements.size()));
+                            InitiliazeAdapters();
+                            ShowMessage(billStatements.size());
+                        }
+                    })
+                    .showListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            AuthMyBillsData(dialogInterface);
+                        }
+                    }).show();
+        } else {
+            for (ModelBillInformation billStatement : estansaas.fonebayad.model.ModelBillInformation.getBillStatement()) {
+                billStatements.add(billStatement);
+            }
+
+            InitiliazeAdapters();
+            ShowMessage(ModelBillInformation.getBillStatement().size());
+        }
+    }
+
+    private void ShowMessage(int size) {
+        if (size > 0) {
+            ll_message.setVisibility(View.INVISIBLE);
+            InitializeTools(true);
+        } else {
+            ll_message.setVisibility(View.VISIBLE);
+            InitializeTools(false);
+        }
+    }
+
+    private void AuthMyBillsData(final DialogInterface dialogInterface) {
+
+        Call<ResponseBillStatement> billStatementResponseCall = RestClient.get().SyncDashboardRecord(ModelLogin.getUserInfo().getApp_id(), Util.getGUID(this));
+        billStatementResponseCall.enqueue(new Callback<ResponseBillStatement>() {
+            @Override
+            public void onResponse(Response<ResponseBillStatement> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    if (response.code() == 200) {
+                        estansaas.fonebayad.model.ModelBillInformation.DeleteBillStatement();
+                        for (ModelBillStatement modelBillStatement : response.body().getModelBillStatementData().getModelBillStatementList()) {
+                            try {
+                                String[] date = Util.StringconvertDate(modelBillStatement.getBill_duedate()).split("-");
+                                ModelBillInformation billStatement = new ModelBillInformation();
+                                billStatement.setBill_Id(modelBillStatement.getBillId());
+                                billStatement.setBill_biller(modelBillStatement.getBill_biller());
+                                billStatement.setBiller_name(modelBillStatement.getBiller_name());
+                                billStatement.setBill_account_number(modelBillStatement.getBill_accountnumber());
+                                billStatement.setBill_transaction_number(modelBillStatement.getBill_transactionnumber());
+                                billStatement.setBill_amount(modelBillStatement.getBill_amount());
+                                billStatement.setBalance(modelBillStatement.getBill_balance());
+                                billStatement.setBill_status(modelBillStatement.getBill_status());
+                                billStatement.setMonth(String.valueOf(Integer.valueOf(date[1])));
+                                billStatement.setYear(date[2]);
+                                billStatement.setBill_biller(modelBillStatement.getBill_biller());
+                                billStatement.setBiller_category(Integer.valueOf(modelBillStatement.getBiller_category()));
+                                billStatement.setBill_share(Integer.valueOf(modelBillStatement.getBill_share()));
+                                billStatement.setBill_due_date(modelBillStatement.getBill_duedate());
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                                billStatement.setDue_date(simpleDateFormat.parse(modelBillStatement.getBill_duedate()));
+                                billStatement.save();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        switch (getIntent().getIntExtra("EXTRA_SESSION_ID", 0)) {
+                            //OverDue
+                            case 1:
+                                InitializeOverDue();
+                                break;
+                            //Week
+                            case 2:
+                                InitializeWeek();
+                                break;
+                            //ALL
+                            default:
+                                InitializeAll();
+                                break;
+                        }
+                    } else {
+                        Util.ShowMessage(coordinatorLayout, "Can't fetch data from server.");
+                    }
+                } else {
+                    Util.ShowMessage(coordinatorLayout, "Can't fetch data from server.");
+                }
+                dialogInterface.dismiss();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                dialogInterface.dismiss();
+            }
+        });
+    }
+
     private void AuthPrimaryBankDetails() {
         if (Network.isConnected(this)) {
             Call<ResponseBankAccount> responseBankAccountCall = RestClient.get().getAllActiveBankAccounts(ModelLogin.getUserInfo().getApp_id());
@@ -470,49 +481,6 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
             });
 
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        try {
-            if (selected == 0) totalSelected = 0.00;
-
-            CheckBox selected_ = (CheckBox) view.findViewById(R.id.chk_select);
-
-            if (selected_.isChecked()) {
-                selected -= 1;
-                selected_.setChecked(false);
-                selected_.setVisibility(View.INVISIBLE);
-                totalSelected -= Double.valueOf(billStatements.get(position).getBalance());
-                listSelected.remove(billStatements.get(position).getBill_Id());
-                selectedBill.remove(ModelBillInformation.viewBillStatement(billStatements.get(position).getBill_Id()));
-            } else {
-                selected += 1;
-                selected_.setChecked(true);
-                selected_.setVisibility(View.VISIBLE);
-                totalSelected += Double.valueOf(billStatements.get(position).getBalance());
-                listSelected.add(billStatements.get(position).getBill_Id());
-                selectedBill.add(ModelBillInformation.viewBillStatement(billStatements.get(position).getBill_Id()));
-            }
-
-            if (selected > 0) {
-                chk_delete.setEnabled(true);
-            } else {
-                listSelected.clear();
-                chk_select.setChecked(false);
-                chk_delete.setEnabled(false);
-                totalSelected = 0.00;
-            }
-
-            animateToolPay();
-            txtNoOfSelected.setText(String.valueOf(selected));
-            txtTotalSelected.setText("Php " + new DecimalFormat("#,##0.00").format(totalSelected < 0.00 ? (totalSelected * -1) : totalSelected));
-            txtAccountBalance.setText("Php " + new DecimalFormat("#,##0.00").format(AccountBalance - totalSelected));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void animateToolPay() {
@@ -631,6 +599,49 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     }
 
     @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        try {
+            if (selected == 0) totalSelected = 0.00;
+
+            CheckBox selected_ = (CheckBox) view.findViewById(R.id.chk_select);
+
+            if (selected_.isChecked()) {
+                selected -= 1;
+                selected_.setChecked(false);
+                selected_.setVisibility(View.INVISIBLE);
+                totalSelected -= Double.valueOf(billStatements.get(position).getBalance());
+                listSelected.remove(billStatements.get(position).getBill_Id());
+                selectedBill.remove(ModelBillInformation.viewBillStatement(billStatements.get(position).getBill_Id()));
+            } else {
+                selected += 1;
+                selected_.setChecked(true);
+                selected_.setVisibility(View.VISIBLE);
+                totalSelected += Double.valueOf(billStatements.get(position).getBalance());
+                listSelected.add(billStatements.get(position).getBill_Id());
+                selectedBill.add(ModelBillInformation.viewBillStatement(billStatements.get(position).getBill_Id()));
+            }
+
+            if (selected > 0) {
+                chk_delete.setEnabled(true);
+            } else {
+                listSelected.clear();
+                chk_select.setChecked(false);
+                chk_delete.setEnabled(false);
+                totalSelected = 0.00;
+            }
+
+            animateToolPay();
+            txtNoOfSelected.setText(String.valueOf(selected));
+            txtTotalSelected.setText("Php " + new DecimalFormat("#,##0.00").format(totalSelected < 0.00 ? (totalSelected * -1) : totalSelected));
+            txtAccountBalance.setText("Php " + new DecimalFormat("#,##0.00").format(AccountBalance - totalSelected));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
     public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
         switch (dialogAction) {
             case POSITIVE:
@@ -659,7 +670,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
             }
 
             AuthPrimaryBankDetails();
-            //InitializeData();
+
             ll_tool.setVisibility(View.INVISIBLE);
             chk_delete.setEnabled(false);
 
@@ -674,6 +685,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
 
             selected = 0;
             totalSelected = 0.00;
+            selectedBill.clear();
         } catch (Exception e) {
             e.printStackTrace();
         }

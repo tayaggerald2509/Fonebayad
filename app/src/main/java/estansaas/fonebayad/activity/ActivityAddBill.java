@@ -82,6 +82,7 @@ public class ActivityAddBill extends BaseActivity implements MaterialDialog.Sing
     @OnClick(R.id.back)
     public void Back() {
         finish();
+        Util.startNextActivity(this, ActivityDashboard.class);
     }
 
     @Override

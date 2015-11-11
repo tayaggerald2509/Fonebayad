@@ -10,15 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -32,6 +37,8 @@ import estansaas.fonebayad.auth.RestClient;
 import estansaas.fonebayad.model.ModelBankAccount;
 import estansaas.fonebayad.model.ModelBillInformation;
 import estansaas.fonebayad.model.ModelCurrency;
+import estansaas.fonebayad.model.ModelLogin;
+import estansaas.fonebayad.utils.Connection;
 import estansaas.fonebayad.utils.Network;
 import estansaas.fonebayad.utils.Util;
 import retrofit.Call;
@@ -46,6 +53,12 @@ public class ActivityMultiplePayment extends BaseActivity implements View.OnTouc
 
     public static final String ACTIVITY_PAYMENT_VIEW = "ActivityPaymentView";
     public static final int REQUEST_PAYMENT_METHOD = 201;
+
+    @Bind(R.id.ll_view)
+    public LinearLayout ll_view;
+
+    @Bind(R.id.rl_bill_paid)
+    public RelativeLayout rl_bill_paid;
 
     @Bind(R.id.bill_list)
     public ListView bill_list;
@@ -75,7 +88,8 @@ public class ActivityMultiplePayment extends BaseActivity implements View.OnTouc
     private ModelBankAccount modelBankAccount;
     public static List<ModelBillInformation> selectedBill;
     private String[] currency;
-    private Double ttlAmnt = 0.0;
+    private double ttlAmnt = 0.0;
+    private BigDecimal newBalance;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -199,11 +213,68 @@ public class ActivityMultiplePayment extends BaseActivity implements View.OnTouc
     public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
         switch (dialogAction) {
             case POSITIVE:
+                if (Double.valueOf(modelBankAccount.getBankaccount_amount()) >= ttlAmnt) {
+                    ShowDialogAuth();
+                } else {
+                    Util.ShowNeutralDialog(this, "Warning", "Payment unsuccessful. Insufficient credit.", "OK", this);
+                }
                 break;
             case NEGATIVE:
             case NEUTRAL:
                 materialDialog.dismiss();
                 break;
+        }
+    }
+
+    private void ShowDialogAuth() {
+        if (Network.isConnected(this)) {
+            new MaterialDialog.Builder(this)
+                    .content("Loading")
+                    .contentGravity(GravityEnum.CENTER)
+                    .theme(Theme.DARK)
+                    .widgetColor(Color.WHITE)
+                    .progressIndeterminateStyle(false)
+                    .progress(true, 0)
+                    .cancelable(true)
+                    .showListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            AuthPayment(dialogInterface);
+                        }
+                    }).show();
+        } else {
+            Util.ShowNeutralDialog(this, "fonebayad", "No Internet connection!", "OK", this);
+        }
+    }
+
+    private void AuthPayment(final DialogInterface dialogInterface) {
+        newBalance = new BigDecimal(modelBankAccount.getBankaccount_amount());
+        for (ModelBillInformation modelBillInformation : selectedBill) {
+            newBalance = newBalance.subtract(new BigDecimal(modelBillInformation.getBill_amount()));
+            Call<estansaas.fonebayad.auth.Responses.Response> responseCall = RestClient.get().paybillsMobile(modelBillInformation.getBill_Id(), ModelLogin.getUserInfo().getApp_id(), "Paid", modelBillInformation.getBill_amount(), String.valueOf(newBalance), modelBankAccount.getBankaccount_id(), modelBillInformation.getBill_amount(), "1");
+            responseCall.enqueue(new Callback<estansaas.fonebayad.auth.Responses.Response>() {
+                @Override
+                public void onResponse(Response<estansaas.fonebayad.auth.Responses.Response> response, Retrofit retrofit) {
+                    if (response.isSuccess()) {
+                        if (response.body().getStatus().equals(Connection.STATUS_ACCEPTED)) {
+                            ll_view.setEnabled(false);
+                            rl_bill_paid.setVisibility(View.VISIBLE);
+                            modelBankAccount.setBankaccount_amount(String.valueOf(newBalance));
+                            YoYo.with(Techniques.Landing).duration(1200).playOn(findViewById(R.id.img_stamp));
+                        }
+                    } else {
+                        Util.ShowNeutralDialog(ActivityMultiplePayment.this, "", "An error occured while trying to connect to server.", "OK", ActivityMultiplePayment.this);
+                    }
+                    dialogInterface.dismiss();
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    t.printStackTrace();
+                    dialogInterface.dismiss();
+                    Util.ShowNeutralDialog(ActivityMultiplePayment.this, "", "An error occured while trying to connect to server.", "OK", ActivityMultiplePayment.this);
+                }
+            });
         }
     }
 
@@ -238,13 +309,29 @@ public class ActivityMultiplePayment extends BaseActivity implements View.OnTouc
         listView.setLayoutParams(params);
     }
 
-    @OnClick(R.id.expanded_menu)
-    public void ShowSideMenu() {
-        showMenu();
+    @OnClick(R.id.ll_finish)
+    public void goto_finish() {
+        onBackPressed();
     }
 
     @OnClick(R.id.back)
-    public void OnBack() {
+    public void Back() {
         onBackPressed();
+    }
+
+    @OnClick(R.id.expanded_menu)
+    public void toggleMenu() {
+        showMenu();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (rl_bill_paid.getVisibility() == View.VISIBLE) {
+            finish();
+            Util.startNextActivity(this, ActivityDashboard.class);
+        } else {
+            finish();
+            Util.startNextActivity(this, ActivityMyBills.class);
+        }
     }
 }

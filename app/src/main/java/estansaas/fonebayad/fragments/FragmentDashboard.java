@@ -178,6 +178,7 @@ public class FragmentDashboard extends Fragment {
     public void AddBill() {
         Intent intent = new Intent(getActivity(), ActivityAddBill.class);
         startActivity(intent);
+        getActivity().finish();
         getActivity().overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 

@@ -30,6 +30,7 @@ import estansaas.fonebayad.R;
 import estansaas.fonebayad.adapter.AdapterBankAccount;
 import estansaas.fonebayad.auth.Responses.ResponseAccess;
 import estansaas.fonebayad.auth.Responses.ResponseBankAccount;
+import estansaas.fonebayad.auth.Responses.ResponseCreateBills;
 import estansaas.fonebayad.auth.RestClient;
 import estansaas.fonebayad.model.ModelBankAccount;
 import estansaas.fonebayad.model.ModelBillInformation;
@@ -210,24 +211,26 @@ public class ActivityPaymentMethod extends BaseActivity implements ListView.OnIt
 
     private void CreateBillStatement(final DialogInterface dialogInterface, ResponseAccess access) {
 
-        Call<estansaas.fonebayad.auth.Responses.Response> responseCall = RestClient.get().createBillStatement(access.getToken_type() + " " + access.getAccess_token(), modelBillInformation.getBill_biller(), modelBillInformation.getBill_account_number(), modelBillInformation.getBill_transaction_number(), modelBillInformation.getBill_currency(), modelBillInformation.getBill_amount(), modelBillInformation.getBill_status(), modelBillInformation.getBill_attachment(), modelBillInformation.getBill_due_date().toString(), modelBillInformation.getBill_schedule_of_payment(), modelBillInformation.getBill_user_id(), modelBillInformation.getBill_payment_method(), modelBillInformation.getBill_type(), modelBillInformation.getBill_user_entity());
-        responseCall.enqueue(new Callback<estansaas.fonebayad.auth.Responses.Response>() {
+        Call<ResponseCreateBills> responseCall = RestClient.get().createBillStatement(access.getToken_type() + " " + access.getAccess_token(), modelBillInformation.getBill_biller(), modelBillInformation.getBill_account_number(), modelBillInformation.getBill_transaction_number(), modelBillInformation.getBill_currency(), modelBillInformation.getBill_amount(), modelBillInformation.getBill_status(), modelBillInformation.getBill_attachment(), modelBillInformation.getBill_due_date().toString(), modelBillInformation.getBill_schedule_of_payment(), modelBillInformation.getBill_user_id(), modelBillInformation.getBill_payment_method(), modelBillInformation.getBill_type(), modelBillInformation.getBill_user_entity());
+        responseCall.enqueue(new Callback<ResponseCreateBills>() {
             @Override
-            public void onResponse(Response<estansaas.fonebayad.auth.Responses.Response> response, Retrofit retrofit) {
+            public void onResponse(Response<ResponseCreateBills> response, Retrofit retrofit) {
 
                 Log.i("ACTIVITY PAYMENT METHOD", response.message());
 
                 if (response.isSuccess()) {
                     if (response.code() == 200) {
-                        if (!modelBillInformation.getBill_attachment().isEmpty()) {
-                            uploadFile(dialogInterface);
-                            return;
-                        } else {
-                            Intent intent = new Intent(ActivityPaymentMethod.this, ActivityViewBills.class);
-                            intent.putExtra("ModelBillInformation", modelBillInformation);
-                            startActivity(intent);
-                            finish();
-                            overridePendingTransition(0, 0);
+                        if (response.body().getMessage().equals("success")) {
+                            if (!modelBillInformation.getBill_attachment().isEmpty()) {
+                                uploadFile(dialogInterface);
+                                return;
+                            } else {
+                                Intent intent = new Intent(ActivityPaymentMethod.this, ActivityViewBills.class);
+                                intent.putExtra("ModelBillInformation", modelBillInformation);
+                                startActivity(intent);
+                                finish();
+                                overridePendingTransition(0, 0);
+                            }
                         }
                     }
                 } else {

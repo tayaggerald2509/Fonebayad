@@ -18,6 +18,7 @@ import com.afollestad.materialdialogs.Theme;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -199,9 +200,8 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
                         Util.ShowNeutralDialog(this, "Warning", "Payment unsuccessful. Insufficient credit.", "OK", this);
                     }
                 } else {
-                    Util.ShowNeutralDialog(this, "Warning", "Unable to proceed with payment. Your bill is already overdue", "Ok", this);
+                    Util.ShowNeutralDialog(this, "Warning", "Unable to proceed with payment. Your bill " + modelBillInformation.getBill_biller() + " is already overdue", "Ok", this);
                 }
-
                 break;
             case NEGATIVE:
             case NEUTRAL:
@@ -233,7 +233,7 @@ public class ActivityPaymentView extends BaseActivity implements MaterialDialog.
 
     private void AuthPayment(final DialogInterface dialogInterface) {
 
-        Double newBalance = Double.valueOf(modelBankAccount.getBankaccount_amount()) - Double.valueOf(modelBillInformation.getBill_amount());
+        BigDecimal newBalance = new BigDecimal(modelBankAccount.getBankaccount_amount()).subtract(new BigDecimal(modelBillInformation.getBill_amount()));
         Call<estansaas.fonebayad.auth.Responses.Response> responseCall = RestClient.get().paybillsMobile(modelBillInformation.getBill_Id(), ModelLogin.getUserInfo().getApp_id(), "Paid", modelBillInformation.getBill_amount(), newBalance.toString(), modelBankAccount.getBankaccount_id(), modelBillInformation.getBill_amount(), "1");
 
         responseCall.enqueue(new Callback<estansaas.fonebayad.auth.Responses.Response>() {

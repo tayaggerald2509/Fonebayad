@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/ll_view">
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -160,7 +161,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="@dimen/activity_margin_min"
+                        android:layout_marginRight="@dimen/activity_margin_min">
 
                         <TextView
                             android:id="@+id/textView41"
@@ -172,14 +175,16 @@
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/abc_text_size_caption_material" />
 
-                        <TextView
+                        <estansaas.fonebayad.view.AutofitTextView
                             android:id="@+id/txtAmountDue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:singleLine="true"
                             android:text="340.00"
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:textColor="@color/color_overdue"
-                            android:textSize="@dimen/abc_text_size_display_1_material" />
+                            android:textSize="@dimen/abc_text_size_display_1_material"
+                            app:minTextSize="12sp" />
 
                     </LinearLayout>
 
@@ -420,7 +425,10 @@
         android:id="@+id/rl_bill_paid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:focusableInTouchMode="true"
+        android:touchscreenBlocksFocus="true"
+        android:clickable="true">
 
         <ImageView
             android:id="@+id/img_stamp"
