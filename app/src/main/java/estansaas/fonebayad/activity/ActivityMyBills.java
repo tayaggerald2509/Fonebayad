@@ -178,6 +178,11 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         showMenu();
     }
 
+    @OnClick(R.id.ll_message)
+    public void AddBill() {
+        GoToAddBill();
+    }
+
     @OnClick(R.id.ll_dashboard)
     public void GoToDashboard() {
         finish();
@@ -209,7 +214,11 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_share:
-
+                ActivityShareBill.billStatements = selectedBill;
+                Intent intent = new Intent(this, ActivityShareBill.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                 break;
             case R.id.ll_view:
             case R.id.ll_pay:
@@ -226,7 +235,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                         e.printStackTrace();
                     }
 
-                    Intent intent = new Intent(this, ActivityViewBills.class);
+                    intent = new Intent(this, ActivityViewBills.class);
                     intent.putExtra("EXTRA_BILL_ADDED", true);
                     intent.putExtra("ModelBillInformation", modelBillInfo);
                     startActivity(intent);
@@ -238,7 +247,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                         calendar.setTime(modelBillInformation.getDue_date());
                         if (new Date().before(calendar.getTime())) {
                             ActivityMultiplePayment.selectedBill = selectedBill;
-                            Intent intent = new Intent(this, ActivityMultiplePayment.class);
+                            intent = new Intent(this, ActivityMultiplePayment.class);
                             startActivity(intent);
                             overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                             break;
@@ -453,6 +462,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
             @Override
             public void onFailure(Throwable t) {
                 dialogInterface.dismiss();
+                Util.ShowNeutralDialog(ActivityMyBills.this, "", t.getMessage(), "OK", ActivityMyBills.this);
             }
         });
     }
@@ -502,7 +512,7 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
         switch (buttonView.getId()) {
             case R.id.chk_select:
                 totalSelected = 0.00;
-
+                selectedBill.clear();
                 for (ModelBillInformation billstatement : billStatements) {
                     totalSelected += Double.valueOf(billstatement.getBalance());
                     billstatement.setIsSelected(isChecked);
@@ -621,6 +631,8 @@ public class ActivityMyBills extends BaseActivity implements AdapterView.OnItemC
                 listSelected.add(billStatements.get(position).getBill_Id());
                 selectedBill.add(ModelBillInformation.viewBillStatement(billStatements.get(position).getBill_Id()));
             }
+
+            if (selected == billStatements.size()) chk_select.setChecked(true);
 
             if (selected > 0) {
                 chk_delete.setEnabled(true);

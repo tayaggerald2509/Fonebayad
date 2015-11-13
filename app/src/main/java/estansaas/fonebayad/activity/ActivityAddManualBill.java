@@ -323,9 +323,11 @@ public class ActivityAddManualBill extends BaseActivity implements CalendarDateP
                 Toast.makeText(ActivityAddManualBill.this, "Captured Image Attached as a file.", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == SELECT_PHOTO) {
-            File file = new File(Util.getPath(this, data));
-            billInfoModel.setBill_attachment(file.getName());
-            billInfoModel.setFile_path(file.getPath());
+            if (resultCode == RESULT_OK) {
+                File file = new File(Util.getPath(this, data));
+                billInfoModel.setBill_attachment(file.getName());
+                billInfoModel.setFile_path(file.getPath());
+            }
         }
     }
 

@@ -45,7 +45,7 @@ import retrofit.Retrofit;
 /**
  * Created by gerald.tayag on 10/21/2015.
  */
-public class ActivityPaymentMethod extends BaseActivity implements ListView.OnItemClickListener, MaterialDialog.SingleButtonCallback {
+public class ActivityPaymentMethod extends BaseActivity implements AdapterView.OnItemClickListener, MaterialDialog.SingleButtonCallback {
 
     private static int ACTIVITY_CURRENT_PROCESS = 101;
 

@@ -361,7 +361,8 @@
                                     android:textAlignment="gravity"
                                     android:textSize="@dimen/abc_text_size_menu_material"
                                     android:elegantTextHeight="false"
-                                    android:numeric="decimal" />
+                                    android:numeric="decimal"
+                                    android:maxLength="9" />
                             </LinearLayout>
 
                             <LinearLayout

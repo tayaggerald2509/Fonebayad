@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -93,7 +94,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 
-
         </activity>
         <activity
             android:name=".activity.ActivityRegister"
@@ -136,6 +136,16 @@
         <activity
             android:name=".activity.ActivityMyBills"
             android:label="@string/app_calendar"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityShareBill"
+            android:label="@string/app_share_bill"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivitySharedContacts"
+            android:label="@string/app_share_bill"
             android:screenOrientation="portrait" />
 
         <activity

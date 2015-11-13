@@ -16,6 +16,7 @@
     <string name="app_transpera">TransPera</string>
     <string name="app_payment_method">Payment Methods</string>
     <string name="app_bill_view">Bill View</string>
+    <string name="app_share_bill">Share Bills</string>
     <string name="app_payment">Payment</string>
     <string name="app_payment_multiple">Multiple Payment</string>
     <string name="app_transaction_history">Transaction History</string>

@@ -81,8 +81,7 @@ public class ActivityAddBill extends BaseActivity implements MaterialDialog.Sing
 
     @OnClick(R.id.back)
     public void Back() {
-        finish();
-        Util.startNextActivity(this, ActivityDashboard.class);
+        onBackPressed();
     }
 
     @Override
@@ -167,5 +166,11 @@ public class ActivityAddBill extends BaseActivity implements MaterialDialog.Sing
                 //.ShowMessage(coordinatorLayout, "Failed to connect to server!");
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Util.startNextActivity(this, ActivityDashboard.class);
     }
 }
