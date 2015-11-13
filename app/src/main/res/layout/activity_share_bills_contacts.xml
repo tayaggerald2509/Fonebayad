@@ -81,7 +81,7 @@
                 android:layout_marginLeft="@dimen/activity_margin_30dp"
                 android:layout_marginRight="@dimen/activity_margin_30dp"
                 android:background="@drawable/search_box"
-                android:drawableLeft="@drawable/ic_action_ic_zoom_in_white_48dp"
+                android:drawableLeft="@drawable/action_search"
                 android:gravity="center"
                 android:hint="Search Contact"
                 android:textAppearance="?android:attr/textAppearanceMedium"
