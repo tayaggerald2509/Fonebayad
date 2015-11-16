@@ -1,4 +1,4 @@
-package estansaas.fonebayad.view;
+package estansaas.fonebayad.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

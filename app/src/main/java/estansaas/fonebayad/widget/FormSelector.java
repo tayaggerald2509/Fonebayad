@@ -1,4 +1,4 @@
-package estansaas.fonebayad.view;
+package estansaas.fonebayad.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
