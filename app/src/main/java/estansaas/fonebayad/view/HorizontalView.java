@@ -1,4 +1,4 @@
-package estansaas.fonebayad.widget;
+package estansaas.fonebayad.view;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
